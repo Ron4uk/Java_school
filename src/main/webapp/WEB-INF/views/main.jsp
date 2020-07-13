@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Oleg
@@ -10,8 +11,15 @@
 <head>
     <title>MyJSPPage</title>
 
-</head>
 <body>
 <h2>Text from jsp!</h2>
+<c:forEach items="${message}" var="mes">
+    <p>
+    <c:out value="${mes}"/>
+    </p>
+
+</c:forEach>
+</head>
+
 </body>
 </html>

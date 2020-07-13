@@ -3,7 +3,8 @@ package com.task.entity;
 import javax.persistence.*;
 
 @Entity
-public class Clients {
+@Table(name = "client")
+public class Client {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
@@ -11,6 +12,14 @@ public class Clients {
     private String firstName;
     @Column (name = "lastname")
     private String lastName;
+
+    public Client() {
+    }
+
+    public Client(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public int getId() {
         return id;
@@ -34,5 +43,14 @@ public class Clients {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }
