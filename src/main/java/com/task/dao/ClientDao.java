@@ -4,7 +4,7 @@ import com.task.entity.Client;
 
 import java.util.List;
 
-public interface ClientsDao {
+public interface ClientDao {
     List<Client> getAll();
     void add(Client client);
 }
