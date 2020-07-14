@@ -25,14 +25,10 @@ public class MainController {
 
 
 
-
     @GetMapping("/main")
     public String testJsp(Map<String, Object> model) {
-
         List<Client> clients = clientService.getAll();
-
         model.put("message", clients);
-
         return "main";
     }
 

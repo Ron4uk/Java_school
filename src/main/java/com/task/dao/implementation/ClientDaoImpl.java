@@ -1,6 +1,7 @@
 package com.task.dao.implementation;
 
 import com.task.dao.ClientDao;
+import com.task.dao.GenericDaoImpl;
 import com.task.entity.Client;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,37 +17,11 @@ import java.util.List;
 
 
 @Repository
-public class ClientDaoImpl implements ClientDao {
+public class ClientDaoImpl extends GenericDaoImpl<Client> implements ClientDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientDaoImpl.class);
-    private SessionFactory sessionFactory;
-
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-    @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
 
-    @Override
-    public List<Client> getAll() {
-
-        LOGGER.info("[{}] Connect to DB. sessionFactory is {}", LocalDateTime.now() ,sessionFactory==null? "null":"work");
-        Session session = sessionFactory.openSession();
-
-        Query query = session.createQuery("FROM Client ");
-        List<Client> clients = query.list();
-
-        session.close();
-
-        return clients;
 
 
-    }
 
-    @Override
-    public void add(Client client) {
-
-    }
 }
