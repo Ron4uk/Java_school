@@ -2,6 +2,10 @@ package com.task.entity;
 
 import javax.persistence.*;
 
+/**
+ * Simple JavaBeans object that represents entity of client
+ */
+
 @Entity
 @Table(name = "client")
 public class Client {

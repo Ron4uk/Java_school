@@ -6,6 +6,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
+/**
+ * Implementations of {@link GenericDao}
+ *
+ */
 public abstract class GenericDaoImpl<T> implements GenericDao<T> {
 
 
@@ -28,7 +32,7 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
     }
 
     @Override
-    public T find(Object id) {
+    public T findById(Object id) {
 
         return (T) entityManager.find(type, id);
     }
@@ -45,7 +49,7 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
 
     @Override
     public void deleteById(Object id) {
-        T entity = find(id);
+        T entity = findById(id);
         delete(entity);
     }
 
