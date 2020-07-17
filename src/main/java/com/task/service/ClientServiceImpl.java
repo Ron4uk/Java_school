@@ -16,13 +16,13 @@ import java.util.List;
 @Transactional
 public class ClientServiceImpl {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientServiceImpl.class);
-    @Autowired
+
     private ClientDao clientDao;
 
     public ClientDao getClientDao() {
         return clientDao;
     }
-
+    @Autowired
     public void setClientDao(ClientDao clientDao) {
         this.clientDao = clientDao;
     }

@@ -31,6 +31,21 @@ public class MainController {
         model.put("message", clients);
         return "main";
     }
+    @GetMapping("/login")
+    public String signIn() {
+
+        return "login";
+    }
+    @GetMapping("/indexauthenticated")
+    public String afterAuthentication() {
+
+        return "indexauthenticated";
+    }
+
+
+
+
+
 
 
 }

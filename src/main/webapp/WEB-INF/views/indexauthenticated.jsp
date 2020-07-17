@@ -56,7 +56,7 @@
                 </li>
 
             </ul>
-            <a href="/main" class="btn btn-secondary  active" role="button" aria-pressed="true">Авторизация</a>
+            <a href="/logout" class="btn btn-secondary  active" role="button" aria-pressed="true">Выход</a>
 
 
         </div>
