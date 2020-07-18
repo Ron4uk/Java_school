@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -24,6 +25,10 @@ public class AuthorizationDaoImpl extends GenericDaoImpl<Authorization> implemen
         Query query = entityManager.createQuery("FROM Authorization where phone = :phone");
         query.setParameter("phone", phone);
 
-        return (Authorization) query.getSingleResult();
+        try {
+            return (Authorization) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

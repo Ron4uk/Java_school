@@ -4,8 +4,10 @@ import com.task.entity.Client;
 import com.task.service.ClientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -37,9 +39,10 @@ public class MainController {
 
 
 
-    @GetMapping("/login")
-    public String signIn() {
 
+    @GetMapping("/login")
+    public String signIn(@RequestParam(name = "error", required = false) Boolean error, Model model) {
+        if(Boolean.TRUE.equals(error)) model.addAttribute("error", true);
         return "login";
     }
     @GetMapping("/startauthclient")

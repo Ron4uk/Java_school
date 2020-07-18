@@ -19,7 +19,7 @@
 
     </nav>
     <h3>Sign in, please!</h3>
-<form action="/client" method="post">
+<form action="/client"  method="post">
     <div>
         Phone: <input name="phone" type="tel" style="margin-top: 10px">
     </div>
@@ -28,6 +28,10 @@
     </div>
     <input type="submit" style="margin-top: 10px">
 </form>
+
+    <c:if test="${error}" >
+        <p> Invalid data </p>
+    </c:if>
 
 <div class="card-footer text-muted" style="margin-top: 20px">
     Created at night
