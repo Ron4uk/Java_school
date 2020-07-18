@@ -27,14 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login", "/index").anonymous()
-                .antMatchers("/main", "/indexauthenticated").authenticated()
+                .antMatchers("/login", "/startpage", "/").anonymous()
+                .antMatchers("/client", "/startauthclient").authenticated()
                 .and().csrf().disable()
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/main")
+                .loginProcessingUrl("/client")
                 .usernameParameter("phone")
-                .and().logout();
+                .and().logout().logoutUrl("/logout").invalidateHttpSession(true).logoutSuccessUrl("/");
     }
 
     @Override

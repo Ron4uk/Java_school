@@ -19,14 +19,14 @@
 
     </nav>
     <h3>Sign in, please!</h3>
-<form action="/main" method="post">
+<form action="/client" method="post">
     <div>
-        Phone: <input name="phone" type="tel">
+        Phone: <input name="phone" type="tel" style="margin-top: 10px">
     </div>
     <div>
-        Password: <input name="password" type="password">
+        Password: <input name="password" type="password" style="margin-top: 10px">
     </div>
-    <input type="submit">
+    <input type="submit" style="margin-top: 10px">
 </form>
 
 <div class="card-footer text-muted" style="margin-top: 20px">
