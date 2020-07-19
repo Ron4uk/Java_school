@@ -37,16 +37,13 @@ public class MainController {
 
 
 
-
-
-
     @GetMapping("/login")
     public String signIn(@RequestParam(name = "error", required = false) Boolean error, Model model) {
         if(Boolean.TRUE.equals(error)) model.addAttribute("error", true);
         return "login";
     }
     @GetMapping("/startauthclient")
-    public String afterAuthentication() {
+    public String afterAuthenticationClient() {
 
         return "startauthclient";
     }
@@ -55,7 +52,16 @@ public class MainController {
 
         return "startpage";
     }
+    @GetMapping("/employee")
+    public String employeePage() {
 
+        return "employee";
+    }
+    @GetMapping("/startauthempl")
+    public String startEmployeePage() {
+
+        return "startauthempl";
+    }
 
 
 

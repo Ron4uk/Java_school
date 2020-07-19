@@ -18,8 +18,6 @@
             align-content: flex-start;
             flex:0; }
         .row-flex > div[class*='col-'] {  margin:-.2px; }
-        
-
     </style>
 </head>
 
@@ -58,7 +56,7 @@
                 </li>
 
             </ul>
-            <a href="/client" class="btn btn-secondary  active" role="button" aria-pressed="true">Авторизация</a>
+            <a href="/logout" class="btn btn-secondary  active" role="button" aria-pressed="true">Выход</a>
 
 
         </div>
@@ -133,6 +131,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Специальные предложения</h5>
+                    <h6 class="card-title">start page for employee</h6>
                     <p class="card-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
                         Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.</p>
                     <a href="#" class="btn btn-primary">Подробнее</a>

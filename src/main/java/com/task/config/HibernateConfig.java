@@ -74,6 +74,8 @@ public class HibernateConfig {
                         env.getProperty("hibernate.dialect"));
                 setProperty("hibernate.globally_quoted_identifiers",
                         "true");
+                setProperty("hhibernate.show_sql",
+                        env.getProperty("hibernate.show_sql"));
             }
         };
     }

@@ -9,22 +9,26 @@ import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Component
 public class AuthProviderImpl implements AuthenticationProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthProviderImpl.class);
     private AuthorizationServiceImpl authorizationService;
 
     public AuthorizationServiceImpl getAuthorizationService() {
@@ -50,6 +54,10 @@ public class AuthProviderImpl implements AuthenticationProvider {
             throw new BadCredentialsException("wrong password");
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(authorization.getRoles().iterator().next().toString()));
+
+        UsernamePasswordAuthenticationToken as = new UsernamePasswordAuthenticationToken(authorization, null,authorities);
+
         return new UsernamePasswordAuthenticationToken(authorization, null,authorities);
     }
 

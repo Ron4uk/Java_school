@@ -1,6 +1,7 @@
 package com.task.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Simple JavaBeans object that represents entity of Authorization
@@ -18,6 +19,18 @@ public class Authorization {
     @Column(name = "password")
     private String password;
 
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "auth_role", joinColumns = @JoinColumn(name="auth_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     public int getId() {
         return id;
