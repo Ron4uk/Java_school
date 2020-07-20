@@ -2,7 +2,7 @@
 <!DOCYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <style type="text/css">
@@ -18,7 +18,7 @@
             align-content: flex-start;
             flex:0; }
         .row-flex > div[class*='col-'] {  margin:-.2px; }
-        
+
 
     </style>
 </head>
@@ -27,7 +27,7 @@
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand" href="#">
-        <img src="https://dzertv.ru/wp-content/uploads/2018/10/planetarii25_10_18.jpg" width="30" height="30"
+        <img src="/images/label.jpg" width="30" height="30"
              class="d-inline-block align-top" alt="" loading="lazy">
         Mokia
     </span>
@@ -72,7 +72,7 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://www.apploder.xyz/wp-content/uploads/2019/05/Untitled-copy-2.jpg" class="d-block w-100"
+                <img src="/images/main_1.jpg" class="d-block w-100"
                      alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5 style="color: black">Семейный коннект.</h5>
@@ -80,7 +80,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://paratic.com/dosya/2016/07/yatirimcilar-forex-piyasasindaki-riskleri-onlemek-icin-nasil-dusunmeli.jpg"
+                <img src="/images/main_2.jpg"
                      class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Двигаем бизнес.</h5>
@@ -101,7 +101,7 @@
     <div class="row row-flex row-flex-wrap" style="margin-top: 10px">
         <div class="col-sm-2 col-md-2">
             <div class="card">
-                <img src="https://teatravel.ru/local/templates/.default/images/icons/lk.png" class="card-img-top" alt="...">
+                <img src="/images/private_account.png" class="card-img-top" alt="...">
                 <div class="card-body">
                     <a href="#" class="btn btn-primary" style="max-width: 100%">Личный кабинет</a>
                 </div>
@@ -110,7 +110,7 @@
         </div>
         <div class="col-sm-2 col-md-2">
             <div class="card">
-                <img src="https://image.winudf.com/v2/image1/Y29tLm5qYXBwcy5vbmxpbmVmcmVlcmVjaGFyZ2VfaWNvbl8xNTQ4MzU3NzM3XzA2Ng/icon.png?w=100&fakeurl=1" class="card-img-top" alt="..." style="padding-top: 5px">
+                <img src="/images/deposit.jpg" class="card-img-top" alt="..." style="padding-top: 5px">
                 <div class="card-body">
                     <a href="#" class="btn btn-primary" style="max-width: 100%">Пополнить баланс</a>
                 </div>
@@ -119,7 +119,7 @@
         </div>
         <div class="col-sm-2 col-md-2" >
             <div class="card" >
-                <img src="https://lh5.ggpht.com/RCzJaB3vx-1e5fUrPFxxpjSBYGAVf57UhMm4WOjfJhD7WCl8H-TnlxNRT9jsXdvkvw=w100" class="card-img-top" alt="..." style="padding-top: 5px">
+                <img src="/images/apps.png" class="card-img-top" alt="..." style="padding-top: 5px">
                 <div class="card-body">
                     <a href="#" class="btn btn-primary" style="max-width: 110%">Мобильные приложения</a>
                 </div>

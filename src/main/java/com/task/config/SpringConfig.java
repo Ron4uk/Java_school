@@ -18,6 +18,9 @@ public class SpringConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/webjars/**")
                 .addResourceLocations("/webjars/");
+        // Register resource handler for images
+        registry.
+                addResourceHandler("/images/**").addResourceLocations("/WEB-INF/views/images/");
     }
 
     @Override
