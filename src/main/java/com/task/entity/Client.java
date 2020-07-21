@@ -1,21 +1,36 @@
 package com.task.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
+import java.sql.Date;
 
 /**
  * Simple JavaBeans object that represents entity of client
  */
 
 @Entity
-@Table(name = "client")
-public class Client {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
+@Table(name = "clients", uniqueConstraints =@UniqueConstraint(columnNames = {"series", "number"}) )
+@Getter
+@Setter
+@ToString
+public class Client extends AbstractIdentification {
+
     @Column (name = "firstname")
     private String firstName;
     @Column (name = "lastname")
     private String lastName;
+
+    @Column(name = "birthday")
+    private Date birthday;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "series")
+    private String passport_series;
+    @Column(name = "number")
+    private  String passport_number;
 
     public Client() {
     }
@@ -25,36 +40,5 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
-    }
 }
