@@ -6,17 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
 public class MainController {
     @Autowired
     private ClientServiceImpl clientService;
-    private final String string = "/client";
+
 
     public ClientServiceImpl getClientService() {
         return clientService;
@@ -29,7 +29,7 @@ public class MainController {
 
 
     @GetMapping("/client")
-    public String testJsp(Map<String, Object> model) {
+    public String clientPage (Map<String, Object> model) {
         List<Client> clients = clientService.getAll();
         model.put("message", clients);
         return "client";
@@ -52,16 +52,7 @@ public class MainController {
 
         return "startpage";
     }
-    @GetMapping("/employee")
-    public String employeePage() {
 
-        return "employee";
-    }
-    @GetMapping("/startauthempl")
-    public String startEmployeePage() {
-
-        return "startauthempl";
-    }
 
 
 

@@ -18,15 +18,19 @@
     </span>
 
     </nav>
-    <h3>Sign in, please!</h3>
-<form action="/client"  method="post">
-    <div>
-        Phone: <input name="phone" type="tel" style="margin-top: 10px">
+
+<form action="/client"  method="post" style="margin-top: 50px; margin-bottom: 50px">
+
+    <div class="form-group">
+        <label>Phone number</label>
+        <input type="tel"  name="phone" class="form-control" size="25">
     </div>
-    <div>
-        Password: <input name="password" type="password" style="margin-top: 10px">
+    <div class="form-group">
+        <label >Password</label>
+        <input type="password"  name="password" class="form-control" size="25">
     </div>
-    <input type="submit" style="margin-top: 10px">
+    <button type="submit"  class="btn btn-primary">Sign in</button>
+
 </form>
 
     <c:if test="${error}" >

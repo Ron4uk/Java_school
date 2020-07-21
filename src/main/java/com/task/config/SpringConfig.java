@@ -15,6 +15,7 @@ public class SpringConfig implements WebMvcConfigurer {
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Register resource handler for Style/css
         registry
                 .addResourceHandler("/webjars/**")
                 .addResourceLocations("/webjars/");
