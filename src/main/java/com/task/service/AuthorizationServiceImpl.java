@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class AuthorizationServiceImpl {
+public class AuthorizationServiceImpl extends GenericMapper {
     private AuthorizationDao authorizationDao;
 
     public AuthorizationDao getAuthorizationDao() {

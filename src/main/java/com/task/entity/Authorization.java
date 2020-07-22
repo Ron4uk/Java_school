@@ -17,13 +17,8 @@ import java.util.Set;
 @ToString
 public class Authorization extends AbstractIdentification {
 
-    @Column(name = "phone")
-    private String phone;
-    @Column(name = "email")
-    private String email;
     @Column(name = "password")
     private String password;
-
 
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

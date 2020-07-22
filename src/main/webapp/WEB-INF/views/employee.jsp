@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: Oleg
@@ -51,9 +52,9 @@
         </div>
     </nav>
 
-    <form action="/find"  method="post" style="margin-top: 10px">
+    <form action="/find"  method="post"  style="margin-top: 10px">
         <div class="form-group">
-            <input type="tel"  name="phone" class="form-control" placeholder="Enter client's phone number" >
+            <input type="tel" mode  name="phone" class="form-control" placeholder="Enter client's phone number" >
         </div>
         <button type="submit"  class="btn btn-secondary ">Search</button>
     </form>
@@ -76,12 +77,13 @@
 
         <button type="submit"  class="btn btn-secondary  btn-lg btn-block">Tariffs</button>
     </form>
+
     <form action="/options"  method="post" style="margin-top: 10px">
 
 
         <button type="submit"  class="btn btn-secondary  btn-lg btn-block">Options</button>
     </form>
-<c:if test="${clientList!=null}">
+<c:if test="${clientList !=null}" >
         <table class="table">
             <thead>
             <tr>
@@ -91,7 +93,7 @@
             </tr>
             </thead>
             <tbody>
-    <c:forEach items="${clientList}" var="mes">
+    <c:forEach items="${clientList}" var="mes" >
             <tr>
                 <th scope="row">${mes.id}</th>
                 <td>${mes.firstName}</td>
@@ -111,5 +113,8 @@
         Created at night
     </div>
 </div>
+
+
+
 </body>
 </html>

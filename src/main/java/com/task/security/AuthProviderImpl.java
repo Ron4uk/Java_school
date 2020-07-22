@@ -3,9 +3,14 @@ package com.task.security;
 
 import com.task.dao.AuthorizationDao;
 import com.task.entity.Authorization;
+import com.task.entity.Client;
+import com.task.entity.Contract;
 import com.task.service.AuthorizationServiceImpl;
 import com.task.service.ClientServiceImpl;
+import com.task.service.ContractServiceImpl;
 import javassist.NotFoundException;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,36 +34,41 @@ import java.util.NoSuchElementException;
 @Component
 public class AuthProviderImpl implements AuthenticationProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthProviderImpl.class);
-    private AuthorizationServiceImpl authorizationService;
+//    private AuthorizationServiceImpl authorizationService;
+//
+//    public AuthorizationServiceImpl getAuthorizationService() {
+//        return authorizationService;
+//    }
+//
+//    @Autowired
+//    public void setAuthorizationService(AuthorizationServiceImpl authorizationService) {
+//        this.authorizationService = authorizationService;
+//    }
+    @Getter
+    @Setter(onMethod = @__({@Autowired}))
+    private ContractServiceImpl contractService;
 
-    public AuthorizationServiceImpl getAuthorizationService() {
-        return authorizationService;
-    }
-
-    @Autowired
-    public void setAuthorizationService(AuthorizationServiceImpl authorizationService) {
-        this.authorizationService = authorizationService;
-    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String phone = authentication.getName().toString();
         LOGGER.info("[{}]  phone = {}", LocalDateTime.now(), phone);
-        Authorization authorization = authorizationService.findByPhone(phone);
-        LOGGER.info("[{}]  Connect to DB from method findByPhone {}. authorization = {}", LocalDateTime.now(), LOGGER.getName(), authorization);
-        if(authorization==null){
+        Contract contract = contractService.findByPhone(phone);
+ //       Authorization authorization = authorizationService.findByPhone(phone);
+        LOGGER.info("[{}]  Connect to DB from method findByPhone {}. contract = {}", LocalDateTime.now(), LOGGER.getName(), contract);
+        if(contract==null){
             throw new UsernameNotFoundException("User not found");
         }
         String password = authentication.getCredentials().toString();
-        if(!password.equals(authorization.getPassword())){
+        if(!password.equals(contract.getAuth().getPassword())){
             throw new BadCredentialsException("wrong password");
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(authorization.getRoles().iterator().next().toString()));
+        authorities.add(new SimpleGrantedAuthority(contract.getAuth().getRoles().iterator().next().toString()));
 
-        UsernamePasswordAuthenticationToken as = new UsernamePasswordAuthenticationToken(authorization, null,authorities);
+        UsernamePasswordAuthenticationToken as = new UsernamePasswordAuthenticationToken(contract, null,authorities);
 
-        return new UsernamePasswordAuthenticationToken(authorization, null,authorities);
+        return new UsernamePasswordAuthenticationToken(contract, null,authorities);
     }
 
     @Override
