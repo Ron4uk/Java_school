@@ -19,5 +19,5 @@ import java.io.Serializable;
 public abstract class AbstractIdentification implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 }
