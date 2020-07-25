@@ -79,7 +79,7 @@
         </form:form>
 
     <c:if test="${change!=null}">
-        <div id="message"><p style="color: forestgreen" >Change successful! </p></div>
+        <div id="message"><p style="margin-top: 10px; color: forestgreen" >Change successful! </p></div>
     </c:if>
 
 

@@ -6,6 +6,7 @@ import com.task.dto.ClientDto;
 import com.task.dto.DtoEntity;
 import com.task.entity.Client;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +20,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ClientServiceImpl extends GenericMapper {
+@NoArgsConstructor
+public class ClientServiceImpl extends GenericMapper  {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientServiceImpl.class);
     @Getter
     @Setter (onMethod =@__({@Autowired}))
     private ClientDao clientDao;
+
 
     public List<Client> getAll() {
         LOGGER.info("[{}]  Connect to DB from method getAll {}", LocalDateTime.now(), LOGGER.getName());
@@ -34,6 +37,5 @@ public class ClientServiceImpl extends GenericMapper {
 
         return clientDao.getAll().stream().map(e->this.convertToDto(e, new ClientDto())).collect(Collectors.toList());
     }
-
 
 }

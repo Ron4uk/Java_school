@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ContractDto implements DtoEntity {
-    private int id;
+    private Integer id;
     private String phone;
     private Authorization auth;
 }

@@ -8,5 +8,4 @@ import com.task.entity.Authorization;
 
 public interface AuthorizationDao extends GenericDao<Authorization> {
 
-    Authorization findByPhone(String phone);
 }

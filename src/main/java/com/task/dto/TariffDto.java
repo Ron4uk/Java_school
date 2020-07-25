@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TariffDto implements DtoEntity {
-    private int id;
+    private Integer id;
     private String tariff;
     private Double price;
     private boolean deprecated;

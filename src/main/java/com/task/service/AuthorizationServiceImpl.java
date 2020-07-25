@@ -21,7 +21,5 @@ public class AuthorizationServiceImpl extends GenericMapper {
         this.authorizationDao = authorizationDao;
     }
 
-    public Authorization findByPhone(String phone){
-        return authorizationDao.findByPhone(phone);
-    }
+
 }

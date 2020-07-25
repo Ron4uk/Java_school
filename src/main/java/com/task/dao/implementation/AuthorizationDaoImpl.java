@@ -17,18 +17,5 @@ import javax.persistence.Query;
 
 @Repository
 public class AuthorizationDaoImpl extends GenericDaoImpl<Authorization> implements AuthorizationDao {
-    @PersistenceContext
-    private EntityManager entityManager;
 
-    @Override
-    public Authorization findByPhone(String phone) {
-        Query query = entityManager.createQuery("FROM Authorization where phone = :phone");
-        query.setParameter("phone", phone);
-
-        try {
-            return (Authorization) query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
 }

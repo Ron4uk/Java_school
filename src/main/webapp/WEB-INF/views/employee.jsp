@@ -73,16 +73,36 @@
             </form>
         </div>
     </div>
-    <form action="/tariffs" method="get" style="margin-top: 10px">
+    <button type="submit" class="btn btn-secondary  btn-lg btn-block" data-toggle="collapse"
+            data-target="#tarrifs" aria-expanded="false" aria-controls="tarrifs" style="margin-top: 10px">Tariffs
+    </button>
+    <div class="collapse" id="tarrifs" style="margin-top: 20px">
+        <div class="row justify-content-around">
+            <form role="form" action="/edittariff" class="col-md-2" method="get">
+                <button type="submit" class="btn btn-secondary  btn ">New tariff</button>
+            </form>
+            <form role="form" action="/tariffs" class="col-md-2" method="get">
+                <button type="submit" class="btn btn-secondary  btn ">Show all</button>
+            </form>
+        </div>
+    </div>
 
-        <button type="submit" class="btn btn-secondary  btn-lg btn-block">Tariffs</button>
-    </form>
+    <button type="submit" class="btn btn-secondary  btn-lg btn-block" data-toggle="collapse"
+            data-target="#options" aria-expanded="false" aria-controls="options" style="margin-top: 10px">Options
+    </button>
+    <div class="collapse" id="options" style="margin-top: 20px">
+        <div class="row justify-content-around">
+            <form role="form" action="/editoption"  class="col-md-2" method="get">
+                <button type="submit" class="btn btn-secondary  btn ">New option</button>
+            </form>
+            <form role="form" action="/options" class="col-md-2" method="get">
+                <button type="submit" class="btn btn-secondary  btn ">Show all</button>
+            </form>
+        </div>
+    </div>
 
-    <form action="/options" method="post" style="margin-top: 10px">
 
 
-        <button type="submit" class="btn btn-secondary  btn-lg btn-block">Options</button>
-    </form>
     <c:if test="${clientList !=null}">
         <table class="table">
             <thead>
@@ -104,8 +124,11 @@
         </table>
     </c:if>
 
-
+    <c:if test="${tariffsList.size() ==0}">
+        <p>No tariffs</p>
+    </c:if>
     <c:if test="${tariffsList !=null}">
+
         <table class="table">
             <thead>
             <tr>
@@ -120,18 +143,56 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${tariffsList}" var="tariff" >
+            <c:forEach items="${tariffsList}" var="tariff">
 
                 <tr>
                     <th scope="row">${tariff.id}</th>
                     <td>${tariff.tariff}</td>
                     <td>${tariff.price}</td>
                     <td>${tariff.deprecated}</td>
-                    <td><a href="/edittariff?id=${tariff.id} " >Edit</a></td>
-<%--                    <td><button type="submit" class="btn btn-secondary btn-sm ">edit</button></td>--%>
+                    <td><a href="/edittariff?id=${tariff.id} ">Edit</a></td>
+                        <%--                    <td><button type="submit" class="btn btn-secondary btn-sm ">edit</button></td>--%>
 
                 </tr>
 
+
+            </c:forEach>
+            </tbody>
+        </table>
+
+    </c:if>
+
+
+        <c:if test="${optionsList.size() ==0}">
+            <p>No options</p>
+        </c:if>
+
+    <c:if test="${optionsList !=null}">
+        <table class="table " >
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">name</th>
+                <th scope="col">price</th>
+                <th scope="col">connection cost</th>
+                <th scope="col">
+                    <a href="/editoption" class="btn btn-outline-dark btn-sm">new option</a>
+
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${optionsList}" var="option">
+
+
+                <tr>
+                    <th scope="row">${option.id}</th>
+                    <td>${option.name}</td>
+                    <td>${option.price}</td>
+                    <td>${option.connectionCost}</td>
+                    <td><a href="/editoption?id=${option.id} ">Edit</a></td>
+
+                </tr>
 
 
             </c:forEach>
@@ -140,7 +201,7 @@
     </c:if>
 
 
-    <div  class="card-footer text-muted" style="margin-top: 20px">
+    <div class="card-footer text-muted" style="margin-top: 20px">
         Created at night
     </div>
 </div>

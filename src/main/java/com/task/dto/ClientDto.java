@@ -10,7 +10,7 @@ import java.sql.Date;
 @Setter
 @ToString
 public class ClientDto implements DtoEntity {
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private Date birthday;
