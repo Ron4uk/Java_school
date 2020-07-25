@@ -192,6 +192,7 @@
                     <td>${option.connectionCost}</td>
                     <td><a href="/editoption?id=${option.id} ">Edit</a></td>
 
+
                 </tr>
 
 
@@ -199,12 +200,20 @@
             </tbody>
         </table>
     </c:if>
+    <c:if test="${change!=null}">
+        <div id="message"><p style="margin-top: 10px; color: forestgreen" >Change successful! </p></div>
+    </c:if>
 
+    <c:if test="${error!=null}">
+        <div id="message" ><p style="margin-top: 10px; color: red" >Change failed! </p></div>
+    </c:if>
 
     <div class="card-footer text-muted" style="margin-top: 20px">
         Created at night
     </div>
 </div>
+
+
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

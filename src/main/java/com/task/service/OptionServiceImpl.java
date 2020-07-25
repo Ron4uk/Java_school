@@ -1,15 +1,19 @@
 package com.task.service;
 
+import com.task.controller.EmplController;
 import com.task.dao.OptionDao;
 import com.task.dto.DtoEntity;
 import com.task.dto.OptionDto;
 import com.task.entity.Option;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +25,7 @@ public class OptionServiceImpl extends GenericMapper {
     @Getter
     @Setter(onMethod = @__({@Autowired}))
     private OptionDao optionDao;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(OptionServiceImpl.class);
 
     public List<Option> getAll() {
         return optionDao.getAll();
@@ -47,8 +51,17 @@ public class OptionServiceImpl extends GenericMapper {
         return convertToDto(optionDao.findById(id), new OptionDto());
     }
 
-    public Option update(Option option) {
-        return optionDao.update(option);
+    public String update(Option option) {
+        String result = "change failed";
+        try {
+            optionDao.update(option);
+            result = "changes successful";
+        } catch (Exception e) {
+            LOGGER.error("[{}],  update [{}]  exception = {}", LocalDateTime.now(), LOGGER.getName(), e);
+            e.printStackTrace();
+
+        }
+        return result;
     }
 
     public OptionDto createOptionConstraint(String[] requirement, String[] exclusion, OptionDto optionDto) {
@@ -64,7 +77,7 @@ public class OptionServiceImpl extends GenericMapper {
             optionDto.setRequiredOptions(requiredOptions);
 
         }
-         if (exclusion != null && exclusion.length > 0) {
+        if (exclusion != null && exclusion.length > 0) {
             Set<OptionDto> exclusionOptions = new HashSet<>();
             for (String s2 : exclusion) {
                 OptionDto optionExDto = (OptionDto) findByIdDto(Integer.parseInt(s2));
@@ -72,6 +85,19 @@ public class OptionServiceImpl extends GenericMapper {
             }
             optionDto.setExclusionOptions(exclusionOptions);
         }
-         return optionDto;
+        return optionDto;
+    }
+
+    public String deleteById(Integer id) {
+        String result = "change failed";
+        try {
+            optionDao.deleteById(id);
+            result = "changes successful";
+        } catch (Exception e) {
+            LOGGER.error("[{}],  delete [{}]  exception = {}", LocalDateTime.now(), LOGGER.getName(), e);
+            e.printStackTrace();
+
+        }
+        return result;
     }
 }

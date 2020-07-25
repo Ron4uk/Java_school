@@ -92,6 +92,7 @@ public class EmplController {
         sessionStatus.setComplete();
 
         model.addAttribute("tariffDto", new TariffDto());
+        //TODO update. Need 2 variant (success and fail)
         model.addAttribute("change", "changes  successful");
         return "edittariff";
     }
@@ -128,21 +129,29 @@ public class EmplController {
 
     @PostMapping("/saveOrUpdateOption")
     public String saveOrUpdateOption(@ModelAttribute("optionDto") OptionDto optionDto, HttpServletRequest request, Model model, SessionStatus sessionStatus) {
-        optionDto=optionService.createOptionConstraint(request.getParameterValues("requirement"), request.getParameterValues("exclusion"), optionDto);
-        LOGGER.info("[{}], POST saveOrUpdateOption [{}]  optionDto = {}", LocalDateTime.now(), LOGGER.getName(), optionDto);
+        if (request.getParameter("delete") != null) {
+            String result = optionService.deleteById(optionDto.getId());
+            model.addAttribute("result", result);
+            LOGGER.info("[{}], POST saveOrUpdateOption DELETE [{}]  optionDto = {}", LocalDateTime.now(), LOGGER.getName(), optionDto);
+        } else {
+            optionDto = optionService.createOptionConstraint(request.getParameterValues("requirement"), request.getParameterValues("exclusion"), optionDto);
+            String result = optionService.update((Option) optionService.convertToEntity(new Option(), optionDto));
+            model.addAttribute("result", result);
+            LOGGER.info("[{}], POST saveOrUpdateOption [{}]  optionDto = {}", LocalDateTime.now(), LOGGER.getName(), optionDto);
 
-        try {
-            optionService.update((Option) optionService.convertToEntity(new Option(), optionDto));
-            model.addAttribute("change", "changes  successful");
-        } catch (Exception e) {
-            model.addAttribute("error", "change failed");
-            LOGGER.error("[{}], POST saveOrUpdateOption class [{}]  error = {}", LocalDateTime.now(), LOGGER.getName(), e.printStackTrace(););
         }
-        sessionStatus.setComplete();
-        model.addAttribute("optionDto", new OptionDto());
+
         List<DtoEntity> options = optionService.getAllDto();
         model.addAttribute("optionsList", options);
-        return  "editoption";
+        sessionStatus.setComplete();
+        model.addAttribute("optionDto", new OptionDto());
+        return "editoption";
     }
 
+    @PostMapping("/deleteoption")
+    public String deleteOption(@RequestParam(value = "id") Integer id, Model model) {
+        // String result = optionService.deleteById(id);
+        //  model.addAttribute("result", result);
+        return "employee";
+    }
 }

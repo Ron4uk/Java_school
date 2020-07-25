@@ -130,16 +130,19 @@
         <div class="form-group row justify-content-end">
             <div class="col-sm-10 ">
                 <form:button type="submit" class="btn btn-secondary">Save</form:button>
+                <c:if test="${optionDto.id!=null}">
+                <form:button type="submit" name="delete" onclick="return confirm('Option: ${optionDto.id} ${optionDto.name} will be deleted. Are you sure?')" class="btn btn-secondary">Delete</form:button>
+                </c:if>
             </div>
         </div>
     </form:form>
 
-    <c:if test="${change!=null}">
-        <div id="message"><p style="margin-top: 10px; color: forestgreen" >Change successful! </p></div>
+    <c:if test="${result=='changes successful'}">
+        <div id="message"><p style="margin-top: 10px; color: forestgreen">Change successful! </p></div>
     </c:if>
 
-    <c:if test="${error!=null}">
-        <div id="message" ><p style="margin-top: 10px; color: red" >Change failed! </p></div>
+    <c:if test="${result =='change failed'}">
+        <div id="message"><p style="margin-top: 10px; color: red">Change failed! </p></div>
     </c:if>
 
 
@@ -152,7 +155,7 @@
 <script>
 
 
-<%--Check Set<Options> from an OptionDto. If OptionDto has some kind of restriction, the onload () function marks it on the checkboxes --%>
+    <%--Check Set<Options> from an OptionDto. If OptionDto has some kind of restriction, the onload () function marks it on the checkboxes --%>
 
     function onload() {
 

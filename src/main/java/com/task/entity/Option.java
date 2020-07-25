@@ -22,9 +22,9 @@ public class Option extends AbstractIdentification{
     @Column(name = "connection_cost")
     private Integer connectionCost;
     @JoinTable(name = "required_options")
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Set<Option> requiredOptions;
     @JoinTable (name = "exclusion_options")
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Set<Option> exclusionOptions;
 }
