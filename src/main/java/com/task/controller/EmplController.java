@@ -5,9 +5,12 @@ import com.task.dto.OptionDto;
 import com.task.dto.TariffDto;
 import com.task.entity.Option;
 import com.task.entity.Tariff;
-import com.task.service.ClientServiceImpl;
-import com.task.service.OptionServiceImpl;
-import com.task.service.TariffServiceImpl;
+import com.task.service.ClientService;
+import com.task.service.OptionService;
+import com.task.service.TariffService;
+import com.task.service.implementation.ClientServiceImpl;
+import com.task.service.implementation.OptionServiceImpl;
+import com.task.service.implementation.TariffServiceImpl;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -20,9 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @SessionAttributes({"tariffDto", "optionDto"})
 
@@ -31,19 +32,21 @@ public class EmplController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmplController.class);
     @Getter
     @Setter(onMethod = @__({@Autowired}))
-    private ClientServiceImpl clientService;
+    private ClientService clientService;
 
     @Getter
     @Setter(onMethod = @__({@Autowired}))
-    private TariffServiceImpl tariffService;
+    private TariffService tariffService;
 
     @Getter
     @Setter(onMethod = @__({@Autowired}))
-    private OptionServiceImpl optionService;
+    private OptionService optionService;
 
     @GetMapping("/employee")
-    public String employeePage() {
-
+    public String employeePage(SessionStatus sessionStatus, Model model) {
+        sessionStatus.setComplete();
+        model.addAttribute("optionDto", new OptionDto());
+        model.addAttribute("tariffDto", new TariffDto());
         return "employee";
     }
 
@@ -74,26 +77,27 @@ public class EmplController {
 
     @GetMapping("/edittariff")
     public String editTariff(@RequestParam(value = "id", required = false) Integer id, Model model) {
-        LOGGER.info("[{}], GET edittariff  [{}]  tarif model = {}", LocalDateTime.now(), LOGGER.getName(), model.getAttribute("tariffDto"));
+        LOGGER.info("[{}],  GET tariff  enter", LocalDateTime.now());
         if (id != null) {
+            LOGGER.info("[{}],  id={}", LocalDateTime.now(), id);
             Tariff tariff = tariffService.findById(id);
-            DtoEntity tariffDto = tariffService.convertToDto(tariff, new TariffDto());
+            LOGGER.info("[{}],  tariff={}", LocalDateTime.now(), tariff);
+            TariffDto tariffDto = tariffService.createRequirementsForEmbeddedOptions(tariffService.convertToDto(tariff, new TariffDto()));
             model.addAttribute(tariffDto);
         }
-
+        model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
         return "edittariff";
     }
 
     @PostMapping("/newTariff")
-    public String newTariff(@ModelAttribute("tariffDto") TariffDto tariffDto, Model model, SessionStatus sessionStatus) {
-        LOGGER.info("[{}], POST [{}]  tarif model = {}", LocalDateTime.now(), LOGGER.getName(), tariffDto);
+    public String newTariff(@ModelAttribute("tariffDto") TariffDto tariffDto, HttpServletRequest request, Model model, SessionStatus sessionStatus) {
 
-        tariffService.merge((Tariff) tariffService.convertToEntity(new Tariff(), tariffDto));
+        String result = tariffService.merge((Tariff) tariffService.convertToEntity(new Tariff(), tariffDto), request.getParameterValues("opt"));
         sessionStatus.setComplete();
-
         model.addAttribute("tariffDto", new TariffDto());
-        //TODO update. Need 2 variant (success and fail)
-        model.addAttribute("change", "changes  successful");
+        model.addAttribute("result", result);
+        model.addAttribute("optionsList", optionService.getAllDto());
+        LOGGER.info("[{}], POST [{}]  result = {}", LocalDateTime.now(), LOGGER.getName(), result);
         return "edittariff";
     }
 
@@ -134,13 +138,10 @@ public class EmplController {
             model.addAttribute("result", result);
             LOGGER.info("[{}], POST saveOrUpdateOption DELETE [{}]  optionDto = {}", LocalDateTime.now(), LOGGER.getName(), optionDto);
         } else {
-            optionDto = optionService.createOptionConstraint(request.getParameterValues("requirement"), request.getParameterValues("exclusion"), optionDto);
-            String result = optionService.update((Option) optionService.convertToEntity(new Option(), optionDto));
+            String result = optionService.update(request.getParameterValues("requirement"), request.getParameterValues("exclusion"), optionDto);
             model.addAttribute("result", result);
-            LOGGER.info("[{}], POST saveOrUpdateOption [{}]  optionDto = {}", LocalDateTime.now(), LOGGER.getName(), optionDto);
-
+            LOGGER.info("[{}], POST saveOrUpdateOption [{}]  optionDto = {}, result={}", LocalDateTime.now(), LOGGER.getName(), optionDto, result);
         }
-
         List<DtoEntity> options = optionService.getAllDto();
         model.addAttribute("optionsList", options);
         sessionStatus.setComplete();
@@ -150,8 +151,8 @@ public class EmplController {
 
     @PostMapping("/deleteoption")
     public String deleteOption(@RequestParam(value = "id") Integer id, Model model) {
-        // String result = optionService.deleteById(id);
-        //  model.addAttribute("result", result);
+        String result = optionService.deleteById(id);
+        model.addAttribute("result", result);
         return "employee";
     }
 }

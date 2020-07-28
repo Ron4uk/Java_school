@@ -1,8 +1,10 @@
-package com.task.service;
+package com.task.service.implementation;
 
 
 import com.task.dao.AuthorizationDao;
-import com.task.entity.Authorization;
+import com.task.service.GenericMapper;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,16 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class AuthorizationServiceImpl extends GenericMapper {
+    @Getter
+    @Setter(onMethod = @__({@Autowired}))
     private AuthorizationDao authorizationDao;
 
-    public AuthorizationDao getAuthorizationDao() {
-        return authorizationDao;
-    }
 
-    @Autowired
-    public void setAuthorizationDao(AuthorizationDao authorizationDao) {
-        this.authorizationDao = authorizationDao;
-    }
 
 
 }

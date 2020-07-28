@@ -1,35 +1,27 @@
 package com.task.controller;
 
-import com.task.dto.ClientDto;
 import com.task.dto.DtoEntity;
-import com.task.entity.Client;
-import com.task.service.ClientServiceImpl;
+import com.task.service.ClientService;
+import com.task.service.implementation.ClientServiceImpl;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Controller
 public class MainController {
-    @Autowired
-    private ClientServiceImpl clientService;
+    @Getter
+    @Setter(onMethod = @__({@Autowired}))
+    private ClientService clientService;
 
 
-    public ClientServiceImpl getClientService() {
-        return clientService;
-    }
-
-    public void setClientService(ClientServiceImpl clientService) {
-        this.clientService = clientService;
-    }
 
 
 

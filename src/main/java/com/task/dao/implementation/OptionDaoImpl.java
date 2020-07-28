@@ -23,4 +23,12 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
         query.setParameter("id", id);
         return query.getResultList();
     }
+
+    @Override
+    public void deleteById(Object id) {
+    entityManager.createNativeQuery("DELETE FROM required_options WHERE requiredOptions_id="+id).executeUpdate();
+    entityManager.createNativeQuery("DELETE FROM exclusion_options WHERE exclusionOptions_id="+id).executeUpdate();
+    entityManager.createNativeQuery("DELETE FROM options_in_tariff WHERE option_id="+id).executeUpdate();
+     super.deleteById(id);
+    }
 }

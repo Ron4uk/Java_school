@@ -54,20 +54,20 @@
         <div class="form-group row">
             <form:label path="name" for="inputNameOption" cssClass="col-sm-2 col-form-label">Option</form:label>
             <div class="col-sm-10">
-                <form:input path="name" cssClass="form-control" id="inputNameOption" required="required"/>
+                <form:input path="name"  cssClass="form-control" id="inputNameOption" required="required" />
             </div>
         </div>
         <div class="form-group row">
             <form:label path="price" for="inputPrice" class="col-sm-2 col-form-label">Price</form:label>
             <div class="col-sm-10">
-                <form:input path="price" cssClass="form-control" id="inputPrice" required="required"/>
+                <form:input path="price" pattern="\d{1,4}\\.?\d{0,2}" cssClass="form-control" id="inputPrice" required="required" placeholder="хххх.хх"/>
             </div>
         </div>
         <div class="form-group row">
             <form:label path="price" for="inputConnectionCost"
                         class="col-sm-2 col-form-label">Connection cost</form:label>
             <div class="col-sm-10">
-                <form:input path="connectionCost" cssClass="form-control" id="inputConnectionCost" required="required"/>
+                <form:input path="connectionCost" pattern="\d{1,4}\\.?\d{0,2}" cssClass="form-control" id="inputConnectionCost" required="required" placeholder="хххх.хх"/>
             </div>
         </div>
 
@@ -131,19 +131,21 @@
             <div class="col-sm-10 ">
                 <form:button type="submit" class="btn btn-secondary">Save</form:button>
                 <c:if test="${optionDto.id!=null}">
-                <form:button type="submit" name="delete" onclick="return confirm('Option: ${optionDto.id} ${optionDto.name} will be deleted. Are you sure?')" class="btn btn-secondary">Delete</form:button>
+                    <form:button type="submit" name="delete"
+                                 onclick="return confirm('Option: ${optionDto.id} ${optionDto.name} will be deleted. Are you sure?')"
+                                 class="btn btn-secondary">Delete</form:button>
                 </c:if>
             </div>
         </div>
     </form:form>
 
-    <c:if test="${result=='changes successful'}">
+    <c:if test="${result=='changes successful.'}">
         <div id="message"><p style="margin-top: 10px; color: forestgreen">Change successful! </p></div>
     </c:if>
+        <c:if test="${result !='changes successful.' && result.length()>0}">
+            <div id="message"><p style="margin-top: 10px; color: red">${result}</p></div>
+        </c:if>
 
-    <c:if test="${result =='change failed'}">
-        <div id="message"><p style="margin-top: 10px; color: red">Change failed! </p></div>
-    </c:if>
 
 
     <div class="card-footer text-muted" style="margin-top: 20px">
@@ -172,7 +174,7 @@
 
         }
 
-        document.write(requiredOptions);
+
         </c:forEach>
         </c:if>
 
@@ -181,7 +183,7 @@
         var exclusionOptions = "${exc.id}"
         var excl = document.getElementsByName("exclusion");
 
-        for (var i = 0; i <= excl.length - 1; i++) {
+        for (let i = 0; i <= excl.length - 1; i++) {
             if (excl[i].value == exclusionOptions) {
                 excl[i].checked = true;
                 updateCheckBox2(excl[i]);
@@ -214,7 +216,7 @@
 
     function updateCheckBox2(chek2) {
         var reqChek = document.getElementsByName("requirement");
-        for (var i = 0; i <= reqChek.length - 1; i++) {
+        for (let i = 0; i <= reqChek.length - 1; i++) {
             if (reqChek[i].value == chek2.value && chek2.checked == true) {
                 reqChek[i].checked = false;
                 reqChek[i].disabled = true;

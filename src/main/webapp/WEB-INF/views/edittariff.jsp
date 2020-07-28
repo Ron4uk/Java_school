@@ -41,45 +41,83 @@
 
 
             </ul>
-            <a href="/employee"  class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>
     </nav>
 
-        <form:form   action="/newTariff" modelAttribute="tariffDto" cssStyle="margin-top: 15px">
-            <div class="form-group row">
-                <form:label path="tariff" for="inputTariff" cssClass="col-sm-2 col-form-label">Tariff</form:label>
-                <div class="col-sm-10">
-                    <form:input path="tariff" cssClass="form-control" id="inputTariff" required="required"/>
+    <form:form action="/newTariff" modelAttribute="tariffDto" cssStyle="margin-top: 15px">
+        <div class="form-group row">
+            <form:label path="tariff" for="inputTariff" cssClass="col-sm-2 col-form-label">Tariff</form:label>
+            <div class="col-sm-10">
+                <form:input path="tariff" cssClass="form-control" id="inputTariff" required="required"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <form:label path="price" for="inputPrice" class="col-sm-2 col-form-label">Price</form:label>
+            <div class="col-sm-10">
+                <form:input path="price" pattern="\d{1,4}\\.?\d{0,2}" cssClass="form-control" id="inputPrice" required ="required" placeholder="хххх.хх"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">Status</div>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <form:checkbox path="deprecated" cssClass="form-check-input" id="status"/>
+                    <form:label path="deprecated" class="form-check-label" for="status">
+                        Deprecated
+                    </form:label>
                 </div>
             </div>
-            <div class="form-group row">
-                <form:label path="price" for="inputPrice" class="col-sm-2 col-form-label">Price</form:label>
-                <div class="col-sm-10">
-                    <form:input path="price"   cssClass="form-control" id="inputPrice" required="required"/>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-2">Status</div>
-                <div class="col-sm-10">
-                    <div class="form-check">
-                        <form:checkbox path="deprecated" cssClass="form-check-input"  id="status"/>
-                        <form:label path="deprecated" class="form-check-label" for="status">
-                            Deprecated
-                        </form:label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row justify-content-end">
-                <div class="col-sm-10 ">
-                    <form:button type="submit"  class="btn btn-secondary">Save</form:button>
-                </div>
-            </div>
-        </form:form>
+        </div>
+        <div class="form-group row">
 
-    <c:if test="${change!=null}">
-        <div id="message"><p style="margin-top: 10px; color: forestgreen" >Change successful! </p></div>
+            <div class="col-sm-12 col-md-12">
+                <div><p>Select the options available in the tariff.</p></div>
+
+                <table class="table" id="required options">
+                    <thead>
+                    <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Option</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Choose</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${optionsList}" var="mes">
+                        <tr>
+                            <th scope="row">${mes.id}</th>
+                            <td>${mes.name}</td>
+                            <td>${mes.price}</td>
+                            <td><input type="checkbox" name="opt" value="${mes.id}"
+                                       onchange="checkreqoptions(${mes.requirementsId}, this)"></td>
+
+
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+
+        <div class="form-group row justify-content-end">
+            <div class="col-sm-10 ">
+                <form:button type="submit" class="btn btn-secondary">Save</form:button>
+            </div>
+        </div>
+    </form:form>
+
+    <c:if test="${result=='changes successful'}">
+        <div id="message"><p style="margin-top: 10px; color: forestgreen">Change successful! </p></div>
+    </c:if>
+
+    <c:if test="${result =='change failed'}">
+        <div id="message"><p style="margin-top: 10px; color: red">Change failed! </p></div>
     </c:if>
 
 
@@ -87,6 +125,49 @@
         Created at night
     </div>
 </div>
+
+<script>
+    function onload() {
+    <c:forEach items="${tariffDto.options}" var="req">
+        var elementOpt = document.getElementsByName("opt")
+        for (let i = 0; i <= elementOpt.length - 1; i++) {
+            if(elementOpt[i].value == ${req.id}){
+                elementOpt[i].checked=true;
+               checkreqoptions(${req.requirementsId}, elementOpt[i]);
+            }
+        }
+    </c:forEach>
+    }
+    document.onload=onload();
+
+
+    function checkreqoptions(optionId, checkbox) {
+        if(optionId.length>0) {
+            if(checkbox.checked==true) { alert("Options with the following identifier: "+ optionId+" will be added to the tariff, because this is a requirement for option "+ checkbox.value)}
+            if(checkbox.checked==false) { alert("Options with the following identifier: "+ optionId +" will be unchecked")}
+            var elementOpt = document.getElementsByName("opt")
+
+            for (let i = 0; i <= elementOpt.length - 1; i++) {
+                for (let opt of optionId) {
+                    if (elementOpt[i].value == opt && checkbox.checked == true && elementOpt[i].value != checkbox.value) {
+                        elementOpt[i].checked = true;
+                        elementOpt[i].onclick = function() {
+                                return false
+                        }
+
+                    } else if (elementOpt[i].value == opt && checkbox.checked == false) {
+                        elementOpt[i].checked = false;
+                        elementOpt[i].onclick = function() {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+</script>
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

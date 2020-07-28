@@ -1,6 +1,8 @@
 package com.task.config;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +19,7 @@ public class SpringConfig implements WebMvcConfigurer {
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Register resource handler for Style/css
+
         registry
                 .addResourceHandler("/webjars/**")
                 .addResourceLocations("/webjars/");
@@ -33,7 +35,13 @@ public class SpringConfig implements WebMvcConfigurer {
 
     @Bean
     public ModelMapper modelMapper(){
-        return  new ModelMapper();
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setFieldMatchingEnabled(true)
+                .setSkipNullEnabled(true)
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
+        return  mapper;
     }
 
 

@@ -1,10 +1,11 @@
-package com.task.service;
+package com.task.service.implementation;
 
 import com.task.dao.ClientDao;
-import com.task.dao.implementation.ClientDaoImpl;
 import com.task.dto.ClientDto;
 import com.task.dto.DtoEntity;
 import com.task.entity.Client;
+import com.task.service.ClientService;
+import com.task.service.GenericMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @NoArgsConstructor
-public class ClientServiceImpl extends GenericMapper  {
+public class ClientServiceImpl extends GenericMapper implements ClientService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientServiceImpl.class);
     @Getter
     @Setter (onMethod =@__({@Autowired}))
