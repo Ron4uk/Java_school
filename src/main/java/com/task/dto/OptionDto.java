@@ -30,12 +30,16 @@ public class OptionDto implements DtoEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Integer> requirementsId;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Integer> exclusionsId;
 
     public OptionDto() {
         this.requiredOptions = new HashSet<>();
         this.exclusionOptions =  new HashSet<>();
         this.tariffs=new HashSet<>();
         this.requirementsId = new HashSet<>();
+        this.exclusionsId = new HashSet<>();
     }
 
 

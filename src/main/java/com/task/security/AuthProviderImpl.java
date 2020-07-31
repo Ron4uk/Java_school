@@ -34,23 +34,21 @@ public class AuthProviderImpl implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String phone = authentication.getName().toString();
-        LOGGER.info("[{}]  phone = {}", LocalDateTime.now(), phone);
         Contract contract = contractService.findByPhone(phone);
- //       Authorization authorization = authorizationService.findByPhone(phone);
         LOGGER.info("[{}]  Connect to DB from method findByPhone {}. contract = {}", LocalDateTime.now(), LOGGER.getName(), contract);
-        if(contract==null){
+        if (contract == null) {
             throw new UsernameNotFoundException("User not found");
         }
         String password = authentication.getCredentials().toString();
-        if(!password.equals(contract.getAuth().getPassword())){
+        if (!password.equals(contract.getAuth().getPassword())) {
             throw new BadCredentialsException("wrong password");
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(contract.getAuth().getRoles().iterator().next().toString()));
 
-        UsernamePasswordAuthenticationToken as = new UsernamePasswordAuthenticationToken(contract, null,authorities);
+        UsernamePasswordAuthenticationToken as = new UsernamePasswordAuthenticationToken(contract, null, authorities);
 
-        return new UsernamePasswordAuthenticationToken(contract, null,authorities);
+        return new UsernamePasswordAuthenticationToken(contract, null, authorities);
     }
 
     @Override

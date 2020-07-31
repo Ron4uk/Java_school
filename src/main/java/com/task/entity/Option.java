@@ -4,12 +4,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -39,7 +36,10 @@ public class Option extends AbstractIdentification{
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Tariff> tariffs;
-
+    @ManyToMany(mappedBy = "connectedOptions",  fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Contract> contracts;
 
 
 }

@@ -39,7 +39,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
     public List<OptionDto> getAllDtoWithReqId() {
         List<OptionDto> result = optionDao.getAll().stream().map(e -> (OptionDto) this.convertToDto(e, new OptionDto())).collect(Collectors.toList());
         for (OptionDto optionDto : result) {
-            Set<Integer> requirementsId = setrequirements(optionDto);
+            Set<Integer> requirementsId = setRequirements(optionDto);
 
             optionDto.setRequirementsId(requirementsId);
 
@@ -48,21 +48,34 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
     }
 
     /**
-     * Create a list of request id options for processing it in jsp (these id will be selected on the checkboxes).
+     * Create a list of required id options for processing it in jsp (these id will be selected on the checkboxes).
      *
      * @param optionDto
      * @return Set<Integer> requirementsId</>
      */
-    public Set<Integer> setrequirements(OptionDto optionDto) {
+    public Set<Integer> setRequirements(OptionDto optionDto) {
         Set<Integer> requirementsId = new HashSet<>();
         if (optionDto.getRequiredOptions().size() > 0) {
             for (OptionDto optionDtoNext : optionDto.getRequiredOptions()) {
-                requirementsId.addAll(setrequirements(optionDtoNext));
+                requirementsId.addAll(setRequirements(optionDtoNext));
                 requirementsId.add(optionDtoNext.getId());
             }
 
         }
         return requirementsId;
+    }
+
+    @Override
+    public Set<Integer> setExclusions(OptionDto optionDto) {
+        Set<Integer> exclusionsId = new HashSet<>();
+        if (optionDto.getExclusionOptions().size() > 0) {
+            for (OptionDto optionDtoNext : optionDto.getExclusionOptions()) {
+                exclusionsId.addAll(setExclusions(optionDtoNext));
+                exclusionsId.add(optionDtoNext.getId());
+            }
+
+        }
+        return exclusionsId;
     }
 
     public List<Option> getAllWithout(Integer id) {
@@ -103,6 +116,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
      * Create constraints on requirement options and exclusion options.
      * Also it checks  have any options from exclusion options in inherited options of requirement options.
      * In this case option won't be updated and return the name and id of option wich have to remove from the Set of exclusion options.
+     *
      * @param requirement
      * @param exclusion
      * @param optionDto
@@ -162,6 +176,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
     public String deleteById(Integer id) {
         String result = "change failed.";
         try {
+            LOGGER.info("[{}],  deleteById [{}] Option id = {}", LocalDateTime.now(), LOGGER.getName(), id);
             optionDao.deleteById(id);
             result = "changes successful.";
         } catch (Exception e) {

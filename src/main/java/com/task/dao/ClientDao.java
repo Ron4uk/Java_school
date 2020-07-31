@@ -8,4 +8,5 @@ import com.task.entity.Client;
 
 public interface ClientDao extends GenericDao<Client> {
 
+    void check(com.task.dto.ClientDto clientDto);
 }

@@ -1,16 +1,11 @@
 package com.task.controller;
 
-import com.task.dto.DtoEntity;
-import com.task.dto.OptionDto;
-import com.task.dto.TariffDto;
-import com.task.entity.Option;
+import com.task.dto.*;
 import com.task.entity.Tariff;
 import com.task.service.ClientService;
+import com.task.service.ContractService;
 import com.task.service.OptionService;
 import com.task.service.TariffService;
-import com.task.service.implementation.ClientServiceImpl;
-import com.task.service.implementation.OptionServiceImpl;
-import com.task.service.implementation.TariffServiceImpl;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -25,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@SessionAttributes({"tariffDto", "optionDto"})
+@SessionAttributes({"tariffDto", "optionDto", "clientDto", "contractDto"})
 
 @Controller
 public class EmplController {
@@ -42,11 +37,17 @@ public class EmplController {
     @Setter(onMethod = @__({@Autowired}))
     private OptionService optionService;
 
+    @Getter
+    @Setter(onMethod = @__({@Autowired}))
+    private ContractService contractService;
+
     @GetMapping("/employee")
     public String employeePage(SessionStatus sessionStatus, Model model) {
         sessionStatus.setComplete();
         model.addAttribute("optionDto", new OptionDto());
         model.addAttribute("tariffDto", new TariffDto());
+        model.addAttribute("clientDto", new ClientDto());
+        model.addAttribute("contractDto", new ContractDto());
         return "employee";
     }
 
@@ -77,11 +78,8 @@ public class EmplController {
 
     @GetMapping("/edittariff")
     public String editTariff(@RequestParam(value = "id", required = false) Integer id, Model model) {
-        LOGGER.info("[{}],  GET tariff  enter", LocalDateTime.now());
         if (id != null) {
-            LOGGER.info("[{}],  id={}", LocalDateTime.now(), id);
             Tariff tariff = tariffService.findById(id);
-            LOGGER.info("[{}],  tariff={}", LocalDateTime.now(), tariff);
             TariffDto tariffDto = tariffService.createRequirementsForEmbeddedOptions(tariffService.convertToDto(tariff, new TariffDto()));
             model.addAttribute(tariffDto);
         }
@@ -154,5 +152,61 @@ public class EmplController {
         String result = optionService.deleteById(id);
         model.addAttribute("result", result);
         return "employee";
+    }
+
+    @ModelAttribute("clientDto")
+    public ClientDto getClientDto() {
+        return new ClientDto();
+    }
+
+    @GetMapping("/newclient")
+    public String newClientForm() {
+        return "newclient";
+    }
+
+    @PostMapping("/addnewclient")
+    public String addClient(@ModelAttribute("clientDto") ClientDto clientDto, Model model) {
+        clientService.check(clientDto);
+
+        model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
+        return "/newcontract";
+    }
+
+    @ModelAttribute("contractDto")
+    public ContractDto getContractDto() {
+        return new ContractDto();
+    }
+
+    @GetMapping("/newcontract")
+    public String newContract() {
+
+        return "newcontract";
+    }
+
+    @PostMapping("/newcontract")
+    public String addContract(@ModelAttribute("clientDto") ClientDto clientDto, @ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request, Model model) {
+
+        contractService.create(contractDto, clientDto, request.getParameter("chosentariff"), request.getParameterValues(request.getParameter("chosentariff")));
+       return "employee";
+    }
+
+    @GetMapping("/chooseclient")
+    public String chooseClient() {
+        return "chooseclient";
+    }
+
+    @PostMapping("/chooseclient")
+    public String searchClient(@ModelAttribute("contractDto") ContractDto contractDto, Model model) {
+
+        if(contractDto.getPhone()!=null) model.addAttribute("client", contractService.findByPhoneDto(contractDto.getPhone()).getClientDto());
+        return "chooseclient";
+    }
+
+    @GetMapping("/searchclient")
+    public String searchClient(Model model, HttpServletRequest request){
+
+        model.addAttribute("clientDto", contractService.findByIdDto(request.getParameter("choice")));
+        model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
+        return "newcontract";
     }
 }

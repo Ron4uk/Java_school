@@ -52,7 +52,7 @@
     </form>
 
     <form action="/getAllContracts" method="get" style="margin-top: 10px">
-        <button type="submit" class="btn btn-secondary  btn-lg btn-block">Get all contracts</button>
+        <button type="submit" class="btn btn-secondary  btn-lg btn-block">Get all contractDtos</button>
     </form>
 
     <form action="/getAllClients" method="get" style="margin-top: 10px">
@@ -60,15 +60,15 @@
     </form>
 
     <button type="submit" class="btn btn-secondary  btn-lg btn-block" data-toggle="collapse"
-            data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Sign a new contract
+            data-target="#clients" aria-expanded="false" aria-controls="collapseExample">Sign a new contract
     </button>
-    <div class="collapse" id="collapseExample" style="margin-top: 20px">
+    <div class="collapse" id="clients" style="margin-top: 20px">
         <div class="row justify-content-around">
 
-            <form role="form" class="col-md-2" method="get">
+            <form role="form" action="/chooseclient" class="col-md-2" method="get">
                 <button type="submit" class="btn btn-secondary  btn ">Existing client</button>
             </form>
-            <form role="form" class="col-md-2" method="get">
+            <form role="form" action="/newclient" class="col-md-2" method="get">
                 <button type="submit" class="btn btn-secondary  btn ">New client</button>
             </form>
         </div>

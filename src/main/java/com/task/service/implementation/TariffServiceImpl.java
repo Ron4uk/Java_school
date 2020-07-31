@@ -48,6 +48,13 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
         return tariffDao.getAll().stream().map(e -> this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
     }
 
+    @Override
+    public List<TariffDto> getAllDtoWithReq() {
+        List<TariffDto> tariffDtoList=tariffDao.getAll().stream().map(e -> (TariffDto)this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
+        tariffDtoList.forEach(e->createRequirementsForEmbeddedOptions(e));
+        return tariffDtoList;
+    }
+
     public Tariff create(Tariff tariff) {
         return tariffDao.create(tariff);
     }
@@ -76,7 +83,7 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
     }
 
     /**
-     * Create a list of request id options for TariffDto.
+     * Creates a list of required id options for TariffDto.
      *
      * @param tariffDto
      * @return tariffDto</>
@@ -84,7 +91,8 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
     public TariffDto createRequirementsForEmbeddedOptions(DtoEntity tariffDto) {
         TariffDto tariffDtoAlter = (TariffDto) tariffDto;
         for (OptionDto optionDto : tariffDtoAlter.getOptions()) {
-            optionDto.setRequirementsId(optionService.setrequirements(optionDto));
+            optionDto.setRequirementsId(optionService.setRequirements(optionDto));
+            optionDto.setExclusionsId(optionService.setExclusions(optionDto));
 
         }
 

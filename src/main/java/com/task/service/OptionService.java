@@ -20,6 +20,7 @@ public interface OptionService {
     DtoEntity convertToDto(Object obj, DtoEntity mapper);
     Object convertToEntity(Object obj, DtoEntity mapper);
     String update(String[] requirement, String[] exclusion, OptionDto optionDto);
-    Set<Integer> setrequirements(OptionDto optionDto);
+    Set<Integer> setRequirements(OptionDto optionDto);
+    Set<Integer> setExclusions(OptionDto optionDto);
 
 }

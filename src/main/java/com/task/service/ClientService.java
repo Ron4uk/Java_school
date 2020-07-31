@@ -10,4 +10,7 @@ public interface ClientService {
     List<DtoEntity> getAllDto();
     DtoEntity convertToDto(Object obj, DtoEntity mapper);
     Object convertToEntity(Object obj, DtoEntity mapper);
+    DtoEntity update(com.task.dto.ClientDto clientDto);
+
+    void check(com.task.dto.ClientDto clientDto);
 }

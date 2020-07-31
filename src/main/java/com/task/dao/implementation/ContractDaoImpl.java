@@ -1,7 +1,9 @@
 package com.task.dao.implementation;
 
+import com.task.customeexceptions.WrongPhoneNumberException;
 import com.task.dao.ContractDao;
 import com.task.dao.GenericDaoImpl;
+import com.task.dto.ClientDto;
 import com.task.entity.Contract;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,15 @@ public class ContractDaoImpl extends GenericDaoImpl<Contract> implements Contrac
             return (Contract) query.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    @Override
+    public void check(String phone, ClientDto clientDto, com.task.dto.ContractDto contractDto) {
+        Query query = entityManager.createNativeQuery("SELECT id from contracts WHERE phone= ?");
+        query.setParameter(1, phone);
+        if(!query.getResultList().isEmpty()){
+            throw new WrongPhoneNumberException("This phone number already exist", clientDto, contractDto);
         }
     }
 }

@@ -1,10 +1,10 @@
 package com.task.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "contracts")
@@ -12,8 +12,24 @@ import javax.persistence.*;
 @Setter
 @ToString
 public class Contract extends AbstractIdentification {
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
     private String phone;
     @OneToOne(cascade = CascadeType.ALL)
     private Authorization auth;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "connected_options",
+            joinColumns = @JoinColumn(name = "contract_id"),
+            inverseJoinColumns = @JoinColumn(name = "option_id")
+    )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Option> connectedOptions;
+
+    public Contract() {
+        this.connectedOptions = new HashSet<>();
+    }
 }

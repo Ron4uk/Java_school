@@ -1,11 +1,14 @@
 package com.task.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Simple JavaBeans object that represents entity of client
@@ -16,6 +19,7 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 public class Client extends AbstractIdentification {
 
     @Column (name = "firstname")
@@ -25,14 +29,22 @@ public class Client extends AbstractIdentification {
 
     @Column(name = "birthday")
     private Date birthday;
-    @Column(name = "email")
+    @Column(name = "address")
+    private String address;
+    @Column(name = "email", unique = true)
     private String email;
     @Column(name = "series")
     private String passport_series;
     @Column(name = "number")
     private  String passport_number;
 
+    @OneToMany (mappedBy = "client")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Contract> contracts;
+
     public Client() {
+        this.contracts =new HashSet<>();
     }
 
     public Client(String firstName, String lastName) {

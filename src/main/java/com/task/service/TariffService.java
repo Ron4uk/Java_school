@@ -27,4 +27,6 @@ public interface TariffService {
     TariffDto createRequirementsForEmbeddedOptions(DtoEntity tariffDto);
     DtoEntity convertToDto(Object obj, DtoEntity mapper);
     Object convertToEntity(Object obj, DtoEntity mapper);
+
+    List<TariffDto> getAllDtoWithReq();
 }

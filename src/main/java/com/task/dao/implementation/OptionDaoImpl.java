@@ -2,8 +2,6 @@ package com.task.dao.implementation;
 
 import com.task.dao.GenericDaoImpl;
 import com.task.dao.OptionDao;
-import com.task.dto.DtoEntity;
-import com.task.entity.Contract;
 import com.task.entity.Option;
 import org.springframework.stereotype.Repository;
 
@@ -26,9 +24,10 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
 
     @Override
     public void deleteById(Object id) {
-    entityManager.createNativeQuery("DELETE FROM required_options WHERE requiredOptions_id="+id).executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM exclusion_options WHERE exclusionOptions_id="+id).executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM options_in_tariff WHERE option_id="+id).executeUpdate();
-     super.deleteById(id);
+        entityManager.createNativeQuery("DELETE FROM connected_options WHERE option_id=" + id).executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM required_options WHERE requiredOptions_id=" + id).executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM exclusion_options WHERE exclusionOptions_id=" + id).executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM options_in_tariff WHERE option_id=" + id).executeUpdate();
+        super.deleteById(id);
     }
 }
