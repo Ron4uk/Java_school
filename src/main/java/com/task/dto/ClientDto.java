@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class ClientDto implements DtoEntity {
     private String email;
     private String passport_series;
     private String passport_number;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<ContractDto> contracts;

@@ -44,15 +44,15 @@
         </div>
     </nav>
 
-    <form action="/find" method="post" style="margin-top: 10px">
+    <form:form action="/findClientOnMainPage" method="post" modelAttribute="contractDto" style="margin-top: 10px">
         <div class="form-group">
-            <input type="tel" mode name="phone" class="form-control" placeholder="Enter client's phone number">
+            <form:input type="tel" path="phone" name="phone" class="form-control" placeholder="Enter client's phone number"/>
         </div>
         <button type="submit" class="btn btn-secondary ">Search</button>
-    </form>
+    </form:form>
 
     <form action="/getAllContracts" method="get" style="margin-top: 10px">
-        <button type="submit" class="btn btn-secondary  btn-lg btn-block">Get all contractDtos</button>
+        <button type="submit" class="btn btn-secondary  btn-lg btn-block">Get all contracts</button>
     </form>
 
     <form action="/getAllClients" method="get" style="margin-top: 10px">
@@ -100,7 +100,44 @@
             </form>
         </div>
     </div>
+    <c:if test="${contract !=null}">
 
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">FirstName</th>
+                <th scope="col">LastName</th>
+                <th scope="col">Tariff</th>
+                <th scope="col">Phone number</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <th scope="row">${contract.clientDto.id}</th>
+                    <td>${contract.clientDto.firstName}</td>
+                    <td>${contract.clientDto.lastName}</td>
+                    <td>${contract.tariff.tariff}</td>
+                    <td>${contract.phone}</td>
+                    <td><a href="/editcontact?id=${contract.id} ">Edit</a></td>
+                    <c:if test="${contract.blockByOperator!=true }">
+                        <form method="post" action="/blockcontract">
+                        <td><button  type="submit" name="block" class="btn btn-outline-dark btn-sm" value="${contract.id}">block</button></td>
+                        </form>
+                    </c:if>
+                    <c:if test="${contract.blockByOperator==true }">
+                        <form method="post" action="/unblockcontract">
+                        <td><button  type="submit" name="unblock" class="btn btn-outline-danger btn-sm" value="${contract.id}">unblock</button></td>
+                        </form>
+                    </c:if>
+                </tr>
+
+            </tbody>
+        </table>
+    </c:if>
 
 
     <c:if test="${clientList !=null}">
@@ -151,7 +188,7 @@
                     <td>${tariff.price}</td>
                     <td>${tariff.deprecated}</td>
                     <td><a href="/edittariff?id=${tariff.id} ">Edit</a></td>
-                        <%--                    <td><button type="submit" class="btn btn-secondary btn-sm ">edit</button></td>--%>
+
 
                 </tr>
 
@@ -202,6 +239,9 @@
     </c:if>
     <c:if test="${change!=null}">
         <div id="message"><p style="margin-top: 10px; color: forestgreen" >Change successful! </p></div>
+    </c:if>
+    <c:if test="${block!=null}">
+        <div id="message"><p style="margin-top: 10px; color: forestgreen" >Client is blocked! </p></div>
     </c:if>
 
     <c:if test="${error!=null}">

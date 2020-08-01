@@ -4,6 +4,7 @@ import com.task.customeexceptions.WrongPhoneNumberException;
 import com.task.dao.ContractDao;
 import com.task.dao.GenericDaoImpl;
 import com.task.dto.ClientDto;
+import com.task.dto.ContractDto;
 import com.task.entity.Contract;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +26,7 @@ public class ContractDaoImpl extends GenericDaoImpl<Contract> implements Contrac
     }
 
     @Override
-    public void check(String phone, ClientDto clientDto, com.task.dto.ContractDto contractDto) {
+    public void check(String phone, ClientDto clientDto, ContractDto contractDto) {
         Query query = entityManager.createNativeQuery("SELECT id from contracts WHERE phone= ?");
         query.setParameter(1, phone);
         if(!query.getResultList().isEmpty()){

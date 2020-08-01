@@ -52,6 +52,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         Client client =(Client) convertToEntity(new Client(), clientDto);
         Contract contract = (Contract) convertToEntity(new Contract(), contractDto);
         contract.setClient(client);
+        contract.setTariff(tariff);
         Set<Role> roles = new HashSet<>();
         roles.add(Role.CLIENT);
         contract.getAuth().setRoles(roles);
@@ -64,9 +65,9 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
             }
         }
 
-        LOGGER.info("[{}], create from ContractServiceImpl [{}]  client = {} and contract ={} options ={}", LocalDateTime.now(), LOGGER.getName(), client, contract, contract.getConnectedOptions());
-//        clientDao.create(client);
-//        contractDAO.create(contract);
+        LOGGER.info("[{}], create from ContractServiceImpl [{}]  client = {} and contract ={} options ={} tariff={}", LocalDateTime.now(), LOGGER.getName(), client, contract, contract.getConnectedOptions(), contract.getTariff());
+        clientDao.create(client);
+        contractDAO.create(contract);
     }
     @Override
     public void check(String phone, com.task.dto.ClientDto clientDto, com.task.dto.ContractDto contractDto) {
@@ -81,15 +82,41 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     }
 
     @Override
-    public ContractDto findByPhoneDto(String phone) {
+    public ContractDto findByPhoneDto(String phone, String path) {
         Contract contract = contractDAO.findByPhone(phone);
         LOGGER.info("[{}], [{}] findByPhone contract get client = {}", LocalDateTime.now(), LOGGER.getName(), contract);
         if(contract==null) {
-            throw new NotExistClientException("The client doesn't exist");
+            throw new NotExistClientException("The client doesn't exist", path);
         }
         ContractDto contractDto =(ContractDto) convertToDto(contract, new ContractDto());
         contractDto.setClientDto((ClientDto) convertToDto(contract.getClient(), new ClientDto()));
         LOGGER.info("[{}], findByPhone [{}] contractDto = {}", LocalDateTime.now(), LOGGER.getName(), contractDto);
+        return contractDto;
+    }
+
+    @Override
+    public ContractDto block(String id) {
+        LOGGER.info("[{}], block [{}] id = {}", LocalDateTime.now(), LOGGER.getName(), id);
+        Contract contract= contractDAO.findById(Integer.parseInt(id));
+        contract.setBlockByOperator(true);
+        LOGGER.info("update contract = {}", contract);
+        contractDAO.update(contract);
+        ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
+        ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
+        contractDto.setClientDto(clientDto);
+        return contractDto;
+    }
+
+    @Override
+    public ContractDto unblock(String id) {
+        LOGGER.info("[{}], unblock [{}] id = {}", LocalDateTime.now(), LOGGER.getName(), id);
+        Contract contract= contractDAO.findById(Integer.parseInt(id));
+        LOGGER.info("update contract = {}", contract);
+        contract.setBlockByOperator(false);
+        contractDAO.update(contract);
+        ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
+        ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
+        contractDto.setClientDto(clientDto);
         return contractDto;
     }
 }

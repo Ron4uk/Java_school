@@ -8,8 +8,10 @@ import lombok.Setter;
 @Setter
 public class NotExistClientException extends RuntimeException {
     private String message;
+    private String path;
 
-    public NotExistClientException(String message) {
+    public NotExistClientException(String message, String path) {
         this.message = message;
+        this.path = path;
     }
 }

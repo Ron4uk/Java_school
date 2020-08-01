@@ -3,6 +3,7 @@ package com.task.dto;
 import com.task.entity.Authorization;
 import com.task.entity.Client;
 import com.task.entity.Option;
+import com.task.entity.Tariff;
 import lombok.*;
 
 import java.util.HashSet;
@@ -17,6 +18,9 @@ public class ContractDto implements DtoEntity {
     private String phone;
     private Authorization auth;
     private ClientDto clientDto;
+    private Tariff tariff;
+    private Boolean blockByClient;
+    private Boolean blockByOperator;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OptionDto> connectedOptions;

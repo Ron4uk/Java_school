@@ -19,6 +19,13 @@ public class Contract extends AbstractIdentification {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tariff_id", nullable = false)
+    private Tariff tariff;
+    @Column(name = "block_client")
+    private Boolean blockByClient;
+    @Column(name = "block_operator")
+    private Boolean blockByOperator;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "connected_options",

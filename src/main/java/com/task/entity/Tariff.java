@@ -9,8 +9,6 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -24,8 +22,11 @@ public class Tariff extends AbstractIdentification {
     private String tariff;
     @Column(name = "price", precision = 6, scale = 2, nullable = false)
     private BigDecimal price;
-    @Column(name = "deprecated")
+    @Column(name = "deprecated", columnDefinition = "boolean default false")
     private Boolean deprecated;
+    @OneToMany (mappedBy = "tariff")
+    @ToString.Exclude
+    private Set<Contract> contracts;
     @ManyToMany( cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "options_in_tariff",
             joinColumns = @JoinColumn(name = "tariff_id"),

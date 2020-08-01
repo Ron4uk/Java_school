@@ -198,7 +198,7 @@ public class EmplController {
     @PostMapping("/chooseclient")
     public String searchClient(@ModelAttribute("contractDto") ContractDto contractDto, Model model) {
 
-        if(contractDto.getPhone()!=null) model.addAttribute("client", contractService.findByPhoneDto(contractDto.getPhone()).getClientDto());
+        if(contractDto.getPhone()!=null) model.addAttribute("client", contractService.findByPhoneDto(contractDto.getPhone(), "chooseclient").getClientDto());
         return "chooseclient";
     }
 
@@ -208,5 +208,23 @@ public class EmplController {
         model.addAttribute("clientDto", contractService.findByIdDto(request.getParameter("choice")));
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
         return "newcontract";
+    }
+
+    @PostMapping("/findClientOnMainPage")
+    public String findClientOnMainPage(@ModelAttribute("contractDto") ContractDto contractDto, Model model){
+        if(contractDto.getPhone()!=null) model.addAttribute("contract", contractService.findByPhoneDto(contractDto.getPhone(), "employee"));
+        return "employee";
+    }
+
+    @PostMapping("/blockcontract")
+    public String blockContract(HttpServletRequest request, Model model){
+        model.addAttribute("contract", contractService.block(request.getParameter("block")));
+        return "employee";
+    }
+
+    @PostMapping("/unblockcontract")
+    public String unBlockContract(HttpServletRequest request, Model model){
+        model.addAttribute("contract", contractService.unblock(request.getParameter("unblock")));
+        return "employee";
     }
 }

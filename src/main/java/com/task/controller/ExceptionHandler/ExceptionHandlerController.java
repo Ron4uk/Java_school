@@ -58,7 +58,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(value = NotExistClientException.class)
     public ModelAndView clientException(NotExistClientException exception){
-        ModelAndView modelAndView = new ModelAndView("/chooseclient");
+        ModelAndView modelAndView = new ModelAndView("/"+exception.getPath());
         modelAndView.addObject("result", exception.getMessage());
         modelAndView.addObject("contractDto", new ContractDto());
         return modelAndView;

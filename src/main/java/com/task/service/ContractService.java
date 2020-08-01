@@ -5,8 +5,6 @@ import com.task.dto.ContractDto;
 import com.task.dto.DtoEntity;
 import com.task.entity.Contract;
 
-import javax.security.auth.kerberos.KerberosTicket;
-
 public interface ContractService {
     Contract findByPhone(String phone);
     DtoEntity convertToDto(Object obj, DtoEntity mapper);
@@ -17,5 +15,9 @@ public interface ContractService {
 
     ClientDto findByIdDto(String id);
 
-    ContractDto findByPhoneDto(String phone);
+    ContractDto findByPhoneDto(String phone, String path);
+
+    ContractDto block(String id);
+
+    ContractDto unblock(String id);
 }
