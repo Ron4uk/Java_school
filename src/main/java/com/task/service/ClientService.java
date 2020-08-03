@@ -1,5 +1,6 @@
 package com.task.service;
 
+import com.task.dto.ClientDto;
 import com.task.dto.DtoEntity;
 import com.task.entity.Client;
 
@@ -13,4 +14,6 @@ public interface ClientService {
     DtoEntity update(com.task.dto.ClientDto clientDto);
 
     void check(com.task.dto.ClientDto clientDto);
+
+    ClientDto findByIdDto(String id);
 }

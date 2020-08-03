@@ -29,4 +29,10 @@ public interface TariffService {
     Object convertToEntity(Object obj, DtoEntity mapper);
 
     List<TariffDto> getAllDtoWithReq();
+
+    TariffDto findByIdDto(Integer id);
+
+    List<TariffDto> getAllWithoutDto(Integer id);
+
+    TariffDto remove(TariffDto tariffDto, Integer id);
 }

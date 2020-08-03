@@ -57,20 +57,11 @@
         <div class="form-group row">
             <form:label path="price" for="inputPrice" class="col-sm-2 col-form-label">Price</form:label>
             <div class="col-sm-10">
-                <form:input path="price" pattern="\d{1,4}\\.?\d{0,2}" cssClass="form-control" id="inputPrice" required ="required" placeholder="хххх.хх"/>
+                <form:input path="price" pattern="\d{1,4}\\.?\d{0,2}" cssClass="form-control" id="inputPrice"
+                            required="required" placeholder="хххх.хх"/>
             </div>
         </div>
-        <div class="form-group row">
-            <div class="col-sm-2">Status</div>
-            <div class="col-sm-10">
-                <div class="form-check">
-                    <form:checkbox path="deprecated" cssClass="form-check-input" id="status"/>
-                    <form:label path="deprecated" class="form-check-label" for="status">
-                        Deprecated
-                    </form:label>
-                </div>
-            </div>
-        </div>
+
         <div class="form-group row">
 
             <div class="col-sm-12 col-md-12">
@@ -82,6 +73,7 @@
                         <th scope="col">id</th>
                         <th scope="col">Option</th>
                         <th scope="col">Price</th>
+
                         <th scope="col">Choose</th>
                     </tr>
                     </thead>
@@ -91,6 +83,7 @@
                             <th scope="row">${mes.id}</th>
                             <td>${mes.name}</td>
                             <td>${mes.price}</td>
+
                             <td><input type="checkbox" name="opt" value="${mes.id}"
                                        onchange="checkreqoptions(${mes.requirementsId}, this)"></td>
 
@@ -128,36 +121,43 @@
 
 <script>
     function onload() {
-    <c:forEach items="${tariffDto.options}" var="req">
+        <c:forEach items="${tariffDto.options}" var="req">
         var elementOpt = document.getElementsByName("opt")
         for (let i = 0; i <= elementOpt.length - 1; i++) {
-            if(elementOpt[i].value == ${req.id}){
-                elementOpt[i].checked=true;
+            if (elementOpt[i].value == ${req.id}) {
+
+                elementOpt[i].checked = true;
+                //TODO do i have to check option here?
                checkreqoptions(${req.requirementsId}, elementOpt[i]);
             }
         }
-    </c:forEach>
+        </c:forEach>
     }
-    document.onload=onload();
+
+    document.onload = onload();
 
 
     function checkreqoptions(optionId, checkbox) {
-        if(optionId.length>0) {
-            if(checkbox.checked==true) { alert("Options with the following identifier: "+ optionId+" will be added to the tariff, because this is a requirement for option "+ checkbox.value)}
-            if(checkbox.checked==false) { alert("Options with the following identifier: "+ optionId +" will be unchecked")}
+        if (optionId.length > 0) {
+            if (checkbox.checked == true) {
+                alert("Options with the following identifier: " + optionId + " will be added to the tariff, because this is a requirement for option " + checkbox.value)
+            }
+            if (checkbox.checked == false) {
+                alert("Options with the following identifier: " + optionId + " will be unchecked")
+            }
             var elementOpt = document.getElementsByName("opt")
 
             for (let i = 0; i <= elementOpt.length - 1; i++) {
                 for (let opt of optionId) {
                     if (elementOpt[i].value == opt && checkbox.checked == true && elementOpt[i].value != checkbox.value) {
                         elementOpt[i].checked = true;
-                        elementOpt[i].onclick = function() {
-                                return false
+                        elementOpt[i].onclick = function () {
+                            return false
                         }
 
                     } else if (elementOpt[i].value == opt && checkbox.checked == false) {
                         elementOpt[i].checked = false;
-                        elementOpt[i].onclick = function() {
+                        elementOpt[i].onclick = function () {
                             return true
                         }
                     }

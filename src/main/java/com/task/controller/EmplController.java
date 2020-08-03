@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SessionAttributes({"tariffDto", "optionDto", "clientDto", "contractDto"})
-
 @Controller
 public class EmplController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmplController.class);
@@ -59,8 +58,7 @@ public class EmplController {
 
     @GetMapping("/getAllClients")
     public String getAllClients(Model model) {
-        List<DtoEntity> clients = clientService.getAllDto();
-        model.addAttribute("clientList", clients);
+        model.addAttribute("clientList", clientService.getAllDto());
         return "employee";
     }
 
@@ -79,9 +77,12 @@ public class EmplController {
     @GetMapping("/edittariff")
     public String editTariff(@RequestParam(value = "id", required = false) Integer id, Model model) {
         if (id != null) {
-            Tariff tariff = tariffService.findById(id);
-            TariffDto tariffDto = tariffService.createRequirementsForEmbeddedOptions(tariffService.convertToDto(tariff, new TariffDto()));
-            model.addAttribute(tariffDto);
+            //TODO make it easy (check it)
+//            Tariff tariff = tariffService.findByIdDto(id);
+//            TariffDto tariffDto = tariffService.createRequirementsForEmbeddedOptions(tariffService.convertToDto(tariff, new TariffDto()));
+//            LOGGER.info("[{}], editTariff tariffDto options={} ", LocalDateTime.now(),tariffDto.getOptions());
+            model.addAttribute(tariffService.findByIdDto(id));
+
         }
         model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
         return "edittariff";
@@ -95,9 +96,25 @@ public class EmplController {
         model.addAttribute("tariffDto", new TariffDto());
         model.addAttribute("result", result);
         model.addAttribute("optionsList", optionService.getAllDto());
-        LOGGER.info("[{}], POST [{}]  result = {}", LocalDateTime.now(), LOGGER.getName(), result);
+
         return "edittariff";
     }
+
+    @GetMapping("/deletetariff")
+    public String deleteTariffGet(@RequestParam Integer id, Model model){
+        model.addAttribute("tariffDto", tariffService.findByIdDto(id));
+        model.addAttribute("tariffsList", tariffService.getAllWithoutDto(id));
+        return  "deletetariff";
+    }
+
+    @PostMapping("/deletetariff")
+    public String deleteTariffPost(@ModelAttribute("tariffDto") TariffDto tariffDto, @RequestParam(value = "newtariff") Integer id, Model model){
+        tariffService.remove(tariffDto, id);
+        model.addAttribute("tariffDto", tariffService.findByIdDto(id));
+        model.addAttribute("tariffsList", tariffService.getAllWithoutDto(id));
+        return "deletetariff";
+    }
+
 
     @GetMapping("/options")
     public String getAllOptions(Model model) {
@@ -116,10 +133,8 @@ public class EmplController {
     @GetMapping("/editoption")
     public String editOption(@RequestParam(value = "id", required = false) Integer id, Model model) {
         if (id != null) {
-            DtoEntity optionDto = optionService.findByIdDto(id);
-            model.addAttribute(optionDto);
-            List<DtoEntity> options = optionService.getAllWithoutDto(id);
-            model.addAttribute("optionsList", options);
+            model.addAttribute(optionService.findByIdDto(id));
+            model.addAttribute("optionsList", optionService.getAllWithoutDto(id));
         } else {
             List<DtoEntity> options = optionService.getAllDto();
             LOGGER.info("[{}], Get editoption [{}]  options List = {}", LocalDateTime.now(), LOGGER.getName(), options);
@@ -132,16 +147,11 @@ public class EmplController {
     @PostMapping("/saveOrUpdateOption")
     public String saveOrUpdateOption(@ModelAttribute("optionDto") OptionDto optionDto, HttpServletRequest request, Model model, SessionStatus sessionStatus) {
         if (request.getParameter("delete") != null) {
-            String result = optionService.deleteById(optionDto.getId());
-            model.addAttribute("result", result);
-            LOGGER.info("[{}], POST saveOrUpdateOption DELETE [{}]  optionDto = {}", LocalDateTime.now(), LOGGER.getName(), optionDto);
+            model.addAttribute("result", optionService.deleteById(optionDto.getId()));
         } else {
-            String result = optionService.update(request.getParameterValues("requirement"), request.getParameterValues("exclusion"), optionDto);
-            model.addAttribute("result", result);
-            LOGGER.info("[{}], POST saveOrUpdateOption [{}]  optionDto = {}, result={}", LocalDateTime.now(), LOGGER.getName(), optionDto, result);
+            model.addAttribute("result", optionService.update(request.getParameterValues("requirement"), request.getParameterValues("exclusion"), optionDto));
         }
-        List<DtoEntity> options = optionService.getAllDto();
-        model.addAttribute("optionsList", options);
+        model.addAttribute("optionsList", optionService.getAllDto());
         sessionStatus.setComplete();
         model.addAttribute("optionDto", new OptionDto());
         return "editoption";
@@ -167,7 +177,6 @@ public class EmplController {
     @PostMapping("/addnewclient")
     public String addClient(@ModelAttribute("clientDto") ClientDto clientDto, Model model) {
         clientService.check(clientDto);
-
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
         return "/newcontract";
     }
@@ -205,7 +214,7 @@ public class EmplController {
     @GetMapping("/searchclient")
     public String searchClient(Model model, HttpServletRequest request){
 
-        model.addAttribute("clientDto", contractService.findByIdDto(request.getParameter("choice")));
+        model.addAttribute("clientDto", clientService.findByIdDto(request.getParameter("choice")));
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
         return "newcontract";
     }
@@ -219,12 +228,31 @@ public class EmplController {
     @PostMapping("/blockcontract")
     public String blockContract(HttpServletRequest request, Model model){
         model.addAttribute("contract", contractService.block(request.getParameter("block")));
+        model.addAttribute("result", "Client blocked!");
         return "employee";
     }
 
     @PostMapping("/unblockcontract")
     public String unBlockContract(HttpServletRequest request, Model model){
         model.addAttribute("contract", contractService.unblock(request.getParameter("unblock")));
+        model.addAttribute("result", "Client unblocked!");
+        return "employee";
+    }
+
+    @GetMapping("/editcontract")
+    public String editGetContract(HttpServletRequest request, Model model){
+        model.addAttribute("contractDto", contractService.findByIdDto(request.getParameter("id")));
+        model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
+        model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
+        return "editcontract";
+    }
+
+    @PostMapping("/editcontract")
+    public String editPostContract(@ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request, Model model){
+        model.addAttribute("contractDto", contractService.update(contractDto, request.getParameterValues(contractDto.getTariffDto().getId().toString())));
+        model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
+        model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
+        model.addAttribute("result", "Contract changes were successful!");
         return "employee";
     }
 }

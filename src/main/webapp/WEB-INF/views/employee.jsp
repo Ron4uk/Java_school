@@ -120,12 +120,12 @@
                     <th scope="row">${contract.clientDto.id}</th>
                     <td>${contract.clientDto.firstName}</td>
                     <td>${contract.clientDto.lastName}</td>
-                    <td>${contract.tariff.tariff}</td>
+                    <td>${contract.tariffDto.tariff}</td>
                     <td>${contract.phone}</td>
-                    <td><a href="/editcontact?id=${contract.id} ">Edit</a></td>
+                    <td><a href="/editcontract?id=${contract.id} ">Edit</a></td>
                     <c:if test="${contract.blockByOperator!=true }">
                         <form method="post" action="/blockcontract">
-                        <td><button  type="submit" name="block" class="btn btn-outline-dark btn-sm" value="${contract.id}">block</button></td>
+                        <td><button  type="submit" name="block" class="btn btn-outline-dark btn-sm" value="${contract.id}"> block </button></td>
                         </form>
                     </c:if>
                     <c:if test="${contract.blockByOperator==true }">
@@ -172,7 +172,7 @@
                 <th scope="col">id</th>
                 <th scope="col">tariff</th>
                 <th scope="col">price</th>
-                <th scope="col">deprecated</th>
+                <th scope="col"></th>
                 <th scope="col">
                     <a href="/edittariff" class="btn btn-outline-dark btn-sm">new tariff</a>
 
@@ -186,8 +186,8 @@
                     <th scope="row">${tariff.id}</th>
                     <td>${tariff.tariff}</td>
                     <td>${tariff.price}</td>
-                    <td>${tariff.deprecated}</td>
                     <td><a href="/edittariff?id=${tariff.id} ">Edit</a></td>
+                    <td><a href="/deletetariff?id=${tariff.id} ">Delete</a></td>
 
 
                 </tr>
@@ -240,12 +240,12 @@
     <c:if test="${change!=null}">
         <div id="message"><p style="margin-top: 10px; color: forestgreen" >Change successful! </p></div>
     </c:if>
-    <c:if test="${block!=null}">
-        <div id="message"><p style="margin-top: 10px; color: forestgreen" >Client is blocked! </p></div>
-    </c:if>
 
     <c:if test="${error!=null}">
         <div id="message" ><p style="margin-top: 10px; color: red" >Change failed! </p></div>
+    </c:if>
+    <c:if test="${result!=null}">
+        <div id="message" ><p style="margin-top: 10px; color: green" >${result}</p></div>
     </c:if>
 
     <div class="card-footer text-muted" style="margin-top: 20px">

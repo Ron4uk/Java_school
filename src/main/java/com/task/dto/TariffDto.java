@@ -12,13 +12,14 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode
-
+@ToString
 public class TariffDto implements DtoEntity {
     private Integer id;
     private String tariff;
     private Double price;
-    private boolean deprecated;
-    private Set<Contract> contracts;
+     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<ContractDto> contracts;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OptionDto> options;

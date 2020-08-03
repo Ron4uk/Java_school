@@ -18,6 +18,7 @@ import java.util.Set;
 public class Authorization extends AbstractIdentification {
 
     @Column(name = "password")
+    @ToString.Exclude
     private String password;
 
 

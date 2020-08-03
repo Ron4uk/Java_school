@@ -1,6 +1,7 @@
 package com.task.service.implementation;
 
 import com.task.dao.ClientDao;
+import com.task.dto.ClientDto;
 import com.task.dto.DtoEntity;
 import com.task.entity.Client;
 import com.task.service.ClientService;
@@ -34,12 +35,11 @@ public class ClientServiceImpl extends GenericMapper implements ClientService {
     }
 
     public List<DtoEntity> getAllDto() {
-
-        return clientDao.getAll().stream().map(e->this.convertToDto(e, new com.task.dto.ClientDto())).collect(Collectors.toList());
+        return clientDao.getAll().stream().map(e->this.convertToDto(e, new ClientDto())).collect(Collectors.toList());
     }
 
     @Override
-    public DtoEntity update(com.task.dto.ClientDto clientDto) {
+    public DtoEntity update(ClientDto clientDto) {
         Client client = (Client) convertToEntity(new Client(), clientDto);
         LOGGER.info("[{}]  save/update client  {}", LocalDateTime.now(), client);
         DtoEntity dtoEntity= convertToDto(clientDao.update(client), new com.task.dto.ClientDto());
@@ -48,7 +48,13 @@ public class ClientServiceImpl extends GenericMapper implements ClientService {
     }
 
     @Override
-    public void check(com.task.dto.ClientDto clientDto) {
+    public void check(ClientDto clientDto) {
         clientDao.check(clientDto);
+    }
+
+    @Override
+    public ClientDto findByIdDto(String id) {
+        Client client = clientDao.findById(Integer.parseInt(id));
+        return (ClientDto)convertToDto(client, new ClientDto());
     }
 }

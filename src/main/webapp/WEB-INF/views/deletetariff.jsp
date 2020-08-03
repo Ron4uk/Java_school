@@ -1,12 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
-        Created by IntelliJ IDEA.
-        User: Oleg
-        Date: 12.07.2020
-        Time: 20:25
-        To change this template use File | Settings | File Templates.
-        --%>
+  Created by IntelliJ IDEA.
+  User: Oleg
+  Date: 12.07.2020
+  Time: 20:25
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html lang="en">
 <head>
@@ -47,64 +47,65 @@
         </div>
     </nav>
 
-    <form:form action="/addnewclient" modelAttribute="clientDto" cssStyle="margin-top: 15px">
+    <form:form action="/deletetariff" modelAttribute="tariffDto" method="post" cssStyle="margin-top: 15px">
         <div class="form-group row">
-            <form:label path="firstName" for="inputFirstName" cssClass="col-sm-2 col-form-label">FirstName</form:label>
+            <form:label path="tariff" for="inputTariff" cssClass="col-sm-2 col-form-label">Tariff</form:label>
             <div class="col-sm-10">
-                <form:input path="firstName" cssClass="form-control" id="inputFirstName" required="required"/>
+                <form:input path="tariff" cssClass="form-control" id="inputTariff" required="required" readonly="true"/>
             </div>
         </div>
         <div class="form-group row">
-            <form:label path="lastName" for="inputLastName" cssClass="col-sm-2 col-form-label">LastName</form:label>
+            <form:label path="price" for="inputPrice" class="col-sm-2 col-form-label">Price</form:label>
             <div class="col-sm-10">
-                <form:input path="lastName" cssClass="form-control" id="inputLastName" required="required"/>
-            </div>
-        </div>
-        <div class="form-group row">
-            <form:label path="address" for="inputAddress" cssClass="col-sm-2 col-form-label">Address</form:label>
-            <div class="col-sm-10">
-                <form:input path="address" cssClass="form-control" id="inputAddress" required="required"/>
-            </div>
-        </div>
-        <div class="form-group row">
-            <form:label path="birthday" for="inputBirthday" cssClass="col-sm-2 col-form-label">Birthday</form:label>
-            <div class="col-sm-10">
-                <form:input path="birthday" type="date"   cssClass="form-control" id="inputBirthday" required="required" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <form:label path="email" for="inputEmail" cssClass="col-sm-2 col-form-label">Email</form:label>
-            <div class="col-sm-10">
-                <form:input path="email" type="email"  cssClass="form-control" id="inputEmail" required="required" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <form:label path="passport_series" for="inputSeries" cssClass="col-sm-2 col-form-label">Passport series</form:label>
-            <div class="col-sm-10">
-                <form:input path="passport_series"   cssClass="form-control" id="inputSeries" required="required" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <form:label path="passport_number" for="inputNumber" cssClass="col-sm-2 col-form-label">Passport number</form:label>
-            <div class="col-sm-10">
-                <form:input path="passport_number"   cssClass="form-control" id="inputNumber" required="required" />
+                <form:input path="price" pattern="\d{1,4}\\.?\d{0,2}" cssClass="form-control" id="inputPrice"
+                            required="required" placeholder="хххх.хх" readonly="true"/>
             </div>
         </div>
 
+        <div class="form-group row">
+
+            <div class="col-sm-12 col-md-12">
+                <div><p>Before you delete tariff you have to choose another tariff instead.</p></div>
+
+                <table class="table" id="required options">
+                    <thead>
+                    <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Tariff</th>
+                        <th scope="col">Cost</th>
+                        <th scope="col">Choose</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${tariffsList}" var="tariff">
+                        <tr>
+                            <th scope="row">${tariff.id}</th>
+                            <td>${tariff.tariff}</td>
+                            <td>${tariff.price}</td>
+                            <td><input type="radio" class="form-check-input" name="newtariff" value="${tariff.id}" required="required"></td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
 
 
-
+            </div>
+        </div>
 
 
         <div class="form-group row justify-content-end">
             <div class="col-sm-10 ">
-                <form:button type="submit" class="btn btn-secondary">Next</form:button>
+                <form:button type="submit" class="btn btn-secondary">Delete and save</form:button>
             </div>
         </div>
     </form:form>
 
-    <c:if test="${result!=null}">
-        <div id="message"><p style="margin-top: 10px; color: red">${result}</p></div>
+    <c:if test="${result=='changes successful'}">
+        <div id="message"><p style="margin-top: 10px; color: forestgreen">Change successful! </p></div>
+    </c:if>
+
+    <c:if test="${result =='change failed'}">
+        <div id="message"><p style="margin-top: 10px; color: red">Change failed! </p></div>
     </c:if>
 
 

@@ -13,11 +13,13 @@ public interface ContractService {
     void create(com.task.dto.ContractDto contractDto, ClientDto clientDto, String tariffId, String[] optionsId);
     void check(String phone, ClientDto clientDto, com.task.dto.ContractDto contractDto);
 
-    ClientDto findByIdDto(String id);
+    ContractDto findByIdDto(String id);
 
     ContractDto findByPhoneDto(String phone, String path);
 
     ContractDto block(String id);
 
     ContractDto unblock(String id);
+
+    ContractDto update(ContractDto contractDto, String[] connectedOptions);
 }

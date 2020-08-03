@@ -58,7 +58,7 @@
         <div class="form-group row">
             <form:label path="phone" for="inputPhoneNumber" cssClass="col-sm-2 col-form-label">Phone Number</form:label>
             <div class="col-sm-10">
-                <form:input path="phone" cssClass="form-control" id="inputPhoneNumber" required="required"/>
+                <form:input path="phone" pattern="\d{11}" cssClass="form-control" id="inputPhoneNumber" required="required"/>
             </div>
         </div>
         <div class="form-group row">

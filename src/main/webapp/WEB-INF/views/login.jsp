@@ -23,11 +23,11 @@
 
     <div class="form-group">
         <label>Phone number</label>
-        <input type="tel"  name="phone" class="form-control" size="25">
+        <input type="tel"  name="phone" class="form-control" pattern="\d{11}" required="required">
     </div>
     <div class="form-group">
         <label >Password</label>
-        <input type="password"  name="password" class="form-control" size="25">
+        <input type="password"  name="password" class="form-control" size="25" required="required">
     </div>
     <button type="submit"  class="btn btn-primary">Sign in</button>
 

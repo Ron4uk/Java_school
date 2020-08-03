@@ -16,8 +16,8 @@ public class Contract extends AbstractIdentification {
     private String phone;
     @OneToOne(cascade = CascadeType.ALL)
     private Authorization auth;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @JoinColumn( name = "client_id", nullable = false)
     private Client client;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tariff_id", nullable = false)
@@ -26,7 +26,7 @@ public class Contract extends AbstractIdentification {
     private Boolean blockByClient;
     @Column(name = "block_operator")
     private Boolean blockByOperator;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH,fetch = FetchType.EAGER)
     @JoinTable(
             name = "connected_options",
             joinColumns = @JoinColumn(name = "contract_id"),

@@ -40,7 +40,8 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
         List<OptionDto> result = optionDao.getAll().stream().map(e -> (OptionDto) this.convertToDto(e, new OptionDto())).collect(Collectors.toList());
         for (OptionDto optionDto : result) {
             Set<Integer> requirementsId = setRequirements(optionDto);
-
+            Set<Integer> exclusionId = setExclusions(optionDto);
+            optionDto.setExclusionsId(exclusionId);
             optionDto.setRequirementsId(requirementsId);
 
         }
@@ -48,7 +49,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
     }
 
     /**
-     * Create a list of required id options for processing it in jsp (these id will be selected on the checkboxes).
+     * Creates a list of required id options for processing it in jsp (these id will be selected on the checkboxes).
      *
      * @param optionDto
      * @return Set<Integer> requirementsId</>
@@ -64,7 +65,12 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
         }
         return requirementsId;
     }
-
+    /**
+     * Creates a list of excluded id options for processing it in jsp (these id will be excluded on the checkboxes).
+     *
+     * @param optionDto
+     * @return Set<Integer> requirementsId</>
+     */
     @Override
     public Set<Integer> setExclusions(OptionDto optionDto) {
         Set<Integer> exclusionsId = new HashSet<>();

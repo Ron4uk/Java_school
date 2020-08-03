@@ -7,6 +7,7 @@ import com.task.dao.OptionDao;
 import com.task.dao.TariffDao;
 import com.task.dto.ClientDto;
 import com.task.dto.ContractDto;
+import com.task.dto.TariffDto;
 import com.task.entity.*;
 import com.task.service.ContractService;
 import com.task.service.GenericMapper;
@@ -66,8 +67,8 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         }
 
         LOGGER.info("[{}], create from ContractServiceImpl [{}]  client = {} and contract ={} options ={} tariff={}", LocalDateTime.now(), LOGGER.getName(), client, contract, contract.getConnectedOptions(), contract.getTariff());
-        clientDao.create(client);
-        contractDAO.create(contract);
+//        clientDao.create(client);
+//        contractDAO.create(contract);
     }
     @Override
     public void check(String phone, com.task.dto.ClientDto clientDto, com.task.dto.ContractDto contractDto) {
@@ -76,9 +77,15 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
 
 
     @Override
-    public ClientDto findByIdDto(String id) {
-        Client client = clientDao.findById(Integer.parseInt(id));
-        return (ClientDto)convertToDto(client, new ClientDto());
+    public ContractDto findByIdDto(String id) {
+        Contract contract= contractDAO.findById(Integer.parseInt(id));
+        ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
+        TariffDto tariffDto = (TariffDto) convertToDto(contract.getTariff(), new TariffDto());
+        ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
+        contractDto.setClientDto(clientDto);
+        contractDto.setTariffDto(tariffDto);
+        LOGGER.info("[{}], findByIdDto [{}] contractDto = {}", LocalDateTime.now(), LOGGER.getName(), contractDto);
+        return contractDto;
     }
 
     @Override
@@ -99,7 +106,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         LOGGER.info("[{}], block [{}] id = {}", LocalDateTime.now(), LOGGER.getName(), id);
         Contract contract= contractDAO.findById(Integer.parseInt(id));
         contract.setBlockByOperator(true);
-        LOGGER.info("update contract = {}", contract);
+        LOGGER.info("block contract = {}", contract);
         contractDAO.update(contract);
         ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
@@ -111,12 +118,43 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     public ContractDto unblock(String id) {
         LOGGER.info("[{}], unblock [{}] id = {}", LocalDateTime.now(), LOGGER.getName(), id);
         Contract contract= contractDAO.findById(Integer.parseInt(id));
-        LOGGER.info("update contract = {}", contract);
+        LOGGER.info("unblock contract = {}", contract);
         contract.setBlockByOperator(false);
         contractDAO.update(contract);
         ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
         contractDto.setClientDto(clientDto);
         return contractDto;
+    }
+
+
+    @Override
+    public ContractDto update(ContractDto contractDto, String[] connectedOptions) {
+        Contract contract = (Contract) convertToEntity(new Contract(), contractDto);
+        Client client =(Client) convertToEntity(new Client(), contractDto.getClientDto());
+        Tariff tariff = (Tariff) convertToEntity(new Tariff(), contractDto.getTariffDto());
+        Authorization authorization =(Authorization) convertToEntity(new Authorization(), contractDto.getAuth());
+        contract.setClient(client);
+        contract.setTariff(tariff);
+        contract.setAuth(authorization);
+        LOGGER.info("[{}], update [{}] contract = {}", LocalDateTime.now(), LOGGER.getName(), contract);
+        contract.setConnectedOptions(new HashSet<>());
+        if(connectedOptions!=null && connectedOptions.length>0){
+        for(String id :connectedOptions){
+            Option option= optionDao.findById(Integer.parseInt(id));
+            LOGGER.info("[{}], update [{}] option = {}", LocalDateTime.now(), LOGGER.getName(), option);
+            contract.getConnectedOptions().add(option);
+        }}
+        LOGGER.info("[{}], update [{}] contract id = {}, auth id ={}, client id={}", LocalDateTime.now(), LOGGER.getName(), contract.getId(), contract.getAuth().getId(), contract.getClient().getId());
+
+        Contract updatedContract = contractDAO.update(contract);
+        ContractDto updatedContractDto = (ContractDto) convertToDto(updatedContract, new ContractDto());
+        TariffDto updatedTariffDto = (TariffDto) convertToDto(updatedContract.getTariff(), new TariffDto());
+        ClientDto updatedClientDto = (ClientDto) convertToDto(updatedContract.getClient(), new ClientDto());
+        updatedContractDto.setTariffDto(updatedTariffDto);
+        updatedContractDto.setClientDto(updatedClientDto);
+        LOGGER.info("[{}], update [{}] updatedContractDto = {}", LocalDateTime.now(), LOGGER.getName(), updatedContractDto);
+
+        return updatedContractDto;
     }
 }

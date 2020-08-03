@@ -1,17 +1,24 @@
 package com.task.config;
 
+import com.task.converter.TariffDtoConverter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.*;
+
+import javax.annotation.Resource;
 
 @Configuration
 @ComponentScan("com.task")
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
+
+    @Resource(name = "tariffDtoConverter")
+    private TariffDtoConverter tariffDtoConverter;
+
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -44,6 +51,9 @@ public class SpringConfig implements WebMvcConfigurer {
         return  mapper;
     }
 
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(tariffDtoConverter);
 
-
+    }
 }

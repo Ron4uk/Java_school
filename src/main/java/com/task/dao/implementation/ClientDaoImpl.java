@@ -4,6 +4,7 @@ import com.task.customeexceptions.WrongEmailException;
 import com.task.customeexceptions.WrongPassportException;
 import com.task.dao.ClientDao;
 import com.task.dao.GenericDaoImpl;
+import com.task.dto.ClientDto;
 import com.task.entity.Client;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +21,7 @@ public class ClientDaoImpl extends GenericDaoImpl<Client> implements ClientDao {
     private EntityManager entityManager;
 
     @Override
-    public void check(com.task.dto.ClientDto clientDto) {
+    public void check(ClientDto clientDto) {
         Query query = entityManager.createNativeQuery("SELECT id from clients WHERE series= ? AND number =? ");
         query.setParameter(1, clientDto.getPassport_series());
         query.setParameter(2, clientDto.getPassport_number());

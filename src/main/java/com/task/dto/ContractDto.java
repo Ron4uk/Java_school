@@ -1,10 +1,9 @@
 package com.task.dto;
 
-import com.task.entity.Authorization;
-import com.task.entity.Client;
-import com.task.entity.Option;
-import com.task.entity.Tariff;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,13 +11,13 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-
+@EqualsAndHashCode
 public class ContractDto implements DtoEntity {
     private Integer id;
     private String phone;
-    private Authorization auth;
+    private AuthorizationDto auth;
     private ClientDto clientDto;
-    private Tariff tariff;
+    private TariffDto tariffDto;
     private Boolean blockByClient;
     private Boolean blockByOperator;
     @ToString.Exclude
