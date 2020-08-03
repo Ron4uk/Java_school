@@ -9,4 +9,5 @@ import java.util.stream.Collectors;
 
 public interface OptionDao extends GenericDao<Option> {
      List<Option> getAllWithout(Integer id);
+    List<Option> getAllParent(Integer id);
 }

@@ -144,8 +144,8 @@ public class EmplController {
         return "editoption";
     }
 
-    @PostMapping("/saveOrUpdateOption")
-    public String saveOrUpdateOption(@ModelAttribute("optionDto") OptionDto optionDto, HttpServletRequest request, Model model, SessionStatus sessionStatus) {
+    @PostMapping("/updateOrDeleteOption")
+    public String updateOrDeleteOption(@ModelAttribute("optionDto") OptionDto optionDto, HttpServletRequest request, Model model, SessionStatus sessionStatus) {
         if (request.getParameter("delete") != null) {
             model.addAttribute("result", optionService.deleteById(optionDto.getId()));
         } else {

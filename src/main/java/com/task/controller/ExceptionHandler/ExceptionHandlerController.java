@@ -1,12 +1,12 @@
 package com.task.controller.ExceptionHandler;
 
 import com.task.controller.EmplController;
-import com.task.customeexceptions.NotExistClientException;
-import com.task.customeexceptions.WrongEmailException;
-import com.task.customeexceptions.WrongPassportException;
-import com.task.customeexceptions.WrongPhoneNumberException;
+import com.task.customeexceptions.*;
 import com.task.dto.ClientDto;
 import com.task.dto.ContractDto;
+import com.task.dto.OptionDto;
+import com.task.entity.Option;
+import com.task.service.OptionService;
 import com.task.service.TariffService;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +30,9 @@ public class ExceptionHandlerController {
     @Getter
     @Setter(onMethod = @__({@Autowired}))
     private TariffService tariffService;
+    @Getter
+    @Setter(onMethod = @__({@Autowired}))
+    private OptionService optionService;
 
     @ExceptionHandler(value = WrongPassportException.class)
     public ModelAndView clientException(WrongPassportException exception){
@@ -61,6 +64,16 @@ public class ExceptionHandlerController {
         ModelAndView modelAndView = new ModelAndView("/"+exception.getPath());
         modelAndView.addObject("result", exception.getMessage());
         modelAndView.addObject("contractDto", new ContractDto());
+        return modelAndView;
+    }
+
+    @ExceptionHandler(value = WrongOptionException.class)
+    public ModelAndView clientException(WrongOptionException exception){
+        ModelAndView modelAndView = new ModelAndView("/editoption");
+        modelAndView.addObject("result", exception.getMessage());
+        modelAndView.addObject("optionDto", exception.getOptionDto());
+        modelAndView.addObject("optionsList", optionService.getAllWithoutDto(exception.getOptionDto().getId()));
+
         return modelAndView;
     }
 

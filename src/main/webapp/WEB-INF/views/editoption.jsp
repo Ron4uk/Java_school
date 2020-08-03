@@ -48,7 +48,7 @@
         </div>
     </nav>
 
-    <form:form action="/saveOrUpdateOption" modelAttribute="optionDto" cssStyle="margin-top: 15px">
+    <form:form action="/updateOrDeleteOption" modelAttribute="optionDto" cssStyle="margin-top: 15px">
 
 
         <div class="form-group row">
@@ -139,10 +139,10 @@
         </div>
     </form:form>
 
-    <c:if test="${result=='changes successful.'}">
+    <c:if test="${result=='Changes successful.'}">
         <div id="message"><p style="margin-top: 10px; color: forestgreen">Change successful! </p></div>
     </c:if>
-        <c:if test="${result !='changes successful.' && result.length()>0}">
+        <c:if test="${result !='Changes successful.' && result.length()>0}">
             <div id="message"><p style="margin-top: 10px; color: red">${result}</p></div>
         </c:if>
 
