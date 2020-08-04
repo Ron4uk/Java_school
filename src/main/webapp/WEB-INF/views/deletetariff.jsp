@@ -100,13 +100,10 @@
         </div>
     </form:form>
 
-    <c:if test="${result=='changes successful'}">
+    <c:if test="${result!=null}">
         <div id="message"><p style="margin-top: 10px; color: forestgreen">Change successful! </p></div>
     </c:if>
 
-    <c:if test="${result =='change failed'}">
-        <div id="message"><p style="margin-top: 10px; color: red">Change failed! </p></div>
-    </c:if>
 
 
     <div class="card-footer text-muted" style="margin-top: 20px">

@@ -155,9 +155,9 @@
 
 
 <script>
-
-
-    <%--Check Set<Options> from an OptionDto. If OptionDto has some kind of restriction, the onload () function marks it on the checkboxes --%>
+    /**
+     * Check Set<Options> from an OptionDto. If OptionDto has some kind of restriction, the onload () function marks it on the checkboxes
+     */
 
     function onload() {
 

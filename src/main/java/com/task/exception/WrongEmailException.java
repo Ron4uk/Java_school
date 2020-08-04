@@ -1,4 +1,4 @@
-package com.task.customeexceptions;
+package com.task.exception;
 
 import com.task.dto.ClientDto;
 import lombok.Getter;
@@ -6,11 +6,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class WrongPassportException extends RuntimeException {
+public class WrongEmailException extends RuntimeException {
     private String message;
     private ClientDto clientDto;
 
-    public WrongPassportException( String message, ClientDto clientDto) {
+    public WrongEmailException( String message, ClientDto clientDto) {
         this.message = message;
         this.clientDto = clientDto;
     }

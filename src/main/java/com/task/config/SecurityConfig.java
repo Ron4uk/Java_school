@@ -1,6 +1,9 @@
 package com.task.config;
 
 import com.task.security.AuthProviderImpl;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,38 +17,41 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @EnableWebSecurity
 @ComponentScan("com.task.security")
+@Getter
+@Setter(onMethod = @__({@Autowired}))
+@RequiredArgsConstructor(onConstructor_={@Autowired})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationSuccessHandler authenticationSuccessHandler;
     private AuthProviderImpl authProvider;
     private AccessDeniedHandler accessDeniedHandler;
 
-    public AccessDeniedHandler getAccessDeniedHandler() {
-        return accessDeniedHandler;
-    }
-
-    @Autowired
-    public void setAccessDeniedHandler(AccessDeniedHandler accessDeniedHandler) {
-        this.accessDeniedHandler = accessDeniedHandler;
-    }
-
-    public AuthenticationSuccessHandler getAuthenticationSuccessHandler() {
-        return authenticationSuccessHandler;
-    }
-
-    @Autowired
-    public void setAuthenticationSuccessHandler(AuthenticationSuccessHandler authenticationSuccessHandler) {
-        this.authenticationSuccessHandler = authenticationSuccessHandler;
-    }
-
-    public AuthProviderImpl getAuthProvider() {
-        return authProvider;
-    }
-
-    @Autowired
-    public void setAuthProvider(AuthProviderImpl authProvider) {
-        this.authProvider = authProvider;
-    }
+//    public AccessDeniedHandler getAccessDeniedHandler() {
+//        return accessDeniedHandler;
+//    }
+//
+//    @Autowired
+//    public void setAccessDeniedHandler(AccessDeniedHandler accessDeniedHandler) {
+//        this.accessDeniedHandler = accessDeniedHandler;
+//    }
+//
+//    public AuthenticationSuccessHandler getAuthenticationSuccessHandler() {
+//        return authenticationSuccessHandler;
+//    }
+//
+//    @Autowired
+//    public void setAuthenticationSuccessHandler(AuthenticationSuccessHandler authenticationSuccessHandler) {
+//        this.authenticationSuccessHandler = authenticationSuccessHandler;
+//    }
+//
+//    public AuthProviderImpl getAuthProvider() {
+//        return authProvider;
+//    }
+//
+//    @Autowired
+//    public void setAuthProvider(AuthProviderImpl authProvider) {
+//        this.authProvider = authProvider;
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

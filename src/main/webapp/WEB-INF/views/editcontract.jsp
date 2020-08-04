@@ -168,7 +168,9 @@
         </div>
     </form:form>
 
-
+    <c:if test="${result!=null}">
+        <div id="message" ><p style="margin-top: 10px; color: green" >${result}</p></div>
+    </c:if>
 
 
     <div class="card-footer text-muted" style="margin-top: 20px">

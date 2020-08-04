@@ -1,6 +1,6 @@
-package com.task.service.implementation;
+package com.task.service.impl;
 
-import com.task.customeexceptions.WrongOptionException;
+import com.task.exception.WrongOptionException;
 import com.task.dao.OptionDao;
 import com.task.dto.DtoEntity;
 import com.task.dto.OptionDto;

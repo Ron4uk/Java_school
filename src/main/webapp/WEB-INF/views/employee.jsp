@@ -123,12 +123,12 @@
                     <td>${contract.tariffDto.tariff}</td>
                     <td>${contract.phone}</td>
                     <td><a href="/editcontract?id=${contract.id} ">Edit</a></td>
-                    <c:if test="${contract.blockByOperator!=true }">
+                    <c:if test="${contract.blockByOperator!=true && contract.blockByClient!=true}">
                         <form method="post" action="/blockcontract">
                         <td><button  type="submit" name="block" class="btn btn-outline-dark btn-sm" value="${contract.id}"> block </button></td>
                         </form>
                     </c:if>
-                    <c:if test="${contract.blockByOperator==true }">
+                    <c:if test="${contract.blockByOperator==true || contract.blockByClient==true }">
                         <form method="post" action="/unblockcontract">
                         <td><button  type="submit" name="unblock" class="btn btn-outline-danger btn-sm" value="${contract.id}">unblock</button></td>
                         </form>

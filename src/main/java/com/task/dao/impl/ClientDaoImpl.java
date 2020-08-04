@@ -1,7 +1,7 @@
-package com.task.dao.implementation;
+package com.task.dao.impl;
 
-import com.task.customeexceptions.WrongEmailException;
-import com.task.customeexceptions.WrongPassportException;
+import com.task.exception.WrongEmailException;
+import com.task.exception.WrongPassportException;
 import com.task.dao.ClientDao;
 import com.task.dao.GenericDaoImpl;
 import com.task.dto.ClientDto;

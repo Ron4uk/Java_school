@@ -1,6 +1,5 @@
-package com.task.customeexceptions;
+package com.task.exception;
 
-import com.task.dto.ClientDto;
 import lombok.Getter;
 import lombok.Setter;
 

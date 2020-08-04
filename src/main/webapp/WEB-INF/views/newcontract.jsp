@@ -41,7 +41,7 @@
 
 
             </ul>
-            <a href="/newclient" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${path}" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>

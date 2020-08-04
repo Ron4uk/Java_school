@@ -1,6 +1,6 @@
-package com.task.service.implementation;
+package com.task.service.impl;
 
-import com.task.customeexceptions.NotExistClientException;
+import com.task.exception.NotExistClientException;
 import com.task.dao.ClientDao;
 import com.task.dao.ContractDao;
 import com.task.dao.OptionDao;
@@ -67,8 +67,8 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         }
 
         LOGGER.info("[{}], create from ContractServiceImpl [{}]  client = {} and contract ={} options ={} tariff={}", LocalDateTime.now(), LOGGER.getName(), client, contract, contract.getConnectedOptions(), contract.getTariff());
-//        clientDao.create(client);
-//        contractDAO.create(contract);
+        clientDao.create(client);
+        contractDAO.create(contract);
     }
     @Override
     public void check(String phone, com.task.dto.ClientDto clientDto, com.task.dto.ContractDto contractDto) {
@@ -97,6 +97,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         }
         ContractDto contractDto =(ContractDto) convertToDto(contract, new ContractDto());
         contractDto.setClientDto((ClientDto) convertToDto(contract.getClient(), new ClientDto()));
+        contractDto.setTariffDto((TariffDto) convertToDto(contract.getTariff(), new TariffDto()));
         LOGGER.info("[{}], findByPhone [{}] contractDto = {}", LocalDateTime.now(), LOGGER.getName(), contractDto);
         return contractDto;
     }
@@ -111,6 +112,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
         contractDto.setClientDto(clientDto);
+        contractDto.setTariffDto((TariffDto) convertToDto(contract.getTariff(), new TariffDto()));
         return contractDto;
     }
 
@@ -120,10 +122,12 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         Contract contract= contractDAO.findById(Integer.parseInt(id));
         LOGGER.info("unblock contract = {}", contract);
         contract.setBlockByOperator(false);
+        contract.setBlockByClient(false);
         contractDAO.update(contract);
         ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
         contractDto.setClientDto(clientDto);
+        contractDto.setTariffDto((TariffDto) convertToDto(contract.getTariff(), new TariffDto()));
         return contractDto;
     }
 

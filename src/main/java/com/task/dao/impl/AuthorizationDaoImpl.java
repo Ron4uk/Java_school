@@ -1,4 +1,4 @@
-package com.task.dao.implementation;
+package com.task.dao.impl;
 
 import com.task.dao.AuthorizationDao;
 import com.task.dao.GenericDaoImpl;

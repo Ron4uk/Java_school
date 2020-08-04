@@ -1,6 +1,6 @@
-package com.task.dao.implementation;
+package com.task.dao.impl;
 
-import com.task.customeexceptions.WrongPhoneNumberException;
+import com.task.exception.WrongPhoneNumberException;
 import com.task.dao.ContractDao;
 import com.task.dao.GenericDaoImpl;
 import com.task.dto.ClientDto;
@@ -9,7 +9,6 @@ import com.task.entity.Contract;
 import com.task.entity.Tariff;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 

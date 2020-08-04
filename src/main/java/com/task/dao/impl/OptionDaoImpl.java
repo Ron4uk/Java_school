@@ -1,9 +1,8 @@
-package com.task.dao.implementation;
+package com.task.dao.impl;
 
 import com.task.dao.GenericDaoImpl;
 import com.task.dao.OptionDao;
 import com.task.entity.Option;
-import com.task.service.implementation.OptionServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -13,7 +12,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Repository

@@ -1,4 +1,4 @@
-package com.task.service.implementation;
+package com.task.service.impl;
 
 import com.task.dao.ContractDao;
 import com.task.dao.OptionDao;
@@ -122,6 +122,7 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
     public TariffDto remove(TariffDto tariffDto, Integer id) {
         Tariff oldTariff = (Tariff) convertToEntity(new Tariff(), tariffDto);
         Tariff newTariff = tariffDao.findById(id);
+        LOGGER.info("[{}],  get all contracts with old Tariff [{}]  oldTariff = {}", LocalDateTime.now(), LOGGER.getName(), oldTariff);
         List<Contract> contractsWithOldTariff = contractDao.getAllWithOldTariff(oldTariff);
         if (!contractsWithOldTariff.isEmpty()) {
             for (Contract contract : contractsWithOldTariff) {

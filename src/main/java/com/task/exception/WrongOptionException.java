@@ -1,4 +1,4 @@
-package com.task.customeexceptions;
+package com.task.exception;
 
 import com.task.dto.OptionDto;
 import lombok.Getter;
