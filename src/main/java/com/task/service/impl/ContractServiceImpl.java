@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -160,5 +162,19 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         LOGGER.info("[{}], update [{}] updatedContractDto = {}", LocalDateTime.now(), LOGGER.getName(), updatedContractDto);
 
         return updatedContractDto;
+    }
+
+
+    @Override
+    public List<ContractDto> getAll() {
+        LOGGER.info("[{}], getAll [{}] ", LocalDateTime.now(), LOGGER.getName());
+        List<Contract> contracts= contractDAO.getAll();
+        return contracts.stream().map(e->
+        {
+          ContractDto contractDto= (ContractDto)convertToDto(e, new ContractDto());
+          contractDto.setClientDto((ClientDto) convertToDto(e.getClient(), new ClientDto()));
+          contractDto.setTariffDto((TariffDto) convertToDto(e.getTariff(), new TariffDto()));
+            return contractDto;
+        }).collect(Collectors.toList());
     }
 }

@@ -86,4 +86,10 @@ public class ContractController {
         model.addAttribute("result", "Contract changes were successful!");
         return "editcontract";
     }
+
+    @GetMapping("getAllContracts")
+    public String getAllContracts(Model model){
+        model.addAttribute("listContracts", contractService.getAll());
+        return "allcontracts";
+    }
 }

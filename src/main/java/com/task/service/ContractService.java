@@ -5,6 +5,8 @@ import com.task.dto.ContractDto;
 import com.task.dto.DtoEntity;
 import com.task.entity.Contract;
 
+import java.util.List;
+
 public interface ContractService {
     Contract findByPhone(String phone);
     DtoEntity convertToDto(Object obj, DtoEntity mapper);
@@ -22,4 +24,6 @@ public interface ContractService {
     ContractDto unblock(String id);
 
     ContractDto update(ContractDto contractDto, String[] connectedOptions);
+
+    List<ContractDto> getAll();
 }
