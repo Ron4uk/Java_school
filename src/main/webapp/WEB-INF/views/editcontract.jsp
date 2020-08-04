@@ -91,7 +91,7 @@
         </div>
         <div class="form-group row">
             <form:label path="blockByOperator" for="editBlockByOperator" cssClass="col-sm-2 ">Operator block</form:label>
-            <div class="col-sm-10">
+            <div class="col-sm-10 ">
                 <form:checkbox path="blockByOperator"    id="editBlockByOperator"  />
             </div>
         </div>

@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <form:form action="/newcontract" modelAttribute="contractDto" cssStyle="margin-top: 15px">
+    <form:form action="/newcontract" modelAttribute="contractDto" cssStyle="margin-top: 15px"  >
         <div class="form-group row">
             <form:label path="phone" for="inputPhoneNumber" cssClass="col-sm-2 col-form-label">Phone Number</form:label>
             <div class="col-sm-10">
@@ -66,7 +66,14 @@
                         cssClass="col-sm-2 col-form-label">Password</form:label>
             <div class="col-sm-10">
                 <form:input type="password" path="auth.password" cssClass="form-control" id="inputPassword"
-                            required="required"/>
+                            required="required" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label  for="confirmPassword" class="col-sm-2 col-form-label">Confirm password</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="confirmPassword"  oninput="checkPassword(this)"
+                            required="required" />
             </div>
         </div>
         <div id="optionsForTariff">
@@ -131,6 +138,16 @@
     </div>
 </div>
 <script>
+    function checkPassword(input) {
+
+        if (input.value != document.getElementById('inputPassword').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+
+
     /**
      * checks option what parameters have requirements before connecting
      *  instance x increase when another option have the same mutual exclusion option.

@@ -17,6 +17,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
 
 
     private ContractService contractService;
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -43,7 +45,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
             throw new UsernameNotFoundException("User not found");
         }
         String password = authentication.getCredentials().toString();
-        if (!password.equals(contract.getAuth().getPassword())) {
+        if (!passwordEncoder.matches(password, contract.getAuth().getPassword())) {
             throw new BadCredentialsException("wrong password");
         }
         List<GrantedAuthority> authorities = new ArrayList<>();

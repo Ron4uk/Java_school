@@ -17,6 +17,7 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     private TariffDao tariffDao;
     private OptionDao optionDao;
     private ClientDao clientDao;
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
     public Contract findByPhone(String phone) {
@@ -56,6 +58,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         Set<Role> roles = new HashSet<>();
         roles.add(Role.CLIENT);
         contract.getAuth().setRoles(roles);
+        contract.getAuth().setPassword(passwordEncoder.encode(contract.getAuth().getPassword()));
         if (optionsId != null && optionsId.length > 0) {
             for (String stringId : optionsId) {
                 Integer id = Integer.parseInt(stringId);
