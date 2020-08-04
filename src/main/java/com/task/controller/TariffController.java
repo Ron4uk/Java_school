@@ -6,8 +6,8 @@ import com.task.dto.TariffDto;
 import com.task.entity.Tariff;
 import com.task.service.OptionService;
 import com.task.service.TariffService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +20,8 @@ import java.util.List;
 
 @Controller
 @Getter
-@Setter(onMethod = @__({@Autowired}))
-@RequiredArgsConstructor()
+@Setter
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
 @SessionAttributes({"tariffDto", "contractDto"})
 public class TariffController {
 

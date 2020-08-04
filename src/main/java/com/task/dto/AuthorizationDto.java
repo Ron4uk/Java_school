@@ -17,9 +17,7 @@ public class AuthorizationDto implements DtoEntity {
     private Integer id;
     @ToString.Exclude
     private String password;
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
-    public AuthorizationDto() {
-        this.roles = new HashSet<>();
-    }
+
 }

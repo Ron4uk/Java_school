@@ -29,6 +29,7 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
 
     @Override
     public void deleteById(Object id) {
+        LOGGER.info("[{}]  [{}] deleteById id={}", LocalDateTime.now(), LOGGER.getName(), id);
         entityManager.createNativeQuery("DELETE FROM connected_options WHERE option_id=" + id).executeUpdate();
         entityManager.createNativeQuery("DELETE FROM required_options WHERE requiredOptions_id=" + id).executeUpdate();
         entityManager.createNativeQuery("DELETE FROM exclusion_options WHERE exclusionOptions_id=" + id).executeUpdate();
@@ -39,13 +40,12 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
 
     @Override
     public List<Option> getAllParent(Integer id) {
+        LOGGER.info("[{}]  [{}] getAllParent id={}", LocalDateTime.now(), LOGGER.getName(), id);
         Query query = entityManager.createNativeQuery("SELECT Option_id FROM required_options WHERE requiredOptions_id=" + id);
         List<Integer> optionsId = query.getResultList();
         List<Option> optionList = new ArrayList<>();
-        LOGGER.info("[{}],  optionsId = {} optionsId.isEmpty={}", LocalDateTime.now(), optionsId.toString(), optionsId.isEmpty());
         if(!optionsId.isEmpty()){
             for(Integer optId: optionsId){
-                LOGGER.info("[{}],  optId = {}", LocalDateTime.now(), optId);
                 Option option = findById(optId);
                 optionList.add(option);
             }

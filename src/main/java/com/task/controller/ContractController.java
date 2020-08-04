@@ -5,8 +5,8 @@ import com.task.dto.ContractDto;
 import com.task.service.ContractService;
 import com.task.service.OptionService;
 import com.task.service.TariffService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @Getter
-@Setter(onMethod = @__({@Autowired}))
-@RequiredArgsConstructor()
+@Setter
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
 @SessionAttributes({"contractDto", "clientDto"})
 public class ContractController {
 

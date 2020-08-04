@@ -11,6 +11,7 @@ import com.task.dto.TariffDto;
 import com.task.entity.*;
 import com.task.service.ContractService;
 import com.task.service.GenericMapper;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -26,41 +27,37 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Getter
+@Setter
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class ContractServiceImpl extends GenericMapper implements ContractService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContractServiceImpl.class);
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
-    private ContractDao contractDAO;
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
-    private TariffDao tariffDao;
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
-    private OptionDao optionDao;
 
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
+    private ContractDao contractDAO;
+    private TariffDao tariffDao;
+    private OptionDao optionDao;
     private ClientDao clientDao;
 
+    @Transactional
     public Contract findByPhone(String phone) {
 
         return contractDAO.findByPhone(phone);
     }
 
+    @Transactional
     @Override
     public void create(com.task.dto.ContractDto contractDto, com.task.dto.ClientDto clientDto, String tariffId, String[] optionsId) {
         check(contractDto.getPhone(), clientDto, contractDto);
         Tariff tariff = tariffDao.findById(Integer.parseInt(tariffId));
-        Client client =(Client) convertToEntity(new Client(), clientDto);
+        Client client = (Client) convertToEntity(new Client(), clientDto);
         Contract contract = (Contract) convertToEntity(new Contract(), contractDto);
         contract.setClient(client);
         contract.setTariff(tariff);
         Set<Role> roles = new HashSet<>();
         roles.add(Role.CLIENT);
         contract.getAuth().setRoles(roles);
-        if(optionsId!=null && optionsId.length>0){
-            for(String stringId :optionsId){
+        if (optionsId != null && optionsId.length > 0) {
+            for (String stringId : optionsId) {
                 Integer id = Integer.parseInt(stringId);
                 Option option = optionDao.findById(id);
 
@@ -72,15 +69,17 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         clientDao.create(client);
         contractDAO.create(contract);
     }
+
+    @Transactional
     @Override
     public void check(String phone, com.task.dto.ClientDto clientDto, com.task.dto.ContractDto contractDto) {
         contractDAO.check(phone, clientDto, contractDto);
     }
 
-
+    @Transactional
     @Override
     public ContractDto findByIdDto(String id) {
-        Contract contract= contractDAO.findById(Integer.parseInt(id));
+        Contract contract = contractDAO.findById(Integer.parseInt(id));
         ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
         TariffDto tariffDto = (TariffDto) convertToDto(contract.getTariff(), new TariffDto());
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
@@ -90,24 +89,26 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         return contractDto;
     }
 
+    @Transactional
     @Override
     public ContractDto findByPhoneDto(String phone, String path) {
         Contract contract = contractDAO.findByPhone(phone);
         LOGGER.info("[{}], [{}] findByPhone contract get client = {}", LocalDateTime.now(), LOGGER.getName(), contract);
-        if(contract==null) {
+        if (contract == null) {
             throw new NotExistClientException("The client doesn't exist", path);
         }
-        ContractDto contractDto =(ContractDto) convertToDto(contract, new ContractDto());
+        ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
         contractDto.setClientDto((ClientDto) convertToDto(contract.getClient(), new ClientDto()));
         contractDto.setTariffDto((TariffDto) convertToDto(contract.getTariff(), new TariffDto()));
         LOGGER.info("[{}], findByPhone [{}] contractDto = {}", LocalDateTime.now(), LOGGER.getName(), contractDto);
         return contractDto;
     }
 
+    @Transactional
     @Override
     public ContractDto block(String id) {
         LOGGER.info("[{}], block [{}] id = {}", LocalDateTime.now(), LOGGER.getName(), id);
-        Contract contract= contractDAO.findById(Integer.parseInt(id));
+        Contract contract = contractDAO.findById(Integer.parseInt(id));
         contract.setBlockByOperator(true);
         LOGGER.info("block contract = {}", contract);
         contractDAO.update(contract);
@@ -118,10 +119,11 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         return contractDto;
     }
 
+    @Transactional
     @Override
     public ContractDto unblock(String id) {
         LOGGER.info("[{}], unblock [{}] id = {}", LocalDateTime.now(), LOGGER.getName(), id);
-        Contract contract= contractDAO.findById(Integer.parseInt(id));
+        Contract contract = contractDAO.findById(Integer.parseInt(id));
         LOGGER.info("unblock contract = {}", contract);
         contract.setBlockByOperator(false);
         contract.setBlockByClient(false);
@@ -133,24 +135,25 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         return contractDto;
     }
 
-
+    @Transactional
     @Override
     public ContractDto update(ContractDto contractDto, String[] connectedOptions) {
         Contract contract = (Contract) convertToEntity(new Contract(), contractDto);
-        Client client =(Client) convertToEntity(new Client(), contractDto.getClientDto());
+        Client client = (Client) convertToEntity(new Client(), contractDto.getClientDto());
         Tariff tariff = (Tariff) convertToEntity(new Tariff(), contractDto.getTariffDto());
-        Authorization authorization =(Authorization) convertToEntity(new Authorization(), contractDto.getAuth());
+        Authorization authorization = (Authorization) convertToEntity(new Authorization(), contractDto.getAuth());
         contract.setClient(client);
         contract.setTariff(tariff);
         contract.setAuth(authorization);
         LOGGER.info("[{}], update [{}] contract = {}", LocalDateTime.now(), LOGGER.getName(), contract);
         contract.setConnectedOptions(new HashSet<>());
-        if(connectedOptions!=null && connectedOptions.length>0){
-        for(String id :connectedOptions){
-            Option option= optionDao.findById(Integer.parseInt(id));
-            LOGGER.info("[{}], update [{}] option = {}", LocalDateTime.now(), LOGGER.getName(), option);
-            contract.getConnectedOptions().add(option);
-        }}
+        if (connectedOptions != null && connectedOptions.length > 0) {
+            for (String id : connectedOptions) {
+                Option option = optionDao.findById(Integer.parseInt(id));
+                LOGGER.info("[{}], update [{}] option = {}", LocalDateTime.now(), LOGGER.getName(), option);
+                contract.getConnectedOptions().add(option);
+            }
+        }
         LOGGER.info("[{}], update [{}] contract id = {}, auth id ={}, client id={}", LocalDateTime.now(), LOGGER.getName(), contract.getId(), contract.getAuth().getId(), contract.getClient().getId());
 
         Contract updatedContract = contractDAO.update(contract);
@@ -164,16 +167,16 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         return updatedContractDto;
     }
 
-
+    @Transactional
     @Override
     public List<ContractDto> getAll() {
         LOGGER.info("[{}], getAll [{}] ", LocalDateTime.now(), LOGGER.getName());
-        List<Contract> contracts= contractDAO.getAll();
-        return contracts.stream().map(e->
+        List<Contract> contracts = contractDAO.getAll();
+        return contracts.stream().map(e ->
         {
-          ContractDto contractDto= (ContractDto)convertToDto(e, new ContractDto());
-          contractDto.setClientDto((ClientDto) convertToDto(e.getClient(), new ClientDto()));
-          contractDto.setTariffDto((TariffDto) convertToDto(e.getTariff(), new TariffDto()));
+            ContractDto contractDto = (ContractDto) convertToDto(e, new ContractDto());
+            contractDto.setClientDto((ClientDto) convertToDto(e.getClient(), new ClientDto()));
+            contractDto.setTariffDto((TariffDto) convertToDto(e.getTariff(), new TariffDto()));
             return contractDto;
         }).collect(Collectors.toList());
     }

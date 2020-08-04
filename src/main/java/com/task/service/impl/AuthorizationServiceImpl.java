@@ -10,13 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Getter
+@Setter(onMethod = @__({@Autowired}))
 public class AuthorizationServiceImpl extends GenericMapper {
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
+
     private AuthorizationDao authorizationDao;
-
-
 
 
 }

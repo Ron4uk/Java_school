@@ -3,6 +3,7 @@ package com.task.security;
 
 import com.task.entity.Contract;
 import com.task.service.ContractService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -23,11 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Getter
+@Setter
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
 public class AuthProviderImpl implements AuthenticationProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthProviderImpl.class);
 
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
+
     private ContractService contractService;
 
 

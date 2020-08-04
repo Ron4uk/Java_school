@@ -19,16 +19,11 @@ public class TariffDto implements DtoEntity {
     private Double price;
      @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<ContractDto> contracts;
+    private Set<ContractDto> contracts= new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<OptionDto> options;
+    private Set<OptionDto> options= new HashSet<>();
 
-    public TariffDto() {
-
-        this.options = new HashSet<>();
-        this.contracts= new HashSet<>();
-    }
 
 
 }

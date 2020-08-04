@@ -1,5 +1,8 @@
 package com.task.config;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,11 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource("classpath:persistence-mysql.properties")
 @ComponentScan("com.task")
+@Getter
+@Setter(onMethod = @__({@Autowired}))
+@RequiredArgsConstructor
 public class HibernateConfig {
 
-
-    @Autowired
     private Environment env;
 
     @Bean

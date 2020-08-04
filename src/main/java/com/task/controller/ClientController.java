@@ -5,6 +5,7 @@ import com.task.dto.ContractDto;
 import com.task.service.ClientService;
 import com.task.service.ContractService;
 import com.task.service.TariffService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,8 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @Getter
-@Setter(onMethod = @__({@Autowired}))
-@RequiredArgsConstructor()
+@Setter
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
 @SessionAttributes({"clientDto", "contractDto"})
 public class ClientController {
 

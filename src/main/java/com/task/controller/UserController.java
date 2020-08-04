@@ -2,6 +2,7 @@ package com.task.controller;
 
 import com.task.dto.DtoEntity;
 import com.task.service.ClientService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,8 +15,9 @@ import java.util.Map;
 
 @Controller
 @Getter
-@Setter(onMethod = @__({@Autowired}))
-@RequiredArgsConstructor()
+@Setter
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
+
 public class UserController {
 
     private ClientService clientService;

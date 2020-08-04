@@ -7,6 +7,7 @@ import com.task.dto.OptionDto;
 import com.task.entity.Option;
 import com.task.service.GenericMapper;
 import com.task.service.OptionService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -20,21 +21,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Getter
+@Setter
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class OptionServiceImpl extends GenericMapper implements OptionService {
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
-    private OptionDao optionDao;
-    private static final Logger LOGGER = LoggerFactory.getLogger(OptionServiceImpl.class);
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(OptionServiceImpl.class);
+    private OptionDao optionDao;
+
+    @Transactional
     public List<Option> getAll() {
         return optionDao.getAll();
     }
-
+    @Transactional
     public List<DtoEntity> getAllDto() {
         return optionDao.getAll().stream().map(e -> this.convertToDto(e, new OptionDto())).collect(Collectors.toList());
     }
-
+    @Transactional
     public List<OptionDto> getAllDtoWithReqId() {
         List<OptionDto> result = optionDao.getAll().stream().map(e -> (OptionDto) this.convertToDto(e, new OptionDto())).collect(Collectors.toList());
         for (OptionDto optionDto : result) {
@@ -83,19 +86,19 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
         }
         return exclusionsId;
     }
-
+    @Transactional
     public List<Option> getAllWithout(Integer id) {
         return optionDao.getAllWithout(id);
     }
-
+    @Transactional
     public List<DtoEntity> getAllWithoutDto(Integer id) {
         return optionDao.getAllWithout(id).stream().map(e -> this.convertToDto(e, new OptionDto())).collect(Collectors.toList());
     }
-
+    @Transactional
     public Option findById(Integer id) {
         return optionDao.findById(id);
     }
-
+    @Transactional
     public DtoEntity findByIdDto(Integer id) {
         return convertToDto(optionDao.findById(id), new OptionDto());
     }
@@ -121,7 +124,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
      *
      * @return String result
      */
-
+    @Transactional
     public String update(String[] requirement, String[] exclusion, OptionDto optionDto) {
         String result = "Changes successful.";
         Set<OptionDto> chooseRequiredOptions = new HashSet<>();
@@ -254,7 +257,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
 
 
 
-
+    @Transactional
     public String deleteById(Integer id) {
             LOGGER.info("[{}],  deleteById [{}] Option id = {}", LocalDateTime.now(), LOGGER.getName(), id);
             optionDao.deleteById(id);

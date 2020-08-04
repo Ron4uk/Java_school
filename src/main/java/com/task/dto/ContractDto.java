@@ -22,9 +22,7 @@ public class ContractDto implements DtoEntity {
     private Boolean blockByOperator;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<OptionDto> connectedOptions;
+    private Set<OptionDto> connectedOptions= new HashSet<>();
 
-    public ContractDto() {
-        this.connectedOptions = new HashSet<>();
-    }
+
 }

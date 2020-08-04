@@ -4,8 +4,8 @@ import com.task.dto.ContractDto;
 import com.task.dto.DtoEntity;
 import com.task.dto.OptionDto;
 import com.task.service.OptionService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +21,8 @@ import java.util.List;
 
 @Controller
 @Getter
-@Setter(onMethod = @__({@Autowired}))
-@RequiredArgsConstructor()
+@Setter
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
 @SessionAttributes({"optionDto", "contractDto"})
 public class OptionController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmplController.class);

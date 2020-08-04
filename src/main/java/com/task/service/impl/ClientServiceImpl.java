@@ -6,6 +6,7 @@ import com.task.dto.DtoEntity;
 import com.task.entity.Client;
 import com.task.service.ClientService;
 import com.task.service.GenericMapper;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,24 +21,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
-@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
 public class ClientServiceImpl extends GenericMapper implements ClientService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientServiceImpl.class);
-    @Getter
-    @Setter (onMethod =@__({@Autowired}))
+
     private ClientDao clientDao;
 
-
+    @Transactional
     public List<Client> getAll() {
         LOGGER.info("[{}]  Connect to DB from method getAll {}", LocalDateTime.now(), LOGGER.getName());
         return clientDao.getAll();
     }
-
+    @Transactional
     public List<DtoEntity> getAllDto() {
         return clientDao.getAll().stream().map(e->this.convertToDto(e, new ClientDto())).collect(Collectors.toList());
     }
-
+    @Transactional
     @Override
     public DtoEntity update(ClientDto clientDto) {
         Client client = (Client) convertToEntity(new Client(), clientDto);
@@ -46,12 +47,12 @@ public class ClientServiceImpl extends GenericMapper implements ClientService {
         LOGGER.info("[{}]  save/update client id = {}", LocalDateTime.now(), client.getId());
         return dtoEntity;
     }
-
+    @Transactional
     @Override
     public void check(ClientDto clientDto) {
         clientDao.check(clientDto);
     }
-
+    @Transactional
     @Override
     public ClientDto findByIdDto(String id) {
         Client client = clientDao.findById(Integer.parseInt(id));

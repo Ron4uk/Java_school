@@ -20,27 +20,21 @@ public class OptionDto implements DtoEntity {
     private Integer connectionCost;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<OptionDto> requiredOptions;
+    private Set<OptionDto> requiredOptions= new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<OptionDto> exclusionOptions;
+    private Set<OptionDto> exclusionOptions= new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<TariffDto> tariffs;
+    private Set<TariffDto> tariffs= new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Integer> requirementsId;
+    private Set<Integer> requirementsId= new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Integer> exclusionsId;
+    private Set<Integer> exclusionsId= new HashSet<>();
 
-    public OptionDto() {
-        this.requiredOptions = new HashSet<>();
-        this.exclusionOptions =  new HashSet<>();
-        this.tariffs=new HashSet<>();
-        this.requirementsId = new HashSet<>();
-        this.exclusionsId = new HashSet<>();
-    }
+
 
 
 }

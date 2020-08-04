@@ -2,6 +2,7 @@ package com.task.converter;
 
 import com.task.dto.TariffDto;
 import com.task.service.TariffService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,11 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component("tariffDtoConverter")
+@Getter
+@Setter
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
 public class TariffDtoConverter implements Converter<String, TariffDto> {
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
+
     private TariffService tariffService;
 
     @Override

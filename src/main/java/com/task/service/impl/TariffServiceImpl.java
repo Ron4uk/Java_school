@@ -12,6 +12,7 @@ import com.task.entity.Tariff;
 import com.task.service.GenericMapper;
 import com.task.service.OptionService;
 import com.task.service.TariffService;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -27,60 +28,56 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Getter
+@Setter
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class TariffServiceImpl extends GenericMapper implements TariffService {
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
+
     private TariffDao tariffDao;
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
     private OptionDao optionDao;
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
     private OptionService optionService;
-    @Getter
-    @Setter(onMethod = @__({@Autowired}))
     private ContractDao contractDao;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TariffServiceImpl.class);
 
+    @Transactional
     public List<Tariff> getAll() {
         return tariffDao.getAll();
     }
-
+    @Transactional
     public List<DtoEntity> getAllDto() {
 
         return tariffDao.getAll().stream().map(e -> this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
     }
-
+    @Transactional
     @Override
     public List<TariffDto> getAllDtoWithReq() {
         List<TariffDto> tariffDtoList = tariffDao.getAll().stream().map(e -> (TariffDto) this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
         tariffDtoList.forEach(e -> createRequirementsForEmbeddedOptions(e));
         return tariffDtoList;
     }
-
+    @Transactional
     @Override
     public List<TariffDto> getAllWithoutDto(Integer id) {
 
         return tariffDao.getAllWithout(id).stream().map(e -> (TariffDto) this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
     }
-
+    @Transactional
     public Tariff create(Tariff tariff) {
         return tariffDao.create(tariff);
     }
-
+    @Transactional
     public Tariff findById(Integer id) {
         return tariffDao.findById(id);
     }
-
+    @Transactional
     @Override
     public TariffDto findByIdDto(Integer id) {
         Tariff tariff = tariffDao.findById(id);
         TariffDto tariffDto = (TariffDto) createRequirementsForEmbeddedOptions(convertToDto(tariff, new TariffDto()));
         return tariffDto;
     }
-
+    @Transactional
     public String merge(Tariff tariff, String[] optionId) {
         String result = "change failed";
         try {
@@ -117,7 +114,7 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
         return tariffDtoAlter;
     }
 
-
+    @Transactional
     @Override
     public TariffDto remove(TariffDto tariffDto, Integer id) {
         Tariff oldTariff = (Tariff) convertToEntity(new Tariff(), tariffDto);

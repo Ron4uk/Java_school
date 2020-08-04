@@ -26,9 +26,7 @@ public class ClientDto implements DtoEntity {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<ContractDto> contracts;
+    private Set<ContractDto> contracts=new HashSet<>();
 
-    public ClientDto() {
-        this.contracts =new HashSet<>();
-    }
+
 }
