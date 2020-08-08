@@ -3,12 +3,11 @@ package com.task.service.impl;
 import com.task.dao.ContractDao;
 import com.task.dao.OptionDao;
 import com.task.dao.TariffDao;
-import com.task.dto.DtoEntity;
-import com.task.dto.OptionDto;
-import com.task.dto.TariffDto;
+import com.task.dto.*;
 import com.task.entity.Contract;
 import com.task.entity.Option;
 import com.task.entity.Tariff;
+import com.task.service.ContractService;
 import com.task.service.GenericMapper;
 import com.task.service.OptionService;
 import com.task.service.TariffService;
@@ -59,8 +58,9 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
     @Transactional
     @Override
     public List<TariffDto> getAllWithoutDto(Integer id) {
-
-        return tariffDao.getAllWithout(id).stream().map(e -> (TariffDto) this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
+        List<TariffDto> tariffDtoList=tariffDao.getAllWithout(id).stream().map(e -> (TariffDto) this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
+        tariffDtoList.forEach(e -> createRequirementsForEmbeddedOptions(e));
+        return tariffDtoList;
     }
     @Transactional
     public Tariff create(Tariff tariff) {
@@ -133,4 +133,6 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
         tariffDao.deleteById(oldTariff.getId());
         return (TariffDto) convertToDto(newTariff, new TariffDto());
     }
+
+
 }

@@ -13,4 +13,5 @@ public class LoginController {
         if(Boolean.TRUE.equals(error)) model.addAttribute("error", true);
         return "login";
     }
+
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -25,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor(onConstructor=@__({@Autowired}))
 @SessionAttributes({"optionDto", "contractDto"})
 public class OptionController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmplController.class);
+
 
     private OptionService optionService;
 
@@ -54,11 +53,8 @@ public class OptionController {
             model.addAttribute(optionService.findByIdDto(id));
             model.addAttribute("optionsList", optionService.getAllWithoutDto(id));
         } else {
-            List<DtoEntity> options = optionService.getAllDto();
-            LOGGER.info("[{}], Get editoption [{}]  options List = {}", LocalDateTime.now(), LOGGER.getName(), options);
-            model.addAttribute("optionsList", options);
+            model.addAttribute("optionsList", optionService.getAllDto());
         }
-        LOGGER.info("[{}], Get editoption after cycle [{}]  id = {}", LocalDateTime.now(), LOGGER.getName(), id);
         return "editoption";
     }
 

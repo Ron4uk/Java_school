@@ -1,5 +1,6 @@
 package com.task.config;
 
+import com.task.converter.OptionDtoConverter;
 import com.task.converter.TariffDtoConverter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -18,6 +19,8 @@ public class SpringConfig implements WebMvcConfigurer {
 
     @Resource(name = "tariffDtoConverter")
     private TariffDtoConverter tariffDtoConverter;
+    @Resource(name = "optionDtoConverter")
+    private OptionDtoConverter optionDtoConverter;
 
 
     @Override
@@ -54,6 +57,7 @@ public class SpringConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(tariffDtoConverter);
+        registry.addConverter(optionDtoConverter);
 
     }
 }

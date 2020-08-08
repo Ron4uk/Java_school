@@ -19,7 +19,7 @@
     <span class="navbar-brand" href="#">
         <img src="/images/label.jpg" width="30" height="30"
              class="d-inline-block align-top" alt="" loading="lazy">
-        Mokia
+        eCare
     </span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -138,13 +138,13 @@
                                 <div class="col-sm-10">
                                     <c:choose>
                                     <c:when test="${contractDto.tariffDto.id==tar.id && contractDto.connectedOptions.contains(opt)}">
-                                    <input type="checkbox" name="${tar.id}" id="${opt.id}" value="${opt.id}" checked="checked" onchange="check(${opt.requirementsId},
+                                    <input type="checkbox" name="${tar.id}"  value="${opt.id}" checked="checked" onchange="check(${opt.requirementsId},
                                         ${opt.exclusionsId}, ${tar.id}, this)"/>
                                     <label  for="${opt.id}">id:${opt.id}  Option: ${opt.name}</label>
 
                                     </c:when>
                                     <c:otherwise>
-                                        <input type="checkbox" name="${tar.id}"  id="${opt.id}"  value="${opt.id}" onchange="check(${opt.requirementsId},
+                                        <input type="checkbox" name="${tar.id}"    value="${opt.id}" onchange="check(${opt.requirementsId},
                                             ${opt.exclusionsId}, ${tar.id}, this)"/>
                                         <label   for="${opt.id}">id:${opt.id}  Option: ${opt.name}</label>
                                     </c:otherwise>
@@ -188,11 +188,11 @@
 
 
     function toggle(sel) {
-        console.log(sel);
+
         let id = sel.options[sel.selectedIndex].value;
         console.log("name = "+id);
         var tariff = document.getElementById(id);
-
+        console.log(tariff);
         if (tariff.style.display == 'none') {
             tariff.style.display = 'block';
         }
@@ -255,8 +255,8 @@
 
     /**
      * checks option what parameters have requirements before connecting
-     *  instance x increase when another option have the same mutual exclusion option.
-     *  when option will be disconnected and x !=0, this means that exclusion options should not be enabled.
+     *  instance amountSlctOnExclOptions increase when another option have the same mutual exclusion option.
+     *  when option will be disconnected and amountSlctOnExclOptions !=0, this means that exclusion options should not be enabled.
      */
 
 

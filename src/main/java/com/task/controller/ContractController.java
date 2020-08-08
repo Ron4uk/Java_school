@@ -8,6 +8,7 @@ import com.task.service.TariffService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @Getter
 @Setter
+@Log4j
 @AllArgsConstructor(onConstructor=@__({@Autowired}))
 @SessionAttributes({"contractDto", "clientDto"})
 public class ContractController {
@@ -75,6 +77,7 @@ public class ContractController {
         model.addAttribute("contractDto", contractService.findByIdDto(request.getParameter("id")));
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
         model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
+
         return "editcontract";
     }
 

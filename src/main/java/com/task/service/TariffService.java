@@ -1,8 +1,6 @@
 package com.task.service;
 
-import com.task.dto.DtoEntity;
-import com.task.dto.OptionDto;
-import com.task.dto.TariffDto;
+import com.task.dto.*;
 import com.task.entity.Option;
 import com.task.entity.Tariff;
 
@@ -35,4 +33,6 @@ public interface TariffService {
     List<TariffDto> getAllWithoutDto(Integer id);
 
     TariffDto remove(TariffDto tariffDto, Integer id);
+
+
 }

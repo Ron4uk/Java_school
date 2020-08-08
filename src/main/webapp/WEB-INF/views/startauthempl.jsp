@@ -27,7 +27,7 @@
     <span class="navbar-brand" href="#">
         <img src="/images/label.jpg" width="30" height="30"
              class="d-inline-block align-top" alt="" loading="lazy">
-        Mokia
+        eCare
     </span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,26 +37,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Главная <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/startauthempl">Main <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Тарифы и услуги</a>
+                    <a class="nav-link" href="#">Tariffs</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Частным клиентам
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Бизнесу</a>
-                        <a class="dropdown-item" href="#">О компании</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Обратная связь</a>
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
                 </li>
 
+
             </ul>
-            <a href="/logout" class="btn btn-secondary  active" role="button" aria-pressed="true">Выход</a>
+            <a href="/logout" class="btn btn-secondary  active" role="button" aria-pressed="true">Sign out</a>
 
 
         </div>
@@ -73,16 +65,16 @@
                 <img src="/images/main_1.jpg" class="d-block w-100"
                      alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5 style="color: black">Семейный коннект.</h5>
-                    <p style="color: black">Все для близких!</p>
+                    <h5 style="color: black">Family connect.</h5>
+                    <p style="color: black">All for loved ones!</p>
                 </div>
             </div>
             <div class="carousel-item">
                 <img src="/images/main_2.jpg"
                      class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5>Двигаем бизнес.</h5>
-                    <p>Быть на связи, быть в деле. Особые условия для бизнеса!</p>
+                    <h5>Moving the business.</h5>
+                    <p>Be in touch, be in action. Special conditions for business!</p>
                 </div>
             </div>
 
@@ -101,25 +93,25 @@
             <div class="card">
                 <img src="/images/private_account.png" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <a href="#" class="btn btn-primary" style="max-width: 100%">Личный кабинет</a>
+                    <a href="/employee" class="btn btn-primary btn-lg" style="max-width: 100%">Private account</a>
                 </div>
 
             </div>
         </div>
         <div class="col-sm-2 col-md-2">
             <div class="card">
-                <img src="/images/deposit.jpg" class="card-img-top" alt="..." style="padding-top: 5px">
+                <img src="/images/deposit.jpg" class="card-img-top" alt="..." style="">
                 <div class="card-body">
-                    <a href="#" class="btn btn-primary" style="max-width: 100%">Пополнить баланс</a>
+                    <a href="#" class="btn btn-primary btn-lg" style="max-width: 100%">Make a deposit</a>
                 </div>
 
             </div>
         </div>
         <div class="col-sm-2 col-md-2" >
             <div class="card" >
-                <img src="/images/apps.png" class="card-img-top" alt="..." style="padding-top: 5px">
+                <img src="/images/apps.png" class="card-img-top" alt="..." style="">
                 <div class="card-body">
-                    <a href="#" class="btn btn-primary" style="max-width: 110%">Мобильные приложения</a>
+                    <a href="#" class="btn btn-primary btn-lg" style="max-width: 110%">Mobile apps</a>
                 </div>
 
             </div>
@@ -127,14 +119,14 @@
         <div class="col-sm-6 col-md-6">
             <div class="card">
                 <div class="card-header">
-                    Тарфиные опции
+                    Tariff options
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Специальные предложения</h5>
+                    <h5 class="card-title">Special offers</h5>
                     <h6 class="card-title">start page for employee</h6>
                     <p class="card-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
                         Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.</p>
-                    <a href="#" class="btn btn-primary">Подробнее</a>
+                    <a href="#" class="btn btn-primary">More...</a>
                 </div>
             </div>
         </div>

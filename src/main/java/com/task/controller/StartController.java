@@ -17,19 +17,12 @@ import java.util.Map;
 @Controller
 public class StartController {
 
-
-
-
-    @GetMapping("/startauthclient")
-    public String afterAuthenticationClient() {
-
-        return "startauthclient";
-    }
     @GetMapping("/")
     public String start() {
-
         return "startpage";
     }
+
+
 
 
 
