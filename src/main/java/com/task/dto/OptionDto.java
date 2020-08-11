@@ -17,6 +17,7 @@ public class OptionDto implements DtoEntity {
     private String name;
     private Integer price;
     private Integer connectionCost;
+    private Boolean deleted;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OptionDto> requiredOptions= new HashSet<>();

@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
-@Table(name = "options")
+@Table(name = "options", uniqueConstraints =@UniqueConstraint(columnNames = "name"))
 @Getter
 @Setter
 @ToString
@@ -22,6 +22,8 @@ public class Option extends AbstractIdentification{
     private BigDecimal price;
     @Column(name = "connection_cost", precision = 6, scale = 2, nullable = false)
     private BigDecimal connectionCost;
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted=false;
     @JoinTable(name = "required_options")
     @ManyToMany(cascade = CascadeType.REFRESH,  fetch = FetchType.EAGER)
     @ToString.Exclude

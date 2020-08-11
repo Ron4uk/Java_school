@@ -14,6 +14,7 @@ import com.task.service.TariffService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @Service
 @Getter
 @Setter
+@Log4j
 @AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class TariffServiceImpl extends GenericMapper implements TariffService {
 
@@ -119,18 +121,20 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
     public TariffDto remove(TariffDto tariffDto, Integer id) {
         Tariff oldTariff = (Tariff) convertToEntity(new Tariff(), tariffDto);
         Tariff newTariff = tariffDao.findById(id);
-        LOGGER.info("[{}],  get all contracts with old Tariff [{}]  oldTariff = {}", LocalDateTime.now(), LOGGER.getName(), oldTariff);
         List<Contract> contractsWithOldTariff = contractDao.getAllWithOldTariff(oldTariff);
         if (!contractsWithOldTariff.isEmpty()) {
             for (Contract contract : contractsWithOldTariff) {
-                contract.setConnectedOptions(new HashSet<>());
+                for (Option option : contract.getConnectedOptions()) {
+                    if (!newTariff.getOptions().contains(option)) {
+                        contract.getConnectedOptions().remove(option);
+                    }
+                }
                 contract.setTariff(newTariff);
                 contractDao.update(contract);
             }
         }
-
-        LOGGER.info("[{}],  remove [{}]  oldTariff = {}", LocalDateTime.now(), LOGGER.getName(), oldTariff);
-        tariffDao.deleteById(oldTariff.getId());
+        oldTariff.setDeleted(true);
+        tariffDao.update(oldTariff);
         return (TariffDto) convertToDto(newTariff, new TariffDto());
     }
 

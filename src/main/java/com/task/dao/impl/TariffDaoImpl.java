@@ -12,10 +12,14 @@ import java.util.List;
 public class TariffDaoImpl extends GenericDaoImpl<Tariff> implements TariffDao {
     @Override
     public List<Tariff> getAllWithout(Integer id) {
-        Query query = entityManager.createQuery("FROM Tariff WHERE id != :id");
+        Query query = entityManager.createQuery("FROM Tariff WHERE id != :id AND deleted !=true");
         query.setParameter("id", id);
         return query.getResultList();
     }
 
-
+    @Override
+    public List<Tariff> getAll() {
+        Query query = entityManager.createQuery("FROM Tariff WHERE  deleted !=true");
+        return query.getResultList();
+    }
 }

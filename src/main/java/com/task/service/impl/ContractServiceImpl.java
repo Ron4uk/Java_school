@@ -148,8 +148,12 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         contract.setClient(client);
         contract.setTariff(tariff);
         contract.setAuth(authorization);
+        for (Option option : contract.getConnectedOptions()) {
+            if (!tariff.getOptions().contains(option)) {
+                contract.getConnectedOptions().remove(option);
+            }
+        }
         LOGGER.info("[{}], update [{}] contract = {}", LocalDateTime.now(), LOGGER.getName(), contract);
-        contract.setConnectedOptions(new HashSet<>());
         if (connectedOptions != null && connectedOptions.length > 0) {
             for (String id : connectedOptions) {
                 Option option = optionDao.findById(Integer.parseInt(id));

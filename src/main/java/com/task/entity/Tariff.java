@@ -22,6 +22,8 @@ public class Tariff extends AbstractIdentification {
     private String tariff;
     @Column(name = "price", precision = 6, scale = 2, nullable = false)
     private BigDecimal price;
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted=false;
     @OneToMany (mappedBy = "tariff")
     @ToString.Exclude
     private Set<Contract> contracts;

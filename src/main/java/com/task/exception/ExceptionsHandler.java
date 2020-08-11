@@ -1,4 +1,4 @@
-package com.task.exception.exceptionhandler;
+package com.task.exception;
 
 import com.task.controller.EmplController;
 import com.task.exception.*;
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 @Getter
 @Setter(onMethod = @__({@Autowired}))
-public class ExceptionHandlerController {
+public class ExceptionsHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmplController.class);
 
 

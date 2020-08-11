@@ -17,6 +17,7 @@ public class TariffDto implements DtoEntity {
     private Integer id;
     private String tariff;
     private Double price;
+    private Boolean deleted;
      @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<ContractDto> contracts= new HashSet<>();

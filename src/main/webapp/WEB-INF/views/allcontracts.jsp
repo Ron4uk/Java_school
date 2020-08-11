@@ -50,16 +50,18 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">id</th>
+                <th scope="col">№</th>
                 <th scope="col">Phone number</th>
                 <th scope="col">Client</th>
                 <th scope="col">Tariff</th>
             </tr>
             </thead>
             <tbody>
+
+                    <% int numberOfContract=0;%>
             <c:forEach items="${listContracts}" var="mes">
                 <tr>
-                    <th scope="row">${mes.id}</th>
+                    <th scope="row"><%= ++numberOfContract %></th>
                     <td>${mes.phone}</td>
                     <td>${mes.clientDto.firstName} ${mes.clientDto.lastName}</td>
                     <td>${mes.tariffDto.tariff}</td>

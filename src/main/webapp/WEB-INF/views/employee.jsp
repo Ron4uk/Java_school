@@ -105,7 +105,7 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">id</th>
+
                 <th scope="col">FirstName</th>
                 <th scope="col">LastName</th>
                 <th scope="col">Tariff</th>
@@ -117,7 +117,6 @@
             <tbody>
 
                 <tr>
-                    <th scope="row">${contract.clientDto.id}</th>
                     <td>${contract.clientDto.firstName}</td>
                     <td>${contract.clientDto.lastName}</td>
                     <td>${contract.tariffDto.tariff}</td>
@@ -144,15 +143,17 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">id</th>
+                <th scope="col">№</th>
                 <th scope="col">FirstName</th>
                 <th scope="col">LastName</th>
             </tr>
             </thead>
             <tbody>
+            <% int numberOfClient=0;%>
             <c:forEach items="${clientList}" var="mes">
                 <tr>
-                    <th scope="row">${mes.id}</th>
+
+                    <th scope="row"><%=++numberOfClient%> </th>
                     <td>${mes.firstName}</td>
                     <td>${mes.lastName}</td>
                 </tr>
@@ -169,7 +170,7 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">id</th>
+                <th scope="col">№</th>
                 <th scope="col">tariff</th>
                 <th scope="col">price</th>
                 <th scope="col"></th>
@@ -180,10 +181,10 @@
             </tr>
             </thead>
             <tbody>
+            <% int numberoftariff=0;%>
             <c:forEach items="${tariffsList}" var="tariff">
-
                 <tr>
-                    <th scope="row">${tariff.id}</th>
+                    <th scope="row"><%=++numberoftariff%></th>
                     <td>${tariff.tariff}</td>
                     <td>${tariff.price}</td>
                     <td><a href="/edittariff?id=${tariff.id} ">Edit</a></td>
@@ -208,7 +209,7 @@
         <table class="table " >
             <thead>
             <tr>
-                <th scope="col">id</th>
+                <th scope="col">№</th>
                 <th scope="col">name</th>
                 <th scope="col">price</th>
                 <th scope="col">connection cost</th>
@@ -219,11 +220,10 @@
             </tr>
             </thead>
             <tbody>
+            <% int numberofoption=0;%>
             <c:forEach items="${optionsList}" var="option">
-
-
                 <tr>
-                    <th scope="row">${option.id}</th>
+                    <th scope="row"><%=++numberofoption%></th>
                     <td>${option.name}</td>
                     <td>${option.price}</td>
                     <td>${option.connectionCost}</td>

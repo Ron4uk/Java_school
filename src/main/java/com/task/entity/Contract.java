@@ -34,9 +34,7 @@ public class Contract extends AbstractIdentification {
     )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Option> connectedOptions;
+    private Set<Option> connectedOptions=new HashSet<>();;
 
-    public Contract() {
-        this.connectedOptions = new HashSet<>();
-    }
+
 }

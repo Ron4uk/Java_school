@@ -1,9 +1,6 @@
 package com.task.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -20,6 +17,7 @@ import java.util.Set;
 @Setter
 @ToString
 @EqualsAndHashCode
+@RequiredArgsConstructor
 public class Client extends AbstractIdentification {
 
     @Column (name = "firstname")
@@ -45,16 +43,11 @@ public class Client extends AbstractIdentification {
     @OneToMany (mappedBy = "client")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Contract> contracts;
+    private Set<Contract> contracts=new HashSet<>();;
 
-    public Client() {
-        this.contracts =new HashSet<>();
-    }
 
-    public Client(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+
+
 
 
 }

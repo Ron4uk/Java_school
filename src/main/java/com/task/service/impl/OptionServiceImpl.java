@@ -13,6 +13,7 @@ import com.task.service.OptionService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @Getter
 @Setter
+@Log4j
 @AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class OptionServiceImpl extends GenericMapper implements OptionService {
 
@@ -131,6 +133,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
      */
     @Transactional
     public String update(String[] requirement, String[] exclusion, OptionDto optionDto) {
+
         String result = "Changes successful.";
         Set<OptionDto> chooseRequiredOptions = new HashSet<>();
         Set<OptionDto> chooseExclusionOptions = new HashSet<>();
@@ -155,7 +158,9 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
             if( chooseRequiredOptions.size()>0) {
                 for (OptionDto optionDtoRequired : chooseRequiredOptions) {
                     checkLikeParent(allOptions, optionDtoRequired, optionDto);
+                    allOptions.add(optionDtoRequired);
                 }
+
                 createExclHierarchy(allOptions, chooseExclusionOptions);
             }
             createReqHierarchy(allOptions, chooseRequiredOptions);
@@ -204,15 +209,20 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
 
     public void checkLikeParent(List<OptionDto> allOptionsForCheck, OptionDto optionDto, OptionDto createOption) {
         List<OptionDto> allOptions = new ArrayList<>(allOptionsForCheck);
+        log.info("optionDto ="+optionDto);
         allOptions.add(optionDto);
+        log.info("alloptions ="+allOptions);
         Deque<OptionDto> queueChildOptions = new ArrayDeque<>();
         if (optionDto.getRequiredOptions().size() > 0) {
             queueChildOptions.addAll(optionDto.getRequiredOptions());
+            log.info("getRequiredOptions().size() > 0  queueChildOptions ="+queueChildOptions);
         } else if (optionDto.getExclusionOptions().size() > 0) {
             queueChildOptions.addAll(optionDto.getExclusionOptions());
+            log.info("optionDto.getExclusionOptions().size() > 0  queueChildOptions ="+queueChildOptions);
         }
         while (queueChildOptions.size() > 0) {
             OptionDto optionDtoFromChild = queueChildOptions.pollFirst();
+            log.info("OptionDto optionDtoFromChild = "+optionDtoFromChild);
             if (allOptions.contains(optionDtoFromChild)) {
                 throw new WrongOptionException(optionDtoFromChild.getId() + " " + optionDtoFromChild.getName() +
                         "  violates the principle of binding to the selected options", createOption);
@@ -227,6 +237,8 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
 
     public void checkLikeChild(List<OptionDto> allCheckingOptions, OptionDto optionDto, OptionDto createOption, List<OptionDto> onlyExclusionOptions) {
         List<OptionDto> parentOptions = getAllParentDto(optionDto);
+        LOGGER.info("[{}],  checkLikeChild for optionDto ={}  ", LocalDateTime.now(), optionDto);
+        LOGGER.info("[{}],  checkLikeChild for allCheckingOptions ={}  ", LocalDateTime.now(), allCheckingOptions);
         LOGGER.info("[{}],  checkLikeChild for={}  ", LocalDateTime.now(), parentOptions);
         if (parentOptions != null) {
             for (OptionDto parentDto : parentOptions) {
@@ -265,7 +277,9 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
     @Transactional
     public String deleteById(Integer id) {
             LOGGER.info("[{}],  deleteById [{}] Option id = {}", LocalDateTime.now(), LOGGER.getName(), id);
-            optionDao.deleteById(id);
+            Option option = optionDao.findById(id);
+            option.setDeleted(true);
+            optionDao.delete(option);
 
         return "Changes successful.";
     }
