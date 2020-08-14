@@ -13,6 +13,7 @@
 <head>
     <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"/>
     <title>MyJSPPage</title>
 
 
@@ -42,13 +43,13 @@
 
 
             </ul>
-            <a href="/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>
     </nav>
 
-    <form:form action="/updateOrDeleteOption" modelAttribute="optionDto" cssStyle="margin-top: 15px">
+    <form:form action="${pageContext.request.contextPath}/employee/updateOrDeleteOption" modelAttribute="optionDto" cssStyle="margin-top: 15px">
 
 
         <div class="form-group row">
@@ -60,14 +61,14 @@
         <div class="form-group row">
             <form:label path="price" for="inputPrice" class="col-sm-2 col-form-label">Price</form:label>
             <div class="col-sm-10">
-                <form:input path="price" pattern="\d{1,4}\\.?\d{0,2}" cssClass="form-control" id="inputPrice" required="required" placeholder="хххх.хх"/>
+                <form:input path="price" type="number"  pattern="\d{1,4}\\.?\d{0,2}" step="0.01" min="0" max="9999" title="ex. 330.20$" cssClass="form-control" id="inputPrice" required="required" placeholder="хххх.хх" />
             </div>
         </div>
         <div class="form-group row">
             <form:label path="price" for="inputConnectionCost"
                         class="col-sm-2 col-form-label">Connection cost</form:label>
             <div class="col-sm-10">
-                <form:input path="connectionCost" pattern="\d{1,4}\\.?\d{0,2}" cssClass="form-control" id="inputConnectionCost" required="required" placeholder="хххх.хх"/>
+                <form:input path="connectionCost" type="number"  pattern="\d{1,4}\\.?\d{0,2}" step="0.01" min="0" max="9999" title="ex. 330.20$" cssClass="form-control" id="inputConnectionCost" required="required" placeholder="хххх.хх" />
             </div>
         </div>
 
@@ -75,25 +76,31 @@
         <div class="form-group row">
 
             <div class="col-sm-6 col-md-6">
-                <div><p>choose required options</p></div>
+                <div><h6 style="text-align: center">Choose required options.</h6></div>
 
                 <table class="table" id="required options">
                     <thead>
                     <tr>
-                        <th scope="col">id</th>
+                        <th scope="col">№</th>
                         <th scope="col">Option</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Choose</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${optionsList}" var="mes">
+                    <c:forEach items="${optionsList}" var="mes" varStatus="reqnumber">
                         <tr>
-                            <th scope="row">${mes.id}</th>
+                            <th scope="row">${reqnumber.count}</th>
                             <td>${mes.name}</td>
-                            <td>${mes.price}</td>
-                            <td><input type="checkbox" name="requirement" value="${mes.id}"
-                                       onchange="updateCheckBox(this)"></td>
+                            <td>${mes.price}$</td>
+                            <td><div class="pretty p-switch p-fill">
+                                    <input type="checkbox" name="requirement" value="${mes.id}"
+                                           onchange="updateCheckBox(this)">
+                                    <div class="state">
+                                        <label>On</label>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -102,41 +109,67 @@
 
             </div>
             <div class="col-sm-6 col-md-6">
-                <div><p>choose mutual exclusion options</p></div>
+                <div><h6 style="text-align: center">Choose mutual exclusion options.</h6></div>
                 <table class="table" id="exclusion options">
                     <thead>
                     <tr>
-                        <th scope="col">id</th>
+                        <th scope="col">№</th>
                         <th scope="col">Option</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Choose</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${optionsList}" var="mes">
+                    <c:forEach items="${optionsList}" var="mes" varStatus="exclnumber">
                         <tr>
-                            <th scope="row">${mes.id}</th>
+                            <th scope="row">${exclnumber.count}</th>
                             <td>${mes.name}</td>
-                            <td>${mes.price}</td>
-                            <td><input type="checkbox" name="exclusion" value="${mes.id}"
-                                       onchange="updateCheckBox2(this)"></td>
+                            <td>${mes.price}$</td>
+                            <td>
+                                <div class="pretty p-switch p-fill">
+                                    <input type="checkbox" name="exclusion" value="${mes.id}"
+                                           onchange="updateCheckBox2(this)">
+                                    <div class="state">
+                                        <label>On</label>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
             </div>
         </div>
-
+<c:choose>
+    <c:when test="${optionDto.deleted!=true}">
+    <div class="form-group row justify-content-end">
+        <div class="col-sm-10 ">
+            <form:button type="submit" class="btn btn-secondary" style="float: right">Save</form:button>
+            <c:if test="${optionDto.id!=null}">
+                <form:button type="submit" name="delete"
+                             onclick="return confirm('Option: ${optionDto.id} ${optionDto.name} will be deleted. Are you sure?')"
+                             class="btn btn-secondary" style="float: right; margin-right: 5px">Delete</form:button>
+            </c:if>
+        </div>
+    </div>
+    </c:when>
+    <c:otherwise>
         <div class="form-group row justify-content-end">
             <div class="col-sm-10 ">
-                <form:button type="submit" class="btn btn-secondary">Save</form:button>
+                <form:button type="submit" class="btn btn-secondary" style="float: right" disabled="true">Save</form:button>
                 <c:if test="${optionDto.id!=null}">
                     <form:button type="submit" name="delete"
                                  onclick="return confirm('Option: ${optionDto.id} ${optionDto.name} will be deleted. Are you sure?')"
-                                 class="btn btn-secondary">Delete</form:button>
+                                 class="btn btn-secondary" style="float: right; margin-right: 5px" disabled="true">Delete</form:button>
                 </c:if>
             </div>
         </div>
+
+    </c:otherwise>
+
+
+</c:choose>
+
     </form:form>
 
     <c:if test="${result=='Changes successful.'}">
@@ -155,6 +188,9 @@
 
 
 <script>
+
+
+
     /**
      * Check Set<Options> from an OptionDto. If OptionDto has some kind of restriction, the onload () function marks it on the checkboxes
      */

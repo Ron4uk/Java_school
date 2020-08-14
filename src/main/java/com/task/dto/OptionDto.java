@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,8 +16,8 @@ import java.util.Set;
 public class OptionDto implements DtoEntity {
     private Integer id;
     private String name;
-    private Integer price;
-    private Integer connectionCost;
+    private BigDecimal price;
+    private BigDecimal connectionCost;
     private Boolean deleted;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

@@ -12,6 +12,7 @@
 <head>
     <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"/>
     <title>MyJSPPage</title>
 
 
@@ -41,7 +42,8 @@
 
 
             </ul>
-            <a href="${path}" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}${path}" class="btn btn-secondary  active" role="button"
+               aria-pressed="true">Back</a>
 
 
         </div>
@@ -54,11 +56,13 @@
         </div>
     </div>
 
-    <form:form action="/newcontract" modelAttribute="contractDto" cssStyle="margin-top: 15px"  >
+    <form:form action="${pageContext.request.contextPath}/employee/newcontract" modelAttribute="contractDto"
+               cssStyle="margin-top: 15px">
         <div class="form-group row">
             <form:label path="phone" for="inputPhoneNumber" cssClass="col-sm-2 col-form-label">Phone Number</form:label>
             <div class="col-sm-10">
-                <form:input path="phone" pattern="\d{11}" cssClass="form-control" id="inputPhoneNumber" required="required"/>
+                <form:input path="phone" pattern="\d{11}" cssClass="form-control" id="inputPhoneNumber"
+                            required="required" placeholder="ex. 89875643210"/>
             </div>
         </div>
         <div class="form-group row">
@@ -66,50 +70,78 @@
                         cssClass="col-sm-2 col-form-label">Password</form:label>
             <div class="col-sm-10">
                 <form:input type="password" path="auth.password" cssClass="form-control" id="inputPassword"
-                            required="required" />
+                            required="required"/>
             </div>
         </div>
         <div class="form-group row">
-            <label  for="confirmPassword" class="col-sm-2 col-form-label">Confirm password</label>
+            <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm password</label>
             <div class="col-sm-10">
-                <input type="password" class="form-control" id="confirmPassword"  oninput="checkPassword(this)"
-                            required="required" />
+                <input type="password" class="form-control" id="confirmPassword" oninput="checkPassword(this)"
+                       required="required"/>
             </div>
         </div>
         <div id="optionsForTariff">
             <c:if test="${listTariffs !=null}">
                 <c:forEach items="${listTariffs}" var="tariffs">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" data-toggle="collapse" aria-expanded="false"
-                               aria-controls="${tariffs.tariff}"
-                               data-target="#${tariffs.tariff}" name="chosentariff" value="${tariffs.id}"
-                               required="required">
-                        <label class="form-check-label">
-                                ${tariffs.tariff}
-                        </label>
+                    <div class="form-check" style="margin-bottom: 10px">
+                        <div class="pretty p-default p-round">
+                            <input class="form-check-input" type="radio" data-toggle="collapse" aria-expanded="false"
+                                   aria-controls="${tariffs.tariff}"
+                                   data-target="#${tariffs.tariff}" name="chosentariff" value="${tariffs.id}"
+                                   required="required">
+                            <div class="state">
+                                <label>${tariffs.tariff}</label>
+                            </div>
+                        </div>
                     </div>
                     <div id="${tariffs.tariff}" class="collapse" data-parent="#optionsForTariff">
 
                         <table class="table">
                             <thead>
                             <tr>
-                                <th scope="col">id</th>
+                                <th scope="col">№</th>
                                 <th scope="col">Option</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Connection cost</th>
-                                <th scope="col">Choose</th>
+                                <th scope="col">Requirements</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${tariffs.options}" var="option">
+                            <c:forEach items="${tariffs.options}" var="option" varStatus="optioncount">
                                 <tr>
-                                    <th scope="row">${option.id}</th>
+                                    <th scope="row">${optioncount.count}</th>
                                     <td>${option.name}</td>
-                                    <td>${option.price}</td>
-                                    <td>${option.connectionCost}</td>
-                                    <td><input type="checkbox" name="${tariffs.id}"
-                                               onchange="check(${option.requirementsId},
-                                                   ${option.exclusionsId}, ${tariffs.id}, this)" value="${option.id}">
+                                    <td>${option.price}$</td>
+                                    <td>${option.connectionCost}$</td>
+                                    <td>
+                                        <c:if test="${option.requiredOptions.size()>0}">
+                                            The following options should be connected:
+                                            <c:forEach items="${option.requiredOptions}" var="requirement">
+                                                ${requirement.name}
+                                            </c:forEach>
+                                            <br>
+                                        </c:if>
+                                        <c:if test="${option.exclusionOptions.size()>0}">
+                                            Cannot be connected with the following options:
+                                            <c:forEach items="${option.exclusionOptions}" var="exclusion">
+                                                ${exclusion.name}
+                                            </c:forEach>
+                                        </c:if>
+
+                                    </td>
+                                    <td>
+                                        <div class="pretty p-switch p-fill">
+                                            <input type="checkbox" name="${tariffs.id}" id="${option.name}"
+                                                   onchange="check(${option.requirementsId},
+                                                       ${option.exclusionsId}, ${tariffs.id}, this)"
+                                                   value="${option.id}">
+                                            <div class="state">
+                                                <label>On</label>
+                                            </div>
+                                        </div>
+
+
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -123,14 +155,20 @@
 
         <div class="form-group row justify-content-end">
             <div class="col-sm-10 ">
-                <form:button type="submit" class="btn btn-secondary">Save</form:button>
+                <form:button type="submit" class="btn btn-secondary" style="float: right">Save</form:button>
             </div>
         </div>
     </form:form>
 
-    <c:if test="${result!=null}">
-        <div id="message"><p style="margin-top: 10px; color: red">${result}</p></div>
-    </c:if>
+
+    <c:choose>
+        <c:when test="${result.equals('Change failed. Check connection options')}">
+            <div id="message"><p style="margin-top: 10px; color: red">${result}</p></div>
+        </c:when>
+        <c:otherwise>
+            <div id="message"><p style="margin-top: 10px; color: green">${result}</p></div>
+        </c:otherwise>
+    </c:choose>
 
 
     <div class="card-footer text-muted" style="margin-top: 20px">
@@ -138,6 +176,9 @@
     </div>
 </div>
 <script>
+    var mapExclusions = new Map();
+    var mapRequirements = new Map();
+
     function checkPassword(input) {
 
         if (input.value != document.getElementById('inputPassword').value) {
@@ -150,10 +191,9 @@
 
     /**
      * checks option what parameters have requirements before connecting
-     *  instance x increase when another option have the same mutual exclusion option.
-     *  when option will be disconnected and x !=0, this means that exclusion options should not be enabled.
+
      */
-    var x=0;
+
 
     function check(optRequirementsId, optExclusionsId, tariff, checkbox) {
 
@@ -161,51 +201,71 @@
         var elementsInTariffBlock = document.getElementsByName(tariff);
         if (checkbox.checked == true) {
             start:
-                if (optExclusionsId.length > 0 || optRequirementsId.length>0){
+                if (optExclusionsId.length > 0 || optRequirementsId.length > 0) {
                     for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
-                        if(optExclusionsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==true){
-                            alert("You cannot enable this option, because option with ID " +elementsInTariffBlock[i].value
-                                + " is mutually exclusive with option ID "+checkbox.value);
+                        if (optExclusionsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked == true) {
+                            alert("You cannot enable this option, because " + elementsInTariffBlock[i].id
+                                + " is mutually exclusive with  " + checkbox.id);
+                            checkbox.checked = false;
+                            break start;
+                        } else if (optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked == false) {
+                            alert("Before enabling this option, connect following option: " + elementsInTariffBlock[i].id);
                             checkbox.checked = false;
                             break start;
                         }
-                        else if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==false){
-                            alert("before enabling this option, all of the following option identifiers must be included: " + optRequirementsId);
-                            checkbox.checked=false;
-                            break start;
-                        }
                     }
                     for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
-                        if(optExclusionsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==false){
-                            x++;
-                            elementsInTariffBlock[i].disabled=true;
-                        }
-                        else if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==true){
+                        if (optExclusionsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked == false) {
+                            if (mapExclusions.has((elementsInTariffBlock[i].value) + " " + tariff)) {
+                                let number = mapExclusions.get((elementsInTariffBlock[i].value) + " " + tariff);
+                                mapExclusions.set((elementsInTariffBlock[i].value) + " " + tariff, ++number);
+                            } else {
+                                mapExclusions.set((elementsInTariffBlock[i].value) + " " + tariff, 1);
+                            }
+                            elementsInTariffBlock[i].disabled = true;
+                        } else if (optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked == true) {
+
+                            if (mapRequirements.has((elementsInTariffBlock[i].value) + " " + tariff)) {
+                                let number = mapRequirements.get((elementsInTariffBlock[i].value) + " " + tariff);
+                                mapRequirements.set((elementsInTariffBlock[i].value) + " " + tariff, ++number);
+                            } else {
+                                mapRequirements.set((elementsInTariffBlock[i].value) + " " + tariff, 1);
+                            }
                             elementsInTariffBlock[i].onclick = function () {
-                                 return false;
+                                return false;
                             }
                         }
                     }
 
                 }
 
-        }
-        else {
+        } else {
             stop:
-                if (optExclusionsId.length > 0 || optRequirementsId.length>0){
+                if (optExclusionsId.length > 0 || optRequirementsId.length > 0) {
                     for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
-                        if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value))){
-                            elementsInTariffBlock[i].onclick = function () {
-                                return true;
+                        if (optRequirementsId.includes(Number(elementsInTariffBlock[i].value))) {
+                            let number = mapRequirements.get((elementsInTariffBlock[i].value) + " " + tariff);
+                            mapRequirements.set((elementsInTariffBlock[i].value) + " " + tariff, --number);
+
+                            if (mapRequirements.get((elementsInTariffBlock[i].value) + " " + tariff) == 0) {
+                                elementsInTariffBlock[i].onclick = function () {
+                                    return true;
+                                }
                             }
+
+
                         }
-                        if(optExclusionsId.includes(Number(elementsInTariffBlock[i].value))){
-                            if(--x==0) elementsInTariffBlock[i].disabled=false;
-                            console.log(x);
+                        if (optExclusionsId.includes(Number(elementsInTariffBlock[i].value))) {
+                            let number = mapExclusions.get((elementsInTariffBlock[i].value) + " " + tariff);
+                            mapExclusions.set((elementsInTariffBlock[i].value) + " " + tariff, --number);
+                            console.log("optExclusionsId.includes -- " + mapExclusions)
+                            if (mapExclusions.get((elementsInTariffBlock[i].value) + " " + tariff) == 0) elementsInTariffBlock[i].disabled = false;
+
                         }
                     }
 
                 }
+
         }
 
     }

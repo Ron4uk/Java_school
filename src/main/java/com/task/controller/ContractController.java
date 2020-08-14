@@ -12,10 +12,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 @Getter
 @Setter
 @Log4j
-@AllArgsConstructor(onConstructor=@__({@Autowired}))
+@RequestMapping("/employee")
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 @SessionAttributes({"contractDto", "clientDto"})
 public class ContractController {
 
@@ -36,6 +34,7 @@ public class ContractController {
     public ContractDto getContractDto() {
         return new ContractDto();
     }
+
     @ModelAttribute("clientDto")
     public ClientDto getClientDto() {
         return new ClientDto();
@@ -48,32 +47,34 @@ public class ContractController {
     }
 
     @PostMapping("/newcontract")
-    public String addContract(@ModelAttribute("clientDto") ClientDto clientDto, @ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request, Model model, SessionStatus sessionStatus) {
-        contractService.create(contractDto, clientDto, request.getParameter("chosentariff"), request.getParameterValues(request.getParameter("chosentariff")));
-        sessionStatus.setComplete();
-        model.addAttribute("contractDto", new ContractDto());
-        model.addAttribute("result", "New contract added");
-        return "employee";
+    public String addContract(@ModelAttribute("clientDto") ClientDto clientDto,
+                              @ModelAttribute("contractDto") ContractDto contractDto,
+                              HttpServletRequest request, Model model) {
+        model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
+        model.addAttribute("result", contractService.create(contractDto, clientDto,
+                request.getParameter("chosentariff"),
+                request.getParameterValues(request.getParameter("chosentariff"))));
+        model.addAttribute("path", "/employee");
+        return "newcontract";
     }
 
 
-
     @PostMapping("/blockcontract")
-    public String blockContract(HttpServletRequest request, Model model){
+    public String blockContract(HttpServletRequest request, Model model) {
         model.addAttribute("contract", contractService.block(request.getParameter("block")));
         model.addAttribute("result", "Client blocked!");
         return "employee";
     }
 
     @PostMapping("/unblockcontract")
-    public String unBlockContract(HttpServletRequest request, Model model){
+    public String unBlockContract(HttpServletRequest request, Model model) {
         model.addAttribute("contract", contractService.unblock(request.getParameter("unblock")));
         model.addAttribute("result", "Client unblocked!");
         return "employee";
     }
 
     @GetMapping("/editcontract")
-    public String editGetContract(HttpServletRequest request, Model model){
+    public String editGetContract(HttpServletRequest request, Model model) {
         model.addAttribute("contractDto", contractService.findByIdDto(request.getParameter("id")));
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
         model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
@@ -82,16 +83,18 @@ public class ContractController {
     }
 
     @PostMapping("/editcontract")
-    public String editPostContract(@ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request, Model model){
-        model.addAttribute("contractDto", contractService.update(contractDto, request.getParameterValues(contractDto.getTariffDto().getId().toString())));
+    public String editPostContract(@ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request,
+                                   Model model) {
+        model.addAttribute("result", contractService.update(contractDto,
+                request.getParameterValues(contractDto.getTariffDto().getId().toString())));
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
         model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
-        model.addAttribute("result", "Contract changes were successful!");
+        model.addAttribute("contractDto", contractService.findByIdDto(contractDto.getId().toString()));
         return "editcontract";
     }
 
     @GetMapping("getAllContracts")
-    public String getAllContracts(Model model){
+    public String getAllContracts(Model model) {
         model.addAttribute("listContracts", contractService.getAll());
         return "allcontracts";
     }

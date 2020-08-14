@@ -36,12 +36,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/startauthempl">Main <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/startauthempl">Main <span class="sr-only">(current)</span></a>
                 </li>
 
 
             </ul>
-            <a href="/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>
@@ -49,17 +49,17 @@
     <div style="margin-top: 10px">
         <h3>Enter client's phone number </h3>
     </div>
-    <form:form action="/chooseclient" modelAttribute="contractDto" method="post" style="margin-top: 10px">
+    <form:form action="${pageContext.request.contextPath}/employee/chooseclient" modelAttribute="contractDto" method="post" style="margin-top: 10px">
     <div class="input-group mb-3">
         <form:input type="text" path="phone" class="form-control" pattern="\d{11}" placeholder="Client's phone ex. 89118887766" aria-label="Client's phone" aria-describedby="button-addon2"/>
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Button</button>
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
         </div>
     </div>
     </form:form>
 
 <c:if test="${client!=null}">
-    <form method="get" action="/searchclient">
+    <form method="get" action="${pageContext.request.contextPath}/employee/searchclient">
     <c:set value="${client}" scope="session" var="clientVar"/>
     <div class="form-group row" style="margin-top: 10px">
 
@@ -68,7 +68,6 @@
             <table class="table" id="required options">
                 <thead>
                 <tr>
-                    <th scope="col">id</th>
                     <th scope="col">FirstName</th>
                     <th scope="col">LastName</th>
                     <th scope="col">Passport</th>
@@ -78,7 +77,6 @@
                 <tbody>
 
                     <tr>
-                        <th scope="row">${clientVar.id}</th>
                         <td>${clientVar.firstName}</td>
                         <td>${clientVar.lastName}</td>
                         <td>${clientVar.passport_series} ${clientVar.passport_number}</td>

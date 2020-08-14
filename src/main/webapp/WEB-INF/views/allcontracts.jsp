@@ -41,7 +41,7 @@
 
 
             </ul>
-            <a href="/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>

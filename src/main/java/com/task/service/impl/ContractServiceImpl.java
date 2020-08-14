@@ -48,7 +48,8 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
 
     @Transactional
     @Override
-    public void create(com.task.dto.ContractDto contractDto, com.task.dto.ClientDto clientDto, String tariffId, String[] optionsId) {
+    public String create(ContractDto contractDto, ClientDto clientDto, String tariffId, String[] optionsId) {
+
         check(contractDto.getPhone(), clientDto, contractDto);
         Tariff tariff = tariffDao.findById(Integer.parseInt(tariffId));
         Client client = (Client) convertToEntity(new Client(), clientDto);
@@ -67,11 +68,31 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
                 contract.getConnectedOptions().add(option);
             }
         }
+        if (!checkOptions(contract.getConnectedOptions())) return "Change failed. Check connection options";
 
-        LOGGER.info("[{}], create from ContractServiceImpl [{}]  client = {} and contract ={} options ={} tariff={}", LocalDateTime.now(), LOGGER.getName(), client, contract, contract.getConnectedOptions(), contract.getTariff());
-        clientDao.create(client);
+        if (clientDto.getId() == null) {
+            clientDao.create(client);
+        }
         contractDAO.create(contract);
+        return "New contract added.";
     }
+
+    private boolean checkOptions(Set<Option> connectedOptions) {
+        for (Option option : connectedOptions) {
+            if (option.getRequiredOptions().size() > 0) {
+                for (Option required : option.getRequiredOptions()) {
+                    if (!connectedOptions.contains(required)) return false;
+                }
+            }
+            if (option.getExclusionOptions().size() > 0) {
+                for (Option exclusion : option.getExclusionOptions()) {
+                    if (connectedOptions.contains(exclusion)) return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     @Transactional
     @Override
@@ -88,7 +109,6 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
         contractDto.setClientDto(clientDto);
         contractDto.setTariffDto(tariffDto);
-        LOGGER.info("[{}], findByIdDto [{}] contractDto = {}", LocalDateTime.now(), LOGGER.getName(), contractDto);
         return contractDto;
     }
 
@@ -96,24 +116,20 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     @Override
     public ContractDto findByPhoneDto(String phone, String path) {
         Contract contract = contractDAO.findByPhone(phone);
-        LOGGER.info("[{}], [{}] findByPhone contract get client = {}", LocalDateTime.now(), LOGGER.getName(), contract);
         if (contract == null) {
             throw new NotExistClientException("The client doesn't exist", path);
         }
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
         contractDto.setClientDto((ClientDto) convertToDto(contract.getClient(), new ClientDto()));
         contractDto.setTariffDto((TariffDto) convertToDto(contract.getTariff(), new TariffDto()));
-        LOGGER.info("[{}], findByPhone [{}] contractDto = {}", LocalDateTime.now(), LOGGER.getName(), contractDto);
         return contractDto;
     }
 
     @Transactional
     @Override
     public ContractDto block(String id) {
-        LOGGER.info("[{}], block [{}] id = {}", LocalDateTime.now(), LOGGER.getName(), id);
         Contract contract = contractDAO.findById(Integer.parseInt(id));
         contract.setBlockByOperator(true);
-        LOGGER.info("block contract = {}", contract);
         contractDAO.update(contract);
         ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
@@ -125,9 +141,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     @Transactional
     @Override
     public ContractDto unblock(String id) {
-        LOGGER.info("[{}], unblock [{}] id = {}", LocalDateTime.now(), LOGGER.getName(), id);
         Contract contract = contractDAO.findById(Integer.parseInt(id));
-        LOGGER.info("unblock contract = {}", contract);
         contract.setBlockByOperator(false);
         contract.setBlockByClient(false);
         contractDAO.update(contract);
@@ -140,38 +154,31 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
 
     @Transactional
     @Override
-    public ContractDto update(ContractDto contractDto, String[] connectedOptions) {
-        Contract contract = (Contract) convertToEntity(new Contract(), contractDto);
+    public String update(ContractDto contractDto, String[] connectedOptions) {
+        Contract oldContract = contractDAO.findById(contractDto.getId());
+        Contract newContract = (Contract) convertToEntity(new Contract(), contractDto);
+        newContract.setConnectedOptions(new HashSet<>());
         Client client = (Client) convertToEntity(new Client(), contractDto.getClientDto());
         Tariff tariff = (Tariff) convertToEntity(new Tariff(), contractDto.getTariffDto());
         Authorization authorization = (Authorization) convertToEntity(new Authorization(), contractDto.getAuth());
-        contract.setClient(client);
-        contract.setTariff(tariff);
-        contract.setAuth(authorization);
-        for (Option option : contract.getConnectedOptions()) {
-            if (!tariff.getOptions().contains(option)) {
-                contract.getConnectedOptions().remove(option);
-            }
-        }
-        LOGGER.info("[{}], update [{}] contract = {}", LocalDateTime.now(), LOGGER.getName(), contract);
+        newContract.setClient(client);
+        newContract.setTariff(tariff);
+        newContract.setAuth(authorization);
         if (connectedOptions != null && connectedOptions.length > 0) {
             for (String id : connectedOptions) {
                 Option option = optionDao.findById(Integer.parseInt(id));
-                LOGGER.info("[{}], update [{}] option = {}", LocalDateTime.now(), LOGGER.getName(), option);
-                contract.getConnectedOptions().add(option);
+                newContract.getConnectedOptions().add(option);
             }
         }
-        LOGGER.info("[{}], update [{}] contract id = {}, auth id ={}, client id={}", LocalDateTime.now(), LOGGER.getName(), contract.getId(), contract.getAuth().getId(), contract.getClient().getId());
+        for (Option option : oldContract.getConnectedOptions()) {
+            if ((oldContract.getTariff().getId() != tariff.getId()) && (tariff.getOptions().contains(option))) {
+                newContract.getConnectedOptions().add(option);
+            }
+        }
+        if (!checkOptions(newContract.getConnectedOptions())) return "Change failed. Check connection options";
+        contractDAO.update(newContract);
 
-        Contract updatedContract = contractDAO.update(contract);
-        ContractDto updatedContractDto = (ContractDto) convertToDto(updatedContract, new ContractDto());
-        TariffDto updatedTariffDto = (TariffDto) convertToDto(updatedContract.getTariff(), new TariffDto());
-        ClientDto updatedClientDto = (ClientDto) convertToDto(updatedContract.getClient(), new ClientDto());
-        updatedContractDto.setTariffDto(updatedTariffDto);
-        updatedContractDto.setClientDto(updatedClientDto);
-        LOGGER.info("[{}], update [{}] updatedContractDto = {}", LocalDateTime.now(), LOGGER.getName(), updatedContractDto);
-
-        return updatedContractDto;
+        return "Contract changes were successful!";
     }
 
     @Transactional
@@ -240,26 +247,28 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
             if (orderDto.getOptionsFromCurTariff().size() > 0) {
                 for (OptionDto optionDto : orderDto.getOptionsFromCurTariff()) {
                     for (OptionDto reqOptionDto : optionDto.getRequiredOptions()) {
-                        if ((!orderDto.getOptionsFromCurTariff().contains(reqOptionDto) && !contractDto.getConnectedOptions().contains(reqOptionDto)) ||
-                        orderDto.getDisableOptionsFromCurTariff().contains(reqOptionDto)) {
+                        if ((!orderDto.getOptionsFromCurTariff().contains(reqOptionDto) &&
+                                !contractDto.getConnectedOptions().contains(reqOptionDto)) ||
+                                orderDto.getDisableOptionsFromCurTariff().contains(reqOptionDto)) {
                             return false;
                         }
                     }
                     for (OptionDto excOptionDto : optionDto.getExclusionOptions()) {
-                        if (orderDto.getOptionsFromCurTariff().contains(excOptionDto) || contractDto.getConnectedOptions().contains(excOptionDto))
+                        if (orderDto.getOptionsFromCurTariff().contains(excOptionDto) ||
+                                contractDto.getConnectedOptions().contains(excOptionDto))
                             return false;
                     }
                 }
-                for(OptionDto connectedOption: contractDto.getConnectedOptions()){
-                    for(OptionDto exclOptionDto: connectedOption.getExclusionOptions()){
-                        if(orderDto.getOptionsFromCurTariff().contains(exclOptionDto)) return false;
+                for (OptionDto connectedOption : contractDto.getConnectedOptions()) {
+                    for (OptionDto exclOptionDto : connectedOption.getExclusionOptions()) {
+                        if (orderDto.getOptionsFromCurTariff().contains(exclOptionDto)) return false;
                     }
                 }
-            }
-            else if (orderDto.getDisableOptionsFromCurTariff().size() > 0){
+            } else if (orderDto.getDisableOptionsFromCurTariff().size() > 0) {
                 for (OptionDto optionDto : orderDto.getDisableOptionsFromCurTariff()) {
-                    for(OptionDto connectedOption: contractDto.getConnectedOptions()){
-                        if(connectedOption.getRequiredOptions().contains(optionDto) && !orderDto.getDisableOptionsFromCurTariff().contains(connectedOption)) return false;
+                    for (OptionDto connectedOption : contractDto.getConnectedOptions()) {
+                        if (connectedOption.getRequiredOptions().contains(optionDto) &&
+                                !orderDto.getDisableOptionsFromCurTariff().contains(connectedOption)) return false;
                     }
                 }
             }
@@ -268,7 +277,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
             Contract contract = (Contract) convertToEntity(new Contract(), contractDto);
             contract.setTariff((Tariff) convertToEntity(new Tariff(), contractDto.getTariffDto()));
             contract.setClient((Client) convertToEntity(new Client(), contractDto.getClientDto()));
-            log.info("contact after convert "+contract.getConnectedOptions() );
+            log.info("contact after convert " + contract.getConnectedOptions());
             orderDto.setTariffDto(null);
             orderDto.setOptionsFromCurTariff(new HashSet<>());
             orderDto.setOptionsFromNewTariff(new HashSet<>());
@@ -281,10 +290,10 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
 
     private boolean checkOnNewTariff(ContractDto contractDto, OrderDto orderDto) {
         if (orderDto.getTariffDto() != null) {
-            if(orderDto.getOptionsFromNewTariff().size()>0){
+            if (orderDto.getOptionsFromNewTariff().size() > 0) {
                 for (OptionDto optionDto : orderDto.getOptionsFromNewTariff()) {
                     for (OptionDto reqOptionDto : optionDto.getRequiredOptions()) {
-                        if ((!orderDto.getOptionsFromNewTariff().contains(reqOptionDto) ))  {
+                        if ((!orderDto.getOptionsFromNewTariff().contains(reqOptionDto))) {
                             return false;
                         }
                     }
@@ -293,14 +302,15 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
                             return false;
                     }
                 }
-                for(OptionDto connectedOption: contractDto.getConnectedOptions()){
-                    for(OptionDto exclOptionDto: connectedOption.getExclusionOptions()){
-                        if(orderDto.getOptionsFromCurTariff().contains(exclOptionDto)) return false;
+                for (OptionDto connectedOption : contractDto.getConnectedOptions()) {
+                    for (OptionDto exclOptionDto : connectedOption.getExclusionOptions()) {
+                        if (orderDto.getOptionsFromCurTariff().contains(exclOptionDto)) return false;
                     }
                 }
             }
             for (OptionDto optionDto : contractDto.getConnectedOptions()) {
-                if (orderDto.getTariffDto().getOptions().contains(optionDto) && !orderDto.getOptionsFromNewTariff().contains(optionDto)) {
+                if (orderDto.getTariffDto().getOptions().contains(optionDto) &&
+                        !orderDto.getOptionsFromNewTariff().contains(optionDto)) {
                     orderDto.getOptionsFromNewTariff().add(optionDto);
                 }
             }
@@ -309,7 +319,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
             Contract contract = (Contract) convertToEntity(new Contract(), contractDto);
             contract.setTariff((Tariff) convertToEntity(new Tariff(), contractDto.getTariffDto()));
             contract.setClient((Client) convertToEntity(new Client(), contractDto.getClientDto()));
-            log.info("checkOnNewTariff contract = "+ contract);
+            log.info("checkOnNewTariff contract = " + contract);
             orderDto.setTariffDto(null);
             orderDto.setOptionsFromCurTariff(new HashSet<>());
             orderDto.setOptionsFromNewTariff(new HashSet<>());
@@ -323,7 +333,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     @Override
     @Transactional
     public void blockByUser(ContractDto contractDto) {
-        if(contractDto.getBlockByOperator()!=true) {
+        if (contractDto.getBlockByOperator() != true) {
             Contract contract = contractDAO.findById(contractDto.getId());
             contract.setBlockByClient(true);
             contractDAO.update(contract);
@@ -334,7 +344,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     @Override
     @Transactional
     public void unblockByUser(ContractDto contractDto) {
-        if(contractDto.getBlockByOperator()!=true) {
+        if (contractDto.getBlockByOperator() != true) {
             Contract contract = contractDAO.findById(contractDto.getId());
             contract.setBlockByClient(false);
             contractDAO.update(contract);

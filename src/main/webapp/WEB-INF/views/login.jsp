@@ -24,14 +24,14 @@
 
 
             </ul>
-            <a href="/" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}/" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>
 
     </nav>
 
-<form action="/client"  method="post" style="margin-top: 50px; margin-bottom: 50px">
+<form action="${pageContext.request.contextPath}/login/process"  method="post" style="margin-top: 50px; margin-bottom: 50px">
 
     <div class="form-group">
         <label>Phone number</label>

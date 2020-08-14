@@ -7,6 +7,7 @@ import com.task.service.OptionService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import java.util.List;
 @Controller
 @Getter
 @Setter
+@Log4j
+@RequestMapping("/employee")
 @AllArgsConstructor(onConstructor=@__({@Autowired}))
 @SessionAttributes({"optionDto", "contractDto"})
 public class OptionController {
@@ -59,15 +62,15 @@ public class OptionController {
     }
 
     @PostMapping("/updateOrDeleteOption")
-    public String updateOrDeleteOption(@ModelAttribute("optionDto") OptionDto optionDto, HttpServletRequest request, Model model, SessionStatus sessionStatus) {
+    public String updateOrDeleteOption(@ModelAttribute("optionDto") OptionDto optionDto, HttpServletRequest request,
+                                       Model model) {
         if (request.getParameter("delete") != null) {
-            model.addAttribute("result", optionService.deleteById(optionDto.getId()));
+            model.addAttribute("result", optionService.deleteById(optionDto.getId(), optionDto));
         } else {
-            model.addAttribute("result", optionService.update(request.getParameterValues("requirement"), request.getParameterValues("exclusion"), optionDto));
+            model.addAttribute("result", optionService.update(request.getParameterValues("requirement"),
+                    request.getParameterValues("exclusion"), optionDto));
         }
-        model.addAttribute("optionsList", optionService.getAllDto());
-        sessionStatus.setComplete();
-        model.addAttribute("optionDto", new OptionDto());
+        model.addAttribute("optionsList", optionService.getAllWithoutDto(optionDto.getId()));
         return "editoption";
     }
 

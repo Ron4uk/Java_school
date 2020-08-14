@@ -186,7 +186,7 @@
                             break start;
                         }
                         else if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==false){
-                            alert("before enabling this option, connect following option: " + elementsInTariffBlock[i].id);
+                            alert("Before enabling this option, connect following option: " + elementsInTariffBlock[i].id);
                             checkbox.checked=false;
                             break start;
                         }

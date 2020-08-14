@@ -11,8 +11,8 @@ public interface ContractService {
     DtoEntity convertToDto(Object obj, DtoEntity mapper);
     Object convertToEntity(Object obj, DtoEntity mapper);
 
-    void create(com.task.dto.ContractDto contractDto, ClientDto clientDto, String tariffId, String[] optionsId);
-    void check(String phone, ClientDto clientDto, com.task.dto.ContractDto contractDto);
+    String create(ContractDto contractDto, ClientDto clientDto, String tariffId, String[] optionsId);
+    void check(String phone, ClientDto clientDto, ContractDto contractDto);
 
     ContractDto findByIdDto(String id);
 
@@ -22,7 +22,7 @@ public interface ContractService {
 
     ContractDto unblock(String id);
 
-    ContractDto update(ContractDto contractDto, String[] connectedOptions);
+    String update(ContractDto contractDto, String[] connectedOptions);
 
     List<ContractDto> getAll();
     Boolean checkContract(ContractDto contractDto, OrderDto orderDto);

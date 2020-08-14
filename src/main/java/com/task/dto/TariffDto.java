@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 public class TariffDto implements DtoEntity {
     private Integer id;
     private String tariff;
-    private Double price;
+    private BigDecimal price;
     private Boolean deleted;
      @ToString.Exclude
     @EqualsAndHashCode.Exclude

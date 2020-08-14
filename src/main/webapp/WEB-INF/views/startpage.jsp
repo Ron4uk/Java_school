@@ -56,7 +56,7 @@
 
 
             </ul>
-            <a href="/client" class="btn btn-secondary  active" role="button" aria-pressed="true">Sign in</a>
+            <a href="/login" class="btn btn-secondary  active" role="button" aria-pressed="true">Sign in</a>
 
 
         </div>

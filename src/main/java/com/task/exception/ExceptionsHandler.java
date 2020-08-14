@@ -1,7 +1,6 @@
 package com.task.exception;
 
 import com.task.controller.EmplController;
-import com.task.exception.*;
 import com.task.dto.ContractDto;
 import com.task.service.OptionService;
 import com.task.service.TariffService;
@@ -51,7 +50,7 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(value = NotExistClientException.class)
     public ModelAndView clientException(NotExistClientException exception){
-        ModelAndView modelAndView = new ModelAndView("/"+exception.getPath());
+        ModelAndView modelAndView = new ModelAndView(exception.getPath());
         modelAndView.addObject("result", exception.getMessage());
         modelAndView.addObject("contractDto", new ContractDto());
         return modelAndView;

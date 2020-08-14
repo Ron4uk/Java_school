@@ -33,29 +33,29 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/startauthempl">Main <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/startauthempl">Main <span class="sr-only">(current)</span></a>
                 </li>
 
 
             </ul>
-            <a href="/logout" class="btn btn-secondary  active" role="button" aria-pressed="true">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary  active" role="button" aria-pressed="true">Sign out</a>
 
 
         </div>
     </nav>
 
-    <form:form action="/findClientOnMainPage" method="post" modelAttribute="contractDto" style="margin-top: 10px">
+    <form:form action="${pageContext.request.contextPath}/employee/findClientOnMainPage" method="post" modelAttribute="contractDto" style="margin-top: 10px">
         <div class="form-group">
             <form:input type="tel" path="phone" name="phone" class="form-control" placeholder="Enter client's phone number"/>
         </div>
         <button type="submit" class="btn btn-secondary ">Search</button>
     </form:form>
 
-    <form action="/getAllContracts" method="get" style="margin-top: 10px">
+    <form action="${pageContext.request.contextPath}/employee/getAllContracts" method="get" style="margin-top: 10px">
         <button type="submit" class="btn btn-secondary  btn-lg btn-block">Get all contracts</button>
     </form>
 
-    <form action="/getAllClients" method="get" style="margin-top: 10px">
+    <form action="${pageContext.request.contextPath}/employee/getAllClients" method="get" style="margin-top: 10px">
         <button type="submit" class="btn btn-secondary  btn-lg btn-block">Get all clients</button>
     </form>
 
@@ -65,10 +65,10 @@
     <div class="collapse" id="clients" style="margin-top: 20px">
         <div class="row justify-content-around">
 
-            <form role="form" action="/chooseclient" class="col-md-2" method="get">
+            <form role="form" action="${pageContext.request.contextPath}/employee/chooseclient" class="col-md-2" method="get">
                 <button type="submit" class="btn btn-secondary  btn ">Existing client</button>
             </form>
-            <form role="form" action="/newclient" class="col-md-2" method="get">
+            <form role="form" action="${pageContext.request.contextPath}/employee/newclient" class="col-md-2" method="get">
                 <button type="submit" class="btn btn-secondary  btn ">New client</button>
             </form>
         </div>
@@ -78,10 +78,10 @@
     </button>
     <div class="collapse" id="tarrifs" style="margin-top: 20px">
         <div class="row justify-content-around">
-            <form role="form" action="/edittariff" class="col-md-2" method="get">
+            <form role="form" action="${pageContext.request.contextPath}/employee/edittariff" class="col-md-2" method="get">
                 <button type="submit" class="btn btn-secondary  btn ">New tariff</button>
             </form>
-            <form role="form" action="/tariffs" class="col-md-2" method="get">
+            <form role="form" action="${pageContext.request.contextPath}/employee/tariffs" class="col-md-2" method="get">
                 <button type="submit" class="btn btn-secondary  btn ">Show all</button>
             </form>
         </div>
@@ -92,10 +92,10 @@
     </button>
     <div class="collapse" id="options" style="margin-top: 20px">
         <div class="row justify-content-around">
-            <form role="form" action="/editoption"  class="col-md-2" method="get">
+            <form role="form" action="${pageContext.request.contextPath}/employee/editoption"  class="col-md-2" method="get">
                 <button type="submit" class="btn btn-secondary  btn ">New option</button>
             </form>
-            <form role="form" action="/options" class="col-md-2" method="get">
+            <form role="form" action="${pageContext.request.contextPath}/employee/options" class="col-md-2" method="get">
                 <button type="submit" class="btn btn-secondary  btn ">Show all</button>
             </form>
         </div>
@@ -121,14 +121,14 @@
                     <td>${contract.clientDto.lastName}</td>
                     <td>${contract.tariffDto.tariff}</td>
                     <td>${contract.phone}</td>
-                    <td><a href="/editcontract?id=${contract.id} ">Edit</a></td>
+                    <td><a href="${pageContext.request.contextPath}/employee/editcontract?id=${contract.id} ">Edit</a></td>
                     <c:if test="${contract.blockByOperator!=true && contract.blockByClient!=true}">
-                        <form method="post" action="/blockcontract">
+                        <form method="post" action="${pageContext.request.contextPath}/employee/blockcontract">
                         <td><button  type="submit" name="block" class="btn btn-outline-dark btn-sm" value="${contract.id}"> block </button></td>
                         </form>
                     </c:if>
                     <c:if test="${contract.blockByOperator==true || contract.blockByClient==true }">
-                        <form method="post" action="/unblockcontract">
+                        <form method="post" action="${pageContext.request.contextPath}/employee/unblockcontract">
                         <td><button  type="submit" name="unblock" class="btn btn-outline-danger btn-sm" value="${contract.id}">unblock</button></td>
                         </form>
                     </c:if>
@@ -149,11 +149,11 @@
             </tr>
             </thead>
             <tbody>
-            <% int numberOfClient=0;%>
-            <c:forEach items="${clientList}" var="mes">
+
+            <c:forEach items="${clientList}" var="mes" varStatus="numberOfClient">
                 <tr>
 
-                    <th scope="row"><%=++numberOfClient%> </th>
+                    <th scope="row"><${numberOfClient.count}</th>
                     <td>${mes.firstName}</td>
                     <td>${mes.lastName}</td>
                 </tr>
@@ -175,20 +175,20 @@
                 <th scope="col">price</th>
                 <th scope="col"></th>
                 <th scope="col">
-                    <a href="/edittariff" class="btn btn-outline-dark btn-sm">new tariff</a>
+                    <a href="${pageContext.request.contextPath}/employee/edittariff" class="btn btn-outline-dark btn-sm">new tariff</a>
 
                 </th>
             </tr>
             </thead>
             <tbody>
-            <% int numberoftariff=0;%>
-            <c:forEach items="${tariffsList}" var="tariff">
+
+            <c:forEach items="${tariffsList}" var="tariff" varStatus="numberoftariff">
                 <tr>
-                    <th scope="row"><%=++numberoftariff%></th>
+                    <th scope="row">${numberoftariff.count}</th>
                     <td>${tariff.tariff}</td>
                     <td>${tariff.price}</td>
-                    <td><a href="/edittariff?id=${tariff.id} ">Edit</a></td>
-                    <td><a href="/deletetariff?id=${tariff.id} ">Delete</a></td>
+                    <td><a href="${pageContext.request.contextPath}/employee/edittariff?id=${tariff.id} ">Edit</a></td>
+                    <td><a href="${pageContext.request.contextPath}/employee/deletetariff?id=${tariff.id} ">Delete</a></td>
 
 
                 </tr>
@@ -206,7 +206,7 @@
         </c:if>
 
     <c:if test="${optionsList !=null}">
-        <table class="table " >
+        <table class="table">
             <thead>
             <tr>
                 <th scope="col">№</th>
@@ -214,21 +214,20 @@
                 <th scope="col">price</th>
                 <th scope="col">connection cost</th>
                 <th scope="col">
-                    <a href="/editoption" class="btn btn-outline-dark btn-sm">new option</a>
+                    <a href="${pageContext.request.contextPath}/employee/editoption" class="btn btn-outline-dark btn-sm">new option</a>
 
                 </th>
             </tr>
             </thead>
             <tbody>
-            <% int numberofoption=0;%>
-            <c:forEach items="${optionsList}" var="option">
-                <tr>
-                    <th scope="row"><%=++numberofoption%></th>
-                    <td>${option.name}</td>
-                    <td>${option.price}</td>
-                    <td>${option.connectionCost}</td>
-                    <td><a href="/editoption?id=${option.id} ">Edit</a></td>
 
+            <c:forEach items="${optionsList}" var="option" varStatus="numberofoption">
+                <tr>
+                    <th scope="row">${numberofoption.count}</th>
+                    <td>${option.name}</td>
+                    <td>${option.price}$</td>
+                    <td>${option.connectionCost}$</td>
+                    <td><a href="${pageContext.request.contextPath}/employee/editoption?id=${option.id}">Edit</a></td>
 
                 </tr>
 

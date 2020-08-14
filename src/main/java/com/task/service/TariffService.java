@@ -20,7 +20,7 @@ public interface TariffService {
 
     Tariff findById(Integer id);
 
-    String merge(Tariff tariff, String[] optionId);
+    String merge(TariffDto tariffDto, String[] optionId);
 
     TariffDto createRequirementsForEmbeddedOptions(DtoEntity tariffDto);
     DtoEntity convertToDto(Object obj, DtoEntity mapper);

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <title>MyJSPPage</title>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"/>
 
 </head>
 <body>
@@ -41,13 +41,13 @@
 
 
             </ul>
-            <a href="/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>
     </nav>
 
-    <form:form action="/deletetariff" modelAttribute="tariffDto" method="post" cssStyle="margin-top: 15px">
+    <form:form action="${pageContext.request.contextPath}/employee/deletetariff" modelAttribute="tariffDto" method="post" cssStyle="margin-top: 15px">
         <div class="form-group row">
             <form:label path="tariff" for="inputTariff" cssClass="col-sm-2 col-form-label">Tariff</form:label>
             <div class="col-sm-10">
@@ -65,24 +65,32 @@
         <div class="form-group row">
 
             <div class="col-sm-12 col-md-12">
-                <div><p>Before you delete tariff you have to choose another tariff instead.</p></div>
+                <div><h6 style="text-align: center">Before you delete tariff you have to choose another tariff instead.</h6></div>
 
                 <table class="table" id="required options">
                     <thead>
                     <tr>
-                        <th scope="col">id</th>
+                        <th scope="col">№</th>
                         <th scope="col">Tariff</th>
                         <th scope="col">Cost</th>
-                        <th scope="col">Choose</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${tariffsList}" var="tariff">
+                    <c:forEach items="${tariffsList}" var="tariff" varStatus="count">
                         <tr>
-                            <th scope="row">${tariff.id}</th>
+                            <th scope="row">${count.count}</th>
                             <td>${tariff.tariff}</td>
-                            <td>${tariff.price}</td>
-                            <td><input type="radio" class="form-check-input" name="newtariff" value="${tariff.id}" required="required"></td>
+                            <td>${tariff.price}$</td>
+                            <td>
+                                <div class="pretty p-switch p-fill">
+                                    <input type="radio" class="form-check-input" name="newtariff" value="${tariff.id}" required="required">
+                                    <div class="state ">
+                                        <label>On</label>
+                                    </div>
+                                </div>
+
+                                </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -95,7 +103,7 @@
 
         <div class="form-group row justify-content-end">
             <div class="col-sm-10 ">
-                <form:button type="submit" class="btn btn-secondary">Delete and save</form:button>
+                <form:button type="submit" class="btn btn-secondary" style="float: right;">Delete and save</form:button>
             </div>
         </div>
     </form:form>

@@ -45,11 +45,13 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
     public List<Tariff> getAll() {
         return tariffDao.getAll();
     }
+
     @Transactional
     public List<DtoEntity> getAllDto() {
 
         return tariffDao.getAll().stream().map(e -> this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
     }
+
     @Transactional
     @Override
     public List<TariffDto> getAllDtoWithReq() {
@@ -57,21 +59,25 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
         tariffDtoList.forEach(e -> createRequirementsForEmbeddedOptions(e));
         return tariffDtoList;
     }
+
     @Transactional
     @Override
     public List<TariffDto> getAllWithoutDto(Integer id) {
-        List<TariffDto> tariffDtoList=tariffDao.getAllWithout(id).stream().map(e -> (TariffDto) this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
+        List<TariffDto> tariffDtoList = tariffDao.getAllWithout(id).stream().map(e -> (TariffDto) this.convertToDto(e, new TariffDto())).collect(Collectors.toList());
         tariffDtoList.forEach(e -> createRequirementsForEmbeddedOptions(e));
         return tariffDtoList;
     }
+
     @Transactional
     public Tariff create(Tariff tariff) {
         return tariffDao.create(tariff);
     }
+
     @Transactional
     public Tariff findById(Integer id) {
         return tariffDao.findById(id);
     }
+
     @Transactional
     @Override
     public TariffDto findByIdDto(Integer id) {
@@ -79,24 +85,28 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
         TariffDto tariffDto = (TariffDto) createRequirementsForEmbeddedOptions(convertToDto(tariff, new TariffDto()));
         return tariffDto;
     }
+
     @Transactional
-    public String merge(Tariff tariff, String[] optionId) {
-        String result = "change failed";
-        try {
+    public String merge(TariffDto tariffDto, String[] optionId) {
+            log.info("tariffDto "+ tariffDto);
+            log.info("tariffDto.id "+tariffDto.getId());
+            Tariff tariff = (Tariff) convertToEntity(new Tariff(), tariffDto);
             Set<Option> optionSet = new HashSet<>();
             if (optionId != null && optionId.length > 0) {
+                tariffDto.setOptions(new HashSet<>());
                 for (String id : optionId) {
                     Option option = optionDao.findById(Integer.parseInt(id));
                     optionSet.add(option);
+                    OptionDto optionDto = (OptionDto) convertToDto(option, new OptionDto());
+                    tariffDto.getOptions().add(optionDto);
                 }
+                if (!optionService.checkOptions(optionSet)) return "Changes failed. Check requirements";
             }
             tariff.setOptions(optionSet);
-            tariffDao.update(tariff);
-            result = "changes successful";
-        } catch (NumberFormatException e) {
-            LOGGER.error("[{}],  merge [{}]  exception = {}", LocalDateTime.now(), LOGGER.getName(), e);
-        }
-        return result;
+            Tariff updatedTariff = tariffDao.update(tariff);
+            tariffDto.setId(updatedTariff.getId());
+            log.info("tariffDto.id "+tariffDto.getId());
+            return "changes successful";
     }
 
     /**

@@ -17,13 +17,11 @@ public interface OptionService {
     List<Option> getAllWithout(Integer id);
     List<DtoEntity> getAllWithoutDto(Integer id);
     DtoEntity findByIdDto(Integer id);
-    String deleteById(Integer id);
+    String deleteById(Integer id, OptionDto optionDto);
     DtoEntity convertToDto(Object obj, DtoEntity mapper);
     Object convertToEntity(Object obj, DtoEntity mapper);
     String update(String[] requirement, String[] exclusion, OptionDto optionDto);
     Set<Integer> setRequirements(OptionDto optionDto);
     Set<Integer> setExclusions(OptionDto optionDto);
-
-
-
+    boolean checkOptions(Set<Option> optionSet);
 }

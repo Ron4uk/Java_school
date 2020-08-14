@@ -3,6 +3,7 @@ package com.task.dao.impl;
 import com.task.dao.GenericDaoImpl;
 import com.task.dao.OptionDao;
 import com.task.entity.Option;
+import com.task.entity.Tariff;
 import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,16 +30,7 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
         return query.getResultList();
     }
 
-//    @Override
-//    public void deleteById(Object id) {
-//        LOGGER.info("[{}]  [{}] deleteById id={}", LocalDateTime.now(), LOGGER.getName(), id);
-//       // entityManager.createNativeQuery("DELETE FROM connected_options WHERE option_id=" + id).executeUpdate();
-//        entityManager.createNativeQuery("DELETE FROM required_options WHERE requiredOptions_id=" + id).executeUpdate();
-//        entityManager.createNativeQuery("DELETE FROM exclusion_options WHERE exclusionOptions_id=" + id).executeUpdate();
-//        entityManager.createNativeQuery("DELETE FROM options_in_tariff WHERE option_id=" + id).executeUpdate();
-//        Option option=findById(id);
-//
-//    }
+
 
 
     @Override
@@ -49,6 +41,8 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
         entityManager.createNativeQuery("DELETE FROM options_in_tariff WHERE option_id=" + option.getId()).executeUpdate();
         update(option);
     }
+
+
 
     @Override
     public List<Option> getAllParent(Integer id) {
@@ -78,5 +72,12 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
     public List<Option> getAll() {
         Query query = entityManager.createQuery("FROM Option WHERE deleted !=true");
         return query.getResultList();
+    }
+
+    @Override
+    public Option findByName(String name) {
+        Query query = entityManager.createQuery("FROM Option WHere name =:name");
+        query.setParameter("name", name);
+        return query.getResultList().size()>0? (Option) query.getResultList().get(0):null;
     }
 }

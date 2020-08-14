@@ -36,18 +36,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/startauthempl">Main <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/startauthempl">Main <span class="sr-only">(current)</span></a>
                 </li>
 
 
             </ul>
-            <a href="/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>
     </nav>
 
-    <form:form action="/addnewclient" modelAttribute="clientDto" cssStyle="margin-top: 15px">
+    <form:form action="${pageContext.request.contextPath}/employee/addnewclient" modelAttribute="clientDto" cssStyle="margin-top: 15px">
         <div class="form-group row">
             <form:label path="firstName" for="inputFirstName" cssClass="col-sm-2 col-form-label">FirstName</form:label>
             <div class="col-sm-10">
@@ -67,9 +67,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <form:label path="birthday" for="inputBirthday" cssClass="col-sm-2 col-form-label">Birthday</form:label>
+            <form:label path="birthday" for="inputBirthday"  cssClass="col-sm-2 col-form-label">Birthday</form:label>
             <div class="col-sm-10">
-                <form:input path="birthday" type="date"   cssClass="form-control" id="inputBirthday" required="required" />
+                <form:input path="birthday" type="date" min="1920-01-01" max="2010-01-01"  cssClass="form-control" id="inputBirthday" required="required" />
             </div>
         </div>
         <div class="form-group row">
@@ -96,9 +96,9 @@
 
 
 
-        <div class="form-group row justify-content-end">
+        <div class="form-group row justify-content-end" >
             <div class="col-sm-10 ">
-                <form:button type="submit" class="btn btn-secondary">Next</form:button>
+                <form:button type="submit" class="btn btn-secondary" style="float: right">Next</form:button>
             </div>
         </div>
     </form:form>

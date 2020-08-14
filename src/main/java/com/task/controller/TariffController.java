@@ -21,6 +21,7 @@ import java.util.List;
 @Controller
 @Getter
 @Setter
+@RequestMapping("/employee")
 @AllArgsConstructor(onConstructor=@__({@Autowired}))
 @SessionAttributes({"tariffDto", "contractDto"})
 public class TariffController {
@@ -46,7 +47,7 @@ public class TariffController {
     }
 
     @GetMapping("/edittariff")
-    public String editTariff(@RequestParam(value = "id", required = false) Integer id, Model model) {
+    public String editTariff(@RequestParam(required = false) Integer id, Model model) {
         if (id != null) {
             model.addAttribute(tariffService.findByIdDto(id));
         }
@@ -55,13 +56,10 @@ public class TariffController {
     }
 
     @PostMapping("/newTariff")
-    public String newTariff(@ModelAttribute("tariffDto") TariffDto tariffDto, HttpServletRequest request, Model model, SessionStatus sessionStatus) {
-
-        String result = tariffService.merge((Tariff) tariffService.convertToEntity(new Tariff(), tariffDto), request.getParameterValues("opt"));
-        sessionStatus.setComplete();
-        model.addAttribute("tariffDto", new TariffDto());
+    public String newTariff(@ModelAttribute("tariffDto") TariffDto tariffDto, HttpServletRequest request, Model model) {
+        String result = tariffService.merge(tariffDto, request.getParameterValues("opt"));
         model.addAttribute("result", result);
-        model.addAttribute("optionsList", optionService.getAllDto());
+        model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
 
         return "edittariff";
     }
