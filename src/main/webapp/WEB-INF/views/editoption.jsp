@@ -26,7 +26,7 @@
 <div class="container" style="margin-bottom: 10px">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand" href="#">
-        <img src="/images/label.jpg" width="30" height="30"
+        <img src="${pageContext.request.contextPath}/images/label.jpg" width="30" height="30"
              class="d-inline-block align-top" alt="" loading="lazy">
         eCare
     </span>

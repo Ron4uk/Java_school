@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Setter
 @Log4j
 @AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequestMapping("/user")
 @SessionAttributes({"contractDto", "orderDto"})
 public class UserOrderController {
     private ContractService contractService;
@@ -54,16 +55,6 @@ public class UserOrderController {
         return "usershoppingcart";
     }
 
-    @GetMapping("/deletecuroptionfromorder")
-    public String deleteOptionInCurTariffFromOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam Integer id) {
-        contractService.deleteOptionFromOrder(orderDto.getOptionsFromCurTariff(), id);
-        return "usershoppingcart";
-    }
 
-    @GetMapping("/deletedisableoptionsfromorder")
-    public String deleteDisableOptionFromOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam Integer id) {
-        contractService.deleteOptionFromOrder(orderDto.getDisableOptionsFromCurTariff(), id);
-        return "usershoppingcart";
-    }
 
 }

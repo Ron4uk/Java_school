@@ -21,7 +21,7 @@
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand" href="#">
-        <img src="/images/label.jpg" width="30" height="30"
+        <img src="${pageContext.request.contextPath}/images/label.jpg" width="30" height="30"
              class="d-inline-block align-top" alt="" loading="lazy">
         eCare
     </span>
@@ -33,23 +33,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/startauthclient">Main<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/startauthclient">Main<span
+                            class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/usercontract">Contract<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/user/usercontract">Contract<span
+                            class="sr-only">(current)</span></a>
                 </li>
 
 
             </ul>
             <c:choose>
-                <c:when test="${orderDto.tariffDto!=null || orderDto.optionsFromCurTariff.size()>0 || orderDto.disableOptionsFromCurTariff.size()>0}">
-                    <a href="/usershoppingcart" type="button" class="btn btn-sm btn-light " style="margin-right: 5px">
-                        <span><img src="/images/scFull.png"/></span> Shopping Cart
+                <c:when test="${orderDto.tariffDto!=null}">
+                    <a href="${pageContext.request.contextPath}/user/usershoppingcart" type="button"
+                       class="btn btn-sm btn-light " style="margin-right: 5px">
+                        <span><img src="${pageContext.request.contextPath}/images/scFull.png"/></span> Shopping Cart
                     </a>
                 </c:when>
                 <c:otherwise>
-                    <a href="/usershoppingcart" type="button" class="btn btn-sm btn-light " style="margin-right: 5px">
-                        <span><img src="/images/emptyCart.jpg"/></span> Shopping Cart
+                    <a href="${pageContext.request.contextPath}/user/usershoppingcart" type="button"
+                       class="btn btn-sm btn-light " style="margin-right: 5px">
+                        <span><img src="${pageContext.request.contextPath}/images/emptyCart.jpg"/></span> Shopping Cart
                     </a>
                 </c:otherwise>
             </c:choose>
@@ -97,7 +101,19 @@
                 <div class="card-body">
                     <h5 class="card-title">Tariffs</h5>
                     <p class="card-text">Choose new tariff and enjoy!</p>
-                    <a href="/userchoosenewtariff" id="checkOnBlock" class="btn btn-primary">Change tariff</a>
+                    <c:choose>
+                        <c:when test="${contractDto.blockByClient==true || contractDto.blockByOperator==true}">
+                            <a href="${pageContext.request.contextPath}/user/userchoosenewtariff" id="checkOnBlock"
+                               class="btn btn-primary disabled">Change
+                                tariff</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/user/userchoosenewtariff" id="checkOnBlock"
+                               class="btn btn-primary">Change tariff</a>
+                        </c:otherwise>
+
+                    </c:choose>
+
                 </div>
             </div>
         </div>
@@ -109,7 +125,16 @@
                 <div class="card-body">
                     <h5 class="card-title">Options</h5>
                     <p class="card-text">Connect new options!</p>
-                    <a href="/usermanageoption" class="btn btn-primary">Manage options</a>
+                    <c:choose>
+                        <c:when test="${contractDto.blockByClient==true || contractDto.blockByOperator==true}">
+                            <a href="${pageContext.request.contextPath}/user/usermanageoption" class="btn btn-primary disabled">Manage options</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/user/usermanageoption" class="btn btn-primary">Manage options</a>
+                        </c:otherwise>
+
+                    </c:choose>
+
                 </div>
             </div>
         </div>

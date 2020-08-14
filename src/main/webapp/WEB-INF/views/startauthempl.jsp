@@ -25,7 +25,7 @@
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand" href="#">
-        <img src="/images/label.jpg" width="30" height="30"
+        <img src="${pageContext.request.contextPath}/images/label.jpg" width="30" height="30"
              class="d-inline-block align-top" alt="" loading="lazy">
         eCare
     </span>
@@ -91,7 +91,7 @@
     <div class="row row-flex row-flex-wrap" style="margin-top: 10px">
         <div class="col-sm-2 col-md-2">
             <div class="card">
-                <img src="/images/private_account.png" class="card-img-top" alt="...">
+                <img src="/images/private_account2" class="card-img-top" alt="...">
                 <div class="card-body">
                     <a href="/employee" class="btn btn-primary btn-lg" style="max-width: 100%">Private account</a>
                 </div>

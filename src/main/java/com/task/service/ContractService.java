@@ -39,4 +39,8 @@ public interface ContractService {
     void blockByUser(ContractDto contractDto);
 
     void unblockByUser(ContractDto contractDto);
+
+    String addConnectedOption(ContractDto contractDto, Integer id);
+
+    String disconnectOption(ContractDto contractDto, Integer id);
 }

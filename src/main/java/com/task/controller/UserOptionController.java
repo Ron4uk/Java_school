@@ -13,17 +13,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Getter
 @Setter
 @Log4j
-@AllArgsConstructor(onConstructor=@__({@Autowired}))
-@SessionAttributes({"contractDto","orderDto"})
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequestMapping("/user")
+@SessionAttributes({"contractDto", "orderDto"})
 public class UserOptionController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContractServiceImpl.class);
     private ContractService contractService;
@@ -40,37 +39,31 @@ public class UserOptionController {
     }
 
     @GetMapping("/userchoosenewoption")
-    public String chooseNewOption(@ModelAttribute("contractDto") ContractDto contractDto, @ModelAttribute("orderDto") OrderDto orderDto){
-
-        return  contractService.checkContract(contractDto, orderDto)? "userchoosenewoption":"user";
+    public String chooseNewOption(@ModelAttribute("contractDto") ContractDto contractDto, @ModelAttribute("orderDto") OrderDto orderDto) {
+        return contractService.checkContract(contractDto, orderDto) ? "userchoosenewoption" : "user";
     }
 
     @PostMapping("addoptiontotariff")
-    public String addOptionToTariff(@ModelAttribute("orderDto") OrderDto orderDto, @ModelAttribute("contractDto")ContractDto contractDto){
-        LOGGER.info("orderDto={}", orderDto);
-        return "user";
+    public String addOptionToTariff() {
+         return "user";
     }
 
     @GetMapping("/usermanageoption")
-    public String manageOption(@ModelAttribute("orderDto") OrderDto orderDto, @ModelAttribute("contractDto")ContractDto contractDto){
-        tariffService.createRequirementsForEmbeddedOptions(contractDto.getTariffDto());
-        return contractService.checkContract(contractDto, orderDto)? "usermanageoption":"user";
+    public String manageOption() {
+        return "usermanageoption";
     }
 
-    @PostMapping("/changecurrentoptions")
-    public String changeCurrentOptions(@ModelAttribute("orderDto") OrderDto orderDto){
-        contractService.checkOrder(orderDto, "changecurrentoptions");
-        LOGGER.info("orderDto={}", orderDto);
-        return "user";
-    }
-    @GetMapping("/userdisableoptions")
-    public String showOptionToDisable(){
-        return "userdisableoptions";
+    @PostMapping("/connectedoptionbyuser")
+    public String connectedNewOptionByUser(@ModelAttribute("contractDto") ContractDto contractDto,
+                                           @RequestParam(name = "optid") Integer id, Model model){
+        model.addAttribute("result", contractService.addConnectedOption(contractDto, id));
+        return "usermanageoption";
     }
 
-    @PostMapping("/disableoption")
-    public String disableOption(@ModelAttribute("orderDto") OrderDto orderDto){
-        contractService.checkOrder(orderDto, "disableoption");
-        return "user";
+    @PostMapping("/disconnectoptionbyuser")
+    public String disconnectOptionByUser(@ModelAttribute("contractDto") ContractDto contractDto,
+                                           @RequestParam(name = "optid") Integer id, Model model){
+        model.addAttribute("result", contractService.disconnectOption(contractDto, id));
+        return "usermanageoption";
     }
 }

@@ -20,15 +20,16 @@ import java.util.Set;
 @Configuration
 public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthSuccessHandler.class);
+
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
+                                        HttpServletResponse httpServletResponse,
+                                        Authentication authentication) throws IOException, ServletException {
 
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        Integer id= ((Contract) authentication.getPrincipal()).getId();
-
-        LOGGER.info("[{}]  roles = {}, role.contains.client={}  authentication.getName()={} ", LocalDateTime.now(), roles, roles.contains("CLIENT"),authentication.getName());
+        Integer id = ((Contract) authentication.getPrincipal()).getId();
         if (roles.contains("CLIENT")) {
-            httpServletResponse.sendRedirect("/user?id="+id);
+            httpServletResponse.sendRedirect("/user?id=" + id);
         } else {
             httpServletResponse.sendRedirect("/employee");
         }

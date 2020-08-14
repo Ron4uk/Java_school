@@ -238,10 +238,11 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         log.info(contract);
         if (!checkContract(contractDto, orderDto)) return "Your contract is blocked.";
         else if (checkOnNewTariff(contractDto, orderDto)) return "Changes were successful";
-        else if (checkOnChangesCurrentOptions(contractDto, orderDto)) return "Changes were successful";
-        return "Something was wrong. Check your choice and try again.";
+
+        return "Confirm failed. Check your choice and try again.";
     }
 
+    //TODO delete
     private boolean checkOnChangesCurrentOptions(ContractDto contractDto, OrderDto orderDto) {
         if (orderDto.getOptionsFromCurTariff().size() > 0 || orderDto.getDisableOptionsFromCurTariff().size() > 0) {
             if (orderDto.getOptionsFromCurTariff().size() > 0) {
@@ -350,5 +351,53 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
             contractDAO.update(contract);
             contractDto.setBlockByClient(false);
         }
+    }
+
+    @Override
+    @Transactional
+    public String addConnectedOption(ContractDto contractDto, Integer id) {
+        Option option = optionDao.findById(id);
+        Contract contract = contractDAO.findById(contractDto.getId());
+        if (!checkUserAddedOption(contract, option)) {
+            return "Change failed. Check option  requirements and try again";
+        }
+        contractDAO.update(contract);
+        contractDto.getConnectedOptions().add((OptionDto) convertToDto(option, new OptionDto()));
+        return "Change successful";
+    }
+
+    private boolean checkUserAddedOption(Contract contract, Option option) {
+        for (Option connectedOption : contract.getConnectedOptions()) {
+            if (connectedOption.getExclusionOptions().contains(option)) return false;
+        }
+        if (!contract.getConnectedOptions().containsAll(option.getRequiredOptions())) return false;
+        contract.getConnectedOptions().add(option);
+        return true;
+    }
+
+
+    @Override
+    @Transactional
+    public String disconnectOption(ContractDto contractDto, Integer id) {
+        log.info("start id ="+id);
+        log.info("contractDto ="+contractDto);
+        Option option = optionDao.findById(id);
+        log.info("option ="+option);
+        Contract contract = contractDAO.findById(contractDto.getId());
+        log.info("contract ="+contract);
+        if (!checkUserDisconnectOption(contract, option)) {
+            return "Change failed. Check option  requirements and try again";
+        }
+        contractDAO.update(contract);
+        contractDto.getConnectedOptions().remove( convertToDto(option, new OptionDto()));
+        return "Change successful";
+    }
+
+    private boolean checkUserDisconnectOption(Contract contract, Option option) {
+        for (Option connectedOption : contract.getConnectedOptions()){
+            if(connectedOption.getRequiredOptions().contains(option)) return false;
+        }
+        contract.getConnectedOptions().remove(option);
+        return true;
     }
 }

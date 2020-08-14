@@ -23,10 +23,10 @@ public class AuthDeniedHandler implements AccessDeniedHandler {
 
 
     @Override
-    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
+    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                       AccessDeniedException e) throws IOException, ServletException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Set<String> roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
-        LOGGER.info("[{}]  roles = {}  ", LocalDateTime.now(), roles);
         if (roles.contains("CLIENT")) {
             httpServletResponse.sendRedirect("/startauthclient");
         } else {

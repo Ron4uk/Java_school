@@ -25,7 +25,7 @@ public class SpringConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-       // registry.addViewController("/").setViewName("index");
+
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -36,6 +36,8 @@ public class SpringConfig implements WebMvcConfigurer {
         // Register resource handler for images
         registry.
                 addResourceHandler("/images/**").addResourceLocations("/WEB-INF/views/images/");
+        registry.
+                addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
     @Override

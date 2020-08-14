@@ -20,7 +20,7 @@
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand" href="#">
-        <img src="/images/label.jpg" width="30" height="30"
+        <img src="${pageContext.request.contextPath}/images/label.jpg" width="30" height="30"
              class="d-inline-block align-top" alt="" loading="lazy">
         eCare
     </span>
@@ -32,32 +32,32 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/startauthclient">Main <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/startauthclient">Main</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/usercontract">Contract<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/user/usercontract">Contract</a>
                 </li>
 
 
             </ul>
             <c:choose>
-                <c:when test="${orderDto.tariffDto!=null || orderDto.optionsFromCurTariff.size()>0 || orderDto.disableOptionsFromCurTariff.size()>0}">
-                    <a href="/usershoppingcart" type="button" class="btn btn-sm btn-light " style="margin-right: 5px">
-                        <span><img src="/images/scFull.png"/></span> Shopping Cart
+                <c:when test="${orderDto.tariffDto!=null}">
+                    <a href="${pageContext.request.contextPath}/user/usershoppingcart" type="button" class="btn btn-sm btn-light " style="margin-right: 5px">
+                        <span><img src="${pageContext.request.contextPath}/images/scFull.png"/></span> Shopping Cart
                     </a>
                 </c:when>
                 <c:otherwise>
-                    <a href="/usershoppingcart" type="button" class="btn btn-sm btn-light " style="margin-right: 5px">
-                        <span><img src="/images/emptyCart.jpg"/></span> Shopping Cart
+                    <a href="${pageContext.request.contextPath}/user/usershoppingcart" type="button" class="btn btn-sm btn-light " style="margin-right: 5px">
+                        <span><img src="${pageContext.request.contextPath}/images/emptyCart.jpg"/></span> Shopping Cart
                     </a>
                 </c:otherwise>
             </c:choose>
-            <a href="/user?id=${contractDto.id}" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}/user?id=${contractDto.id}" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
 
 
         </div>
     </nav>
-    <form:form action="/addtarifftoorder" modelAttribute="orderDto" cssStyle="margin-top: 15px" method="post">
+    <form:form action="${pageContext.request.contextPath}/user/addtarifftoorder" modelAttribute="orderDto" cssStyle="margin-top: 15px" method="post">
         <div class="form-group row">
             <form:label path="tariffDto" for="editTariff" cssClass="col-sm-2 col-form-label">Tariff</form:label>
             <div class="col-sm-10">
@@ -132,12 +132,6 @@
             </div>
         </div>
     </form:form>
-    <c:if test="${orderDto.optionsFromCurTariff.size()>0}">
-        <div style="color: red">
-            NOTE: If you add new tariff, selected options will be removed from the shopping cart.
-        </div>
-
-    </c:if>
 
 
 

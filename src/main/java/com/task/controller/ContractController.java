@@ -83,8 +83,7 @@ public class ContractController {
     }
 
     @PostMapping("/editcontract")
-    public String editPostContract(@ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request,
-                                   Model model) {
+    public String editPostContract(@ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request, Model model) {
         model.addAttribute("result", contractService.update(contractDto,
                 request.getParameterValues(contractDto.getTariffDto().getId().toString())));
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
