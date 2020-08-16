@@ -2,8 +2,10 @@ package com.task.controller;
 
 import com.task.dto.ContractDto;
 import com.task.dto.DtoEntity;
+import com.task.dto.OrderDto;
 import com.task.dto.TariffDto;
 import com.task.entity.Tariff;
+import com.task.service.ContractService;
 import com.task.service.OptionService;
 import com.task.service.TariffService;
 import lombok.AllArgsConstructor;
@@ -21,32 +23,35 @@ import java.util.List;
 @Controller
 @Getter
 @Setter
-@RequestMapping("/employee")
-@AllArgsConstructor(onConstructor=@__({@Autowired}))
-@SessionAttributes({"tariffDto", "contractDto"})
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@SessionAttributes({"tariffDto", "contractDto", "orderDto"})
 public class TariffController {
 
     private TariffService tariffService;
     private OptionService optionService;
+    private ContractService contractService;
 
     @ModelAttribute("contractDto")
     public ContractDto getContractDto() {
         return new ContractDto();
     }
 
-    @GetMapping("/tariffs")
-    public String getAllTariffs(Model model) {
-        List<DtoEntity> tariffs = tariffService.getAllDto();
-        model.addAttribute("tariffsList", tariffs);
-        return "employee";
-    }
 
     @ModelAttribute("tariffDto")
     public TariffDto getTariffDto() {
         return new TariffDto();
     }
 
-    @GetMapping("/edittariff")
+
+    @GetMapping("/employee/tariffs")
+    public String getAllTariffs(Model model) {
+        List<DtoEntity> tariffs = tariffService.getAllDto();
+        model.addAttribute("tariffsList", tariffs);
+        return "employee";
+    }
+
+
+    @GetMapping("/employee/edittariff")
     public String editTariff(@RequestParam(required = false) Integer id, Model model) {
         if (id != null) {
             model.addAttribute(tariffService.findByIdDto(id));
@@ -55,7 +60,7 @@ public class TariffController {
         return "edittariff";
     }
 
-    @PostMapping("/newTariff")
+    @PostMapping("/employee/newTariff")
     public String newTariff(@ModelAttribute("tariffDto") TariffDto tariffDto, HttpServletRequest request, Model model) {
         String result = tariffService.merge(tariffDto, request.getParameterValues("opt"));
         model.addAttribute("result", result);
@@ -64,19 +69,32 @@ public class TariffController {
         return "edittariff";
     }
 
-    @GetMapping("/deletetariff")
-    public String deleteTariffGet(@RequestParam Integer id, Model model){
+    @GetMapping("/employee/deletetariff")
+    public String deleteTariffGet(@RequestParam Integer id, Model model) {
         model.addAttribute("tariffDto", tariffService.findByIdDto(id));
         model.addAttribute("tariffsList", tariffService.getAllWithoutDto(id));
-        return  "deletetariff";
+        return "deletetariff";
     }
 
-    @PostMapping("/deletetariff")
-    public String deleteTariffPost(@ModelAttribute("tariffDto") TariffDto tariffDto, @RequestParam(value = "newtariff") Integer id, Model model){
+    @PostMapping("/employee/deletetariff")
+    public String deleteTariffPost(@ModelAttribute("tariffDto") TariffDto tariffDto, @RequestParam(value = "newtariff") Integer id, Model model) {
         tariffService.remove(tariffDto, id);
         model.addAttribute("tariffDto", tariffService.findByIdDto(id));
         model.addAttribute("tariffsList", tariffService.getAllWithoutDto(id));
         model.addAttribute("result", true);
         return "deletetariff";
+    }
+
+    @GetMapping("/user/userchoosenewtariff")
+    public String chooseNewTariff(@ModelAttribute("contractDto") ContractDto contractDto, @ModelAttribute("orderDto") OrderDto orderDto, Model model){
+        model.addAttribute("listTariffs", tariffService.getAllWithoutDto(contractDto.getTariffDto().getId()));
+        return  contractService.checkContract(contractDto, orderDto)? "userchoosenewtariff":"user";
+    }
+
+    @PostMapping("/user/addtarifftoorder")
+    public String addTariffToOrder(@ModelAttribute("orderDto") OrderDto orderDto, Model model){
+        tariffService.createRequirementsForEmbeddedOptions(orderDto.getTariffDto());
+        model.addAttribute("listOptions", orderDto.getTariffDto().getOptions());
+        return "userchoosenewoption";
     }
 }

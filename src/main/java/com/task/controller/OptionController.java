@@ -3,7 +3,10 @@ package com.task.controller;
 import com.task.dto.ContractDto;
 import com.task.dto.DtoEntity;
 import com.task.dto.OptionDto;
+import com.task.dto.OrderDto;
+import com.task.service.ContractService;
 import com.task.service.OptionService;
+import com.task.service.TariffService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,12 +26,12 @@ import java.util.List;
 @Getter
 @Setter
 @Log4j
-@RequestMapping("/employee")
 @AllArgsConstructor(onConstructor=@__({@Autowired}))
-@SessionAttributes({"optionDto", "contractDto"})
+@SessionAttributes({"optionDto", "contractDto", "orderDto"})
 public class OptionController {
 
-
+    private ContractService contractService;
+    private TariffService tariffService;
     private OptionService optionService;
 
     @ModelAttribute("contractDto")
@@ -36,21 +39,19 @@ public class OptionController {
         return new ContractDto();
     }
 
-    @GetMapping("/options")
+    @ModelAttribute("optionDto")
+    public OptionDto getOptionDto() {
+        return new OptionDto();
+    }
+
+    @GetMapping("/employee/options")
     public String getAllOptions(Model model) {
         List<DtoEntity> options = optionService.getAllDto();
         model.addAttribute("optionsList", options);
         return "employee";
     }
 
-
-    @ModelAttribute("optionDto")
-    public OptionDto getOptionDto() {
-        return new OptionDto();
-    }
-
-
-    @GetMapping("/editoption")
+    @GetMapping("/employee/editoption")
     public String editOption(@RequestParam(value = "id", required = false) Integer id, Model model) {
         if (id != null) {
             model.addAttribute(optionService.findByIdDto(id));
@@ -61,7 +62,7 @@ public class OptionController {
         return "editoption";
     }
 
-    @PostMapping("/updateOrDeleteOption")
+    @PostMapping("/employee/updateOrDeleteOption")
     public String updateOrDeleteOption(@ModelAttribute("optionDto") OptionDto optionDto, HttpServletRequest request,
                                        Model model) {
         if (request.getParameter("delete") != null) {
@@ -74,5 +75,35 @@ public class OptionController {
         return "editoption";
     }
 
+    @GetMapping("/user/userchoosenewoption")
+    public String chooseNewOption(@ModelAttribute("contractDto") ContractDto contractDto, @ModelAttribute("orderDto") OrderDto orderDto) {
+        log.info(orderDto);
+        return contractService.checkContract(contractDto, orderDto) ? "userchoosenewoption" : "user";
+    }
+
+    @PostMapping("/user/addoptiontotariff")
+    public String addOptionToTariff(@ModelAttribute("orderDto") OrderDto orderDto) {
+        log.info(orderDto);
+        return "user";
+    }
+
+    @GetMapping("/user/usermanageoption")
+    public String manageOption() {
+        return "usermanageoption";
+    }
+
+    @PostMapping("/user/connectedoptionbyuser")
+    public String connectedNewOptionByUser(@ModelAttribute("contractDto") ContractDto contractDto,
+                                           @RequestParam(name = "optid") Integer id, Model model){
+        model.addAttribute("result", contractService.addConnectedOption(contractDto, id));
+        return "usermanageoption";
+    }
+
+    @PostMapping("/user/disconnectoptionbyuser")
+    public String disconnectOptionByUser(@ModelAttribute("contractDto") ContractDto contractDto,
+                                         @RequestParam(name = "optid") Integer id, Model model){
+        model.addAttribute("result", contractService.disconnectOption(contractDto, id));
+        return "usermanageoption";
+    }
 
 }
