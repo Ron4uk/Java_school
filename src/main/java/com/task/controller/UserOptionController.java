@@ -40,11 +40,13 @@ public class UserOptionController {
 
     @GetMapping("/userchoosenewoption")
     public String chooseNewOption(@ModelAttribute("contractDto") ContractDto contractDto, @ModelAttribute("orderDto") OrderDto orderDto) {
+        log.info(orderDto);
         return contractService.checkContract(contractDto, orderDto) ? "userchoosenewoption" : "user";
     }
 
     @PostMapping("addoptiontotariff")
-    public String addOptionToTariff() {
+    public String addOptionToTariff(@ModelAttribute("orderDto") OrderDto orderDto) {
+        log.info(orderDto);
          return "user";
     }
 

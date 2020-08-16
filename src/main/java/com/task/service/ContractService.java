@@ -28,7 +28,7 @@ public interface ContractService {
     Boolean checkContract(ContractDto contractDto, OrderDto orderDto);
 
 
-    void checkOrder(OrderDto orderDto, String path);
+
 
     void deleteTariffFromOrder(OrderDto orderDto);
 
@@ -43,4 +43,8 @@ public interface ContractService {
     String addConnectedOption(ContractDto contractDto, Integer id);
 
     String disconnectOption(ContractDto contractDto, Integer id);
+
+    List<ContractDto> getAllByPage(Integer id);
+
+    Long countContractsInBd();
 }

@@ -66,6 +66,7 @@
     <form:form action="${pageContext.request.contextPath}/user/addoptiontotariff" modelAttribute="orderDto"
                cssStyle="margin-top: 15px" method="post">
         <c:forEach items="${orderDto.tariffDto.options}" var="option">
+            <c:if test="${option.deleted!=true}">
             <div class="border-bottom row" style="margin-top: 5px">
                 <div class="col-md-1"></div>
                 <div class="col-md-5">
@@ -110,6 +111,7 @@
 
                 </div>
             </div>
+            </c:if>
         </c:forEach>
 
         <div class="form-group row justify-content-end" style="margin-top: 5px">

@@ -87,14 +87,14 @@
                         <div class="pretty p-default p-round">
                             <input class="form-check-input" type="radio" data-toggle="collapse" aria-expanded="false"
                                    aria-controls="${tariffs.tariff}"
-                                   data-target="#${tariffs.tariff}" name="chosentariff" value="${tariffs.id}"
+                                   data-target="#${tariffs.tariff.replaceAll(" ", "")}" name="chosentariff" value="${tariffs.id}"
                                    required="required">
                             <div class="state">
                                 <label>${tariffs.tariff}</label>
                             </div>
                         </div>
                     </div>
-                    <div id="${tariffs.tariff}" class="collapse" data-parent="#optionsForTariff">
+                    <div id="${tariffs.tariff.replaceAll(" ", "")}" class="collapse" data-parent="#optionsForTariff">
 
                         <table class="table">
                             <thead>
@@ -109,6 +109,7 @@
                             </thead>
                             <tbody>
                             <c:forEach items="${tariffs.options}" var="option" varStatus="optioncount">
+                                <c:if test="${option.deleted!=true}">
                                 <tr>
                                     <th scope="row">${optioncount.count}</th>
                                     <td>${option.name}</td>
@@ -144,6 +145,7 @@
 
                                     </td>
                                 </tr>
+                                </c:if>
                             </c:forEach>
                             </tbody>
                         </table>

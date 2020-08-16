@@ -42,7 +42,8 @@
         </div>
     </nav>
 
-    <form:form action="${pageContext.request.contextPath}/employee/editcontract" modelAttribute="contractDto" cssStyle="margin-top: 15px" method="post">
+    <form:form action="${pageContext.request.contextPath}/employee/editcontract" modelAttribute="contractDto"
+               cssStyle="margin-top: 15px" method="post">
         <div class="form-group row">
             <form:label path="phone" for="phone" cssClass="col-sm-2 col-form-label">Phone number</form:label>
             <div class="col-sm-10">
@@ -167,8 +168,17 @@
                             </thead>
                             <tbody>
                             <c:forEach items="${tar.options}" var="opt">
+                                <c:if test="${opt.deleted!=true || contractDto.connectedOptions.contains(opt)}">
                                 <tr>
-                                    <td>${opt.name}</td>
+                                    <c:choose>
+                                        <c:when test="${opt.deleted==true}">
+                                            <td>${opt.name} <b>[deleted]</b></td>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td>${opt.name}</td>
+                                        </c:otherwise>
+                                    </c:choose>
+
                                     <td>${opt.price}$</td>
                                     <td>${opt.connectionCost}$</td>
                                     <td>
@@ -212,6 +222,7 @@
 
                                     </td>
                                 </tr>
+                                </c:if>
                             </c:forEach>
                             </tbody>
                         </table>
@@ -296,7 +307,7 @@
                                 mapRequirements.set((chekboxes[i].value) + " " + sel.options[sel.selectedIndex].value, ++number);
                             } else {
                                 mapRequirements.set((chekboxes[i].value) + " " + sel.options[sel.selectedIndex].value, 1);
-                                console.log("HERE ="+ mapRequirements.get((chekboxes[i].value) + " " + sel.options[sel.selectedIndex].value))
+                                console.log("HERE =" + mapRequirements.get((chekboxes[i].value) + " " + sel.options[sel.selectedIndex].value))
                             }
                             chekboxes[i].onclick = function () {
                                 return false;

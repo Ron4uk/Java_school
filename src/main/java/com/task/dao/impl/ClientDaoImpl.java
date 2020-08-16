@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Implementation of {@link ClientDao}
@@ -33,5 +34,18 @@ public class ClientDaoImpl extends GenericDaoImpl<Client> implements ClientDao {
         if(!query.getResultList().isEmpty()){
             throw new WrongEmailException("This email already exist", clientDto);
         }
+    }
+
+    @Override
+    public List<Client> getAllByPage(int skipClients, int numberContractsOnPage) {
+        Query query = entityManager.createQuery("FROM Client order by lastName, firstName").
+                setFirstResult(skipClients).setMaxResults(numberContractsOnPage);
+        return query.getResultList();
+    }
+
+    @Override
+    public Long countContractsInBd() {
+        Query query = entityManager.createQuery("SELECT COUNT (id) FROM Client");
+        return (Long) query.getSingleResult();
     }
 }

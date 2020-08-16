@@ -38,7 +38,8 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
         LOGGER.info("[{}]  [{}] deleteById id={}", LocalDateTime.now(), LOGGER.getName(), option.getId());
         entityManager.createNativeQuery("DELETE FROM required_options WHERE requiredOptions_id=" + option.getId()+" or option_id="+ option.getId()).executeUpdate();
         entityManager.createNativeQuery("DELETE FROM exclusion_options WHERE exclusionOptions_id=" + option.getId()).executeUpdate();
-        entityManager.createNativeQuery("DELETE FROM options_in_tariff WHERE option_id=" + option.getId()).executeUpdate();
+        //TODO
+       // entityManager.createNativeQuery("DELETE FROM options_in_tariff WHERE option_id=" + option.getId()).executeUpdate();
         update(option);
     }
 
@@ -69,9 +70,21 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
     }
 
     @Override
+    public Option findByIdWithDeleted(Integer id) {
+        Query query = entityManager.createQuery("FROM Option WHERE id =:id");
+        query.setParameter("id", id);
+        return (Option) query.getSingleResult();
+    }
+
+    @Override
     public List<Option> getAll() {
         Query query = entityManager.createQuery("FROM Option WHERE deleted !=true");
         return query.getResultList();
+    }
+
+    @Override
+    public List<Option> getAllWithDeleted() {
+        return super.getAll();
     }
 
     @Override

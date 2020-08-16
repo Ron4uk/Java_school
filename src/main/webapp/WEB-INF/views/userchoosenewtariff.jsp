@@ -87,6 +87,7 @@
                     </thead>
                     <tbody>
                     <c:forEach items="${tariff.options}" var="option">
+                        <c:if test="${option.deleted!=true}">
                         <tr>
                             <th scope="row">${option.name}</th>
                             <td>${option.price}$</td>
@@ -119,6 +120,7 @@
                             </td>
 
                         </tr>
+                        </c:if>
                     </c:forEach>
                     </tbody>
                 </table>

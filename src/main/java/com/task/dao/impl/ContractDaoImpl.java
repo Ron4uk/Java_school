@@ -39,4 +39,17 @@ public class ContractDaoImpl extends GenericDaoImpl<Contract> implements Contrac
         query.setParameter("tariff", tariff);
         return query.getResultList();
     }
+
+    @Override
+    public List<Contract> getAllByPage(int skipContracts, int numberContractsOnPage) {
+        Query query = entityManager.createQuery("FROM Contract order by client.lastName, client.firstName").
+                setFirstResult(skipContracts).setMaxResults(numberContractsOnPage);
+        return query.getResultList();
+    }
+
+    @Override
+    public Long countContractsInBd() {
+        Query query = entityManager.createQuery("SELECT COUNT (id) FROM Contract ");
+        return (Long) query.getSingleResult();
+    }
 }

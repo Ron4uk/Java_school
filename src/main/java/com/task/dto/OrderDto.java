@@ -15,6 +15,5 @@ import java.util.Set;
 public class OrderDto {
     private TariffDto tariffDto;
     private Set<OptionDto> optionsFromNewTariff =new HashSet<>();
-    private Set<OptionDto> optionsFromCurTariff =new HashSet<>();
-    private Set<OptionDto> disableOptionsFromCurTariff =new HashSet<>();
+
 }

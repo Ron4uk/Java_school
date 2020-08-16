@@ -34,8 +34,11 @@ public class ClientController {
     }
 
     @GetMapping("/getAllClients")
-    public String getAllClients(Model model) {
-        model.addAttribute("clientList", clientService.getAllDto());
+    public String getAllClients(@RequestParam(required = false) Integer id, Model model) {
+        model.addAttribute("clientList", clientService.getAllDtoByPage(id));
+        model.addAttribute("countClients", clientService.countContractsInBd());
+        model.addAttribute("pagenumber", id==null?0:id);
+        //model.addAttribute("clientList", clientService.getAllDto());
         return "employee";
     }
 
@@ -64,9 +67,8 @@ public class ClientController {
 
     @PostMapping("/chooseclient")
     public String searchClient(@ModelAttribute("contractDto") ContractDto contractDto, Model model) {
-
-        if(contractDto.getPhone()!=null) model.addAttribute("client", contractService.findByPhoneDto(contractDto.getPhone(), "/chooseclient").getClientDto());
-
+        if(contractDto.getPhone()!=null) model.addAttribute("client",
+                contractService.findByPhoneDto(contractDto.getPhone(), "/chooseclient").getClientDto());
         return "chooseclient";
     }
 
@@ -81,7 +83,8 @@ public class ClientController {
 
     @PostMapping("/findClientOnMainPage")
     public String findClientOnMainPage(@ModelAttribute("contractDto") ContractDto contractDto, Model model){
-        if(contractDto.getPhone()!=null) model.addAttribute("contract", contractService.findByPhoneDto(contractDto.getPhone(), "/employee"));
+        if(contractDto.getPhone()!=null) model.addAttribute("contract",
+                contractService.findByPhoneDto(contractDto.getPhone(), "/employee"));
         return "employee";
     }
 }

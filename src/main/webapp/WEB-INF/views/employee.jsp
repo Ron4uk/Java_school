@@ -152,14 +152,34 @@
 
             <c:forEach items="${clientList}" var="mes" varStatus="numberOfClient">
                 <tr>
+                    <c:choose>
+                        <c:when test="${pagenumber==0 || pagenumber==1}">
+                            <th scope="row">${numberOfClient.count}</th>
+                        </c:when>
+                        <c:otherwise>
+                            <th scope="row">${numberOfClient.count+(5*(pagenumber-1))}</th>
+                        </c:otherwise>
+                    </c:choose>
 
-                    <th scope="row"><${numberOfClient.count}</th>
                     <td>${mes.firstName}</td>
                     <td>${mes.lastName}</td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
+    </c:if>
+    <c:if test="${countClients>1}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <c:forEach var = "pagenumberClient" begin = "1" end = "${countClients}">
+                    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}
+                    /employee/getAllClients?id=${pagenumberClient}">${pagenumberClient}</a></li>
+                </c:forEach>
+
+            </ul>
+        </nav>
+
+
     </c:if>
 
     <c:if test="${tariffsList.size() ==0}">

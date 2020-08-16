@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="/resources/css/style.css">
-    <%--    <link rel="stylesheet" href="<c:url value='/css/style.css' />">--%>
+
     <title>MyJSPPage</title>
 
 
@@ -127,7 +127,7 @@
     <h4 style="margin-top: 100px; text-align: center" >Available options</h4>
     <div class="row" style="margin-top: 20px">
     <c:forEach items="${contractDto.tariffDto.options}" var="optionintarif">
-        <c:if test="${!contractDto.connectedOptions.contains(optionintarif)}">
+        <c:if test="${!contractDto.connectedOptions.contains(optionintarif) && optionintarif.deleted!=true}">
             <div class="col-md-4 col-sm-4">
                 <form method="post" action="${pageContext.request.contextPath}/user/connectedoptionbyuser" id="connect${optionintarif.id}">
                     <input type="hidden" name="optid" value="${optionintarif.id}">

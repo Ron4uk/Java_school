@@ -49,7 +49,6 @@ public class UserTariffController {
     @PostMapping("/addtarifftoorder")
     public String addTariffToOrder(@ModelAttribute("orderDto") OrderDto orderDto, Model model){
         tariffService.createRequirementsForEmbeddedOptions(orderDto.getTariffDto());
-        contractService.checkOrder(orderDto, "addtarifftoorder");
         model.addAttribute("listOptions", orderDto.getTariffDto().getOptions());
         return "userchoosenewoption";
     }

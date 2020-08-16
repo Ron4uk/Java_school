@@ -16,4 +16,8 @@ public interface ClientService {
     void check(com.task.dto.ClientDto clientDto);
 
     ClientDto findByIdDto(String id);
+
+    List<ClientDto> getAllDtoByPage(Integer id);
+
+    Long countContractsInBd();
 }

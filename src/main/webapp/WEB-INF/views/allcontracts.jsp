@@ -58,10 +58,18 @@
             </thead>
             <tbody>
 
-                    <% int numberOfContract=0;%>
-            <c:forEach items="${listContracts}" var="mes">
+
+            <c:forEach items="${listContracts}" var="mes" varStatus="numberOfContract">
                 <tr>
-                    <th scope="row"><%= ++numberOfContract %></th>
+                    <c:choose>
+                        <c:when test="${pagenumber==0 || pagenumber==1}">
+                            <th scope="row">${numberOfContract.count}</th>
+                        </c:when>
+                        <c:otherwise>
+                            <th scope="row">${numberOfContract.count+(5*(pagenumber-1))}</th>
+                        </c:otherwise>
+                    </c:choose>
+
                     <td>${mes.phone}</td>
                     <td>${mes.clientDto.firstName} ${mes.clientDto.lastName}</td>
                     <td>${mes.tariffDto.tariff}</td>
@@ -69,6 +77,19 @@
             </c:forEach>
             </tbody>
         </table>
+    </c:if>
+    <c:if test="${count>1}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <c:forEach var = "pagenumber" begin = "1" end = "${count}">
+                    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}
+                    /employee/getAllContracts?id=${pagenumber}">${pagenumber}</a></li>
+                </c:forEach>
+
+            </ul>
+        </nav>
+
+
     </c:if>
 
 

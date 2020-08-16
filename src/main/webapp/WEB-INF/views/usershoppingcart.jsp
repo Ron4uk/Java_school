@@ -73,7 +73,7 @@
                 <tbody>
                     <tr>
                         <th>${orderDto.tariffDto.tariff}</th>
-                        <td>${orderDto.tariffDto.price}</td>
+                        <td>${orderDto.tariffDto.price}$</td>
                         <td style="float: right"><a href="${pageContext.request.contextPath}/user/deletetarifffromorder" class="btn btn-outline-dark btn-sm" value="${orderDto.tariffDto.id}">Delete</a></td>
                     </tr>
                 </tbody>
@@ -96,8 +96,8 @@
                 <c:forEach items="${orderDto.optionsFromNewTariff}" var="option">
                 <tr>
                     <th>${option.name}</th>
-                    <td>${option.price}</td>
-                    <td>${option.connectionCost}</td>
+                    <td>${option.price}$</td>
+                    <td>${option.connectionCost}$</td>
                     <td style="float: right"><a href="${pageContext.request.contextPath}/user/deletenewoptionfromorder?id=${option.id}" class="btn btn-outline-dark btn-sm" value="${option.id}">Delete</a></td>
                 </tr>
                 </c:forEach>

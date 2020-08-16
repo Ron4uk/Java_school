@@ -62,4 +62,8 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.addConverter(optionDtoConverter);
 
     }
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+
+    }
 }

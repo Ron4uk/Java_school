@@ -47,12 +47,23 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
 
     @Transactional
     public List<OptionDto> getAllDtoWithReqId() {
-        List<OptionDto> result = optionDao.getAll().stream().map(e -> (OptionDto) this.convertToDto(e, new OptionDto())).collect(Collectors.toList());
+        List<OptionDto> result = optionDao.getAll().stream().map(e -> (OptionDto) this.convertToDto(e,
+                new OptionDto())).collect(Collectors.toList());
         for (OptionDto optionDto : result) {
-            Set<Integer> requirementsId = setRequirements(optionDto);
-            Set<Integer> exclusionId = setExclusions(optionDto);
-            optionDto.setExclusionsId(exclusionId);
-            optionDto.setRequirementsId(requirementsId);
+            optionDto.setExclusionsId(setExclusions(optionDto));
+            optionDto.setRequirementsId(setRequirements(optionDto));
+
+        }
+        return result;
+    }
+    @Transactional
+    @Override
+    public List<OptionDto> getAllDtoWithReqIdWithDeleted() {
+        List<OptionDto> result = optionDao.getAllWithDeleted().stream().map(e -> (OptionDto) this.convertToDto(e,
+                new OptionDto())).collect(Collectors.toList());
+        for (OptionDto optionDto : result) {
+            optionDto.setExclusionsId(setExclusions(optionDto));
+            optionDto.setRequirementsId(setRequirements(optionDto));
 
         }
         return result;
@@ -68,7 +79,6 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
         Set<Integer> requirementsId = new HashSet<>();
         if (optionDto.getRequiredOptions().size() > 0) {
             for (OptionDto optionDtoNext : optionDto.getRequiredOptions()) {
-//                requirementsId.addAll(setRequirements(optionDtoNext));
                 requirementsId.add(optionDtoNext.getId());
             }
 
@@ -102,7 +112,8 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
 
     @Transactional
     public List<DtoEntity> getAllWithoutDto(Integer id) {
-        return optionDao.getAllWithout(id).stream().map(e -> this.convertToDto(e, new OptionDto())).collect(Collectors.toList());
+        return optionDao.getAllWithout(id).stream().map(e -> this.convertToDto(e,
+                new OptionDto())).collect(Collectors.toList());
     }
 
     @Transactional
@@ -196,7 +207,8 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
         }
     }
 
-    private List<OptionDto> createOnlyExclusionOptions(Set<OptionDto> chooseRequiredOptions, List<OptionDto> onlyExclusionOptions) {
+    private List<OptionDto> createOnlyExclusionOptions(Set<OptionDto> chooseRequiredOptions,
+                                                       List<OptionDto> onlyExclusionOptions) {
 
         if (chooseRequiredOptions.size() > 0) {
             for (OptionDto reqOption : chooseRequiredOptions) {
@@ -249,21 +261,25 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
         }
     }
 
-    public void checkLikeChild(List<OptionDto> allCheckingOptions, OptionDto optionDto, OptionDto createOption, List<OptionDto> onlyExclusionOptions) {
+    public void checkLikeChild(List<OptionDto> allCheckingOptions, OptionDto optionDto, OptionDto createOption,
+                               List<OptionDto> onlyExclusionOptions) {
         List<OptionDto> parentOptions = getAllParentDto(optionDto);
         if (parentOptions != null) {
             for (OptionDto parentDto : parentOptions) {
                 if (allCheckingOptions.contains(parentDto))
-                    throw new WrongOptionException("Chosen options violates the principle of coupling with option " + parentDto.getName(), createOption);
+                    throw new WrongOptionException("Chosen options violates the principle of " +
+                            "coupling with option " + parentDto.getName(), createOption);
                 if (parentDto.getExclusionOptions().size() > 0) {
                     for (OptionDto exclOptDtoParent : parentDto.getExclusionOptions()) {
                         if (allCheckingOptions.contains(exclOptDtoParent))
-                            throw new WrongOptionException("Chosen options violates the principle of coupling with option " + parentDto.getName(), createOption);
+                            throw new WrongOptionException("Chosen options violates the principle of " +
+                                    "coupling with option " + parentDto.getName(), createOption);
                     }
                 } else if (parentDto.getRequiredOptions().size() > 0) {
                     for (OptionDto reqOptDtoParent : parentDto.getRequiredOptions()) {
                         if (reqOptDtoParent != optionDto && onlyExclusionOptions.contains(reqOptDtoParent)) {
-                            throw new WrongOptionException("Chosen options violates the principle of coupling with option " + reqOptDtoParent.getName(), createOption);
+                            throw new WrongOptionException("Chosen options violates the principle of " +
+                                    "coupling with option " + reqOptDtoParent.getName(), createOption);
                         }
                     }
                 }
@@ -275,7 +291,8 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
     private List<OptionDto> getAllParentDto(OptionDto optionDto) {
         List<Option> parentOptions = optionDao.getAllParent(optionDto.getId());
         if (parentOptions != null) {
-            List<OptionDto> parentOptionsDto = parentOptions.stream().map(e -> (OptionDto) convertToDto(e, new OptionDto())).collect(Collectors.toList());
+            List<OptionDto> parentOptionsDto = parentOptions.stream().map(e -> (OptionDto) convertToDto(e,
+                    new OptionDto())).collect(Collectors.toList());
             return parentOptionsDto;
         }
         return null;

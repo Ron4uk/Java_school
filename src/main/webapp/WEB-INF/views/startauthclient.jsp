@@ -91,7 +91,7 @@
     <div class="row row-flex row-flex-wrap" style="margin-top: 10px">
         <div class="col-sm-2 col-md-2">
             <div class="card">
-                <img src="/images/private_account2" class="card-img-top" alt="...">
+                <img src="/images/private_account2.png" class="card-img-top" alt="...">
                 <div class="card-body">
                     <a href="/user?id=${contractDto.id}" class="btn btn-primary btn-lg" style="max-width: 100%">Private account</a>
                 </div>

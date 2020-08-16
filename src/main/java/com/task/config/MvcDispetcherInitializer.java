@@ -3,6 +3,7 @@ package com.task.config;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletRegistration;
 
 
 public class MvcDispetcherInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -19,5 +20,10 @@ public class MvcDispetcherInitializer extends AbstractAnnotationConfigDispatcher
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
+    }
+
+    @Override
+    public void customizeRegistration(ServletRegistration.Dynamic registration) {
+        registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
     }
 }

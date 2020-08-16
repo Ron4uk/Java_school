@@ -88,25 +88,35 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
 
     @Transactional
     public String merge(TariffDto tariffDto, String[] optionId) {
-            log.info("tariffDto "+ tariffDto);
-            log.info("tariffDto.id "+tariffDto.getId());
-            Tariff tariff = (Tariff) convertToEntity(new Tariff(), tariffDto);
-            Set<Option> optionSet = new HashSet<>();
-            if (optionId != null && optionId.length > 0) {
-                tariffDto.setOptions(new HashSet<>());
-                for (String id : optionId) {
-                    Option option = optionDao.findById(Integer.parseInt(id));
-                    optionSet.add(option);
-                    OptionDto optionDto = (OptionDto) convertToDto(option, new OptionDto());
-                    tariffDto.getOptions().add(optionDto);
-                }
-                if (!optionService.checkOptions(optionSet)) return "Changes failed. Check requirements";
+        log.info("tariffDto " + tariffDto);
+        log.info("tariffDto.opt " + tariffDto.getOptions());
+        Tariff tariff = (Tariff) convertToEntity(new Tariff(), tariffDto);
+        Set<Option> optionSet = new HashSet<>();
+        for (OptionDto optionDto : tariffDto.getOptions()) {
+            if (optionDto.getDeleted() == true) {
+                Option option = (Option) convertToEntity(new Option(), optionDto);
+                log.info("option " + option);
+                tariff.getOptions().add(option);
             }
-            tariff.setOptions(optionSet);
-            Tariff updatedTariff = tariffDao.update(tariff);
-            tariffDto.setId(updatedTariff.getId());
-            log.info("tariffDto.id "+tariffDto.getId());
-            return "changes successful";
+        }
+        if (optionId != null && optionId.length > 0) {
+            tariffDto.setOptions(new HashSet<>());
+            for (String id : optionId) {
+                Option option = optionDao.findById(Integer.parseInt(id));
+                optionSet.add(option);
+                OptionDto optionDto = (OptionDto) convertToDto(option, new OptionDto());
+                tariffDto.getOptions().add(optionDto);
+            }
+            if (!optionService.checkOptions(optionSet)) return "Changes failed. Check requirements";
+        }
+        tariff.getOptions().addAll(optionSet);
+
+        log.info("tariff " + tariff.getOptions());
+        Tariff updatedTariff = tariffDao.update(tariff);
+        tariffDto.setId(updatedTariff.getId());
+        log.info("tariffDto.id " + tariffDto.getId());
+        log.info("tariffDto.id " + tariffDto.getId());
+        return "changes successful";
     }
 
     /**

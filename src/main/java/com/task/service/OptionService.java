@@ -24,4 +24,6 @@ public interface OptionService {
     Set<Integer> setRequirements(OptionDto optionDto);
     Set<Integer> setExclusions(OptionDto optionDto);
     boolean checkOptions(Set<Option> optionSet);
+
+    List<OptionDto> getAllDtoWithReqIdWithDeleted();
 }

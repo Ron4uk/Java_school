@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -74,27 +73,30 @@ public class ContractController {
     }
 
     @GetMapping("/editcontract")
-    public String editGetContract(HttpServletRequest request, Model model) {
+    public String showContract(HttpServletRequest request, Model model) {
         model.addAttribute("contractDto", contractService.findByIdDto(request.getParameter("id")));
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
-        model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
+        model.addAttribute("optionsList", optionService.getAllDtoWithReqIdWithDeleted());
 
         return "editcontract";
     }
 
     @PostMapping("/editcontract")
-    public String editPostContract(@ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request, Model model) {
+    public String editContract(@ModelAttribute("contractDto") ContractDto contractDto, HttpServletRequest request,
+                                   Model model) {
         model.addAttribute("result", contractService.update(contractDto,
                 request.getParameterValues(contractDto.getTariffDto().getId().toString())));
         model.addAttribute("listTariffs", tariffService.getAllDtoWithReq());
-        model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
+        model.addAttribute("optionsList", optionService.getAllDtoWithReqIdWithDeleted());
         model.addAttribute("contractDto", contractService.findByIdDto(contractDto.getId().toString()));
         return "editcontract";
     }
 
     @GetMapping("getAllContracts")
-    public String getAllContracts(Model model) {
-        model.addAttribute("listContracts", contractService.getAll());
+    public String getAllContracts(@RequestParam(required = false) Integer id, Model model) {
+        model.addAttribute("listContracts", contractService.getAllByPage(id));
+        model.addAttribute("count", contractService.countContractsInBd());
+        model.addAttribute("pagenumber", id==null?0:id);
         return "allcontracts";
     }
 }

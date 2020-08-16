@@ -1,6 +1,7 @@
 package com.task.dao;
 
 import com.task.dto.ClientDto;
+import com.task.dto.ContractDto;
 import com.task.entity.Contract;
 import com.task.entity.Tariff;
 
@@ -12,4 +13,8 @@ public interface ContractDao extends GenericDao<Contract> {
     void check(String phone, ClientDto clientDto, com.task.dto.ContractDto contractDto);
 
     List<Contract> getAllWithOldTariff(Tariff tariff);
+
+    List<Contract> getAllByPage(int skipContracts, int numberContractsOnPage);
+
+    Long countContractsInBd();
 }
