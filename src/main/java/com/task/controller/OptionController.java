@@ -76,8 +76,8 @@ public class OptionController {
     }
 
     @GetMapping("/user/userchoosenewoption")
-    public String chooseNewOption(@ModelAttribute("contractDto") ContractDto contractDto, @ModelAttribute("orderDto") OrderDto orderDto) {
-        log.info(orderDto);
+    public String chooseNewOption(@ModelAttribute("contractDto") ContractDto contractDto, @ModelAttribute("orderDto")
+            OrderDto orderDto) {
         return contractService.checkContract(contractDto, orderDto) ? "userchoosenewoption" : "user";
     }
 

@@ -27,6 +27,40 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-broker -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-broker</artifactId>
+      <version>5.16.0</version>
+    </dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-amq-store -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-amq-store</artifactId>
+      <version>5.8.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-kahadb-store -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-kahadb-store</artifactId>
+      <version>5.8.0</version>
+    </dependency>
+
+
+
+
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-jms -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
+      <version>5.2.8.RELEASE</version>
+    </dependency>
+
+
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -155,7 +189,22 @@
       <artifactId>modelmapper</artifactId>
       <version>2.3.8</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>2.10.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-spring</artifactId>
+      <version>5.16.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-kahadb-store</artifactId>
+      <version>5.8.0</version>
+      <scope>compile</scope>
+    </dependency>
 
 
   </dependencies>

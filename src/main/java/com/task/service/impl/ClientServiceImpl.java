@@ -4,12 +4,10 @@ import com.task.dao.ClientDao;
 import com.task.dto.ClientDto;
 import com.task.dto.DtoEntity;
 import com.task.entity.Client;
-import com.task.entity.Contract;
 import com.task.service.ClientService;
 import com.task.service.GenericMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +50,8 @@ public class ClientServiceImpl extends GenericMapper implements ClientService {
     @Transactional
     @Override
     public void check(ClientDto clientDto) {
-        clientDao.check(clientDto);
+        clientDao.checkPassport(clientDto);
+        clientDao.checkEmail(clientDto);
     }
     @Transactional
     @Override

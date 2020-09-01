@@ -16,8 +16,6 @@ public interface TariffService {
 
     List<DtoEntity> getAllDto();
 
-    Tariff create(Tariff tariff);
-
     Tariff findById(Integer id);
 
     String merge(TariffDto tariffDto, String[] optionId);
@@ -35,4 +33,5 @@ public interface TariffService {
     TariffDto remove(TariffDto tariffDto, Integer id);
 
 
+    void sendTariffsToQueue();
 }

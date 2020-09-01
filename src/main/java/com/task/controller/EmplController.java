@@ -22,7 +22,6 @@ import org.springframework.web.bind.support.SessionStatus;
 @Controller
 @Getter
 @Setter
-
 @AllArgsConstructor(onConstructor=@__({@Autowired}))
 public class EmplController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmplController.class);

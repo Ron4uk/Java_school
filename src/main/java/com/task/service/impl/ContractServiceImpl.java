@@ -99,7 +99,7 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
 
     @Transactional
     @Override
-    public void check(String phone, com.task.dto.ClientDto clientDto, com.task.dto.ContractDto contractDto) {
+    public void check(String phone, ClientDto clientDto, ContractDto contractDto) {
         contractDAO.check(phone, clientDto, contractDto);
     }
 
@@ -107,12 +107,23 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     @Override
     public ContractDto findByIdDto(String id) {
         Contract contract = contractDAO.findById(Integer.parseInt(id));
-        ClientDto clientDto = (ClientDto) convertToDto(contract.getClient(), new ClientDto());
-        TariffDto tariffDto = (TariffDto) convertToDto(contract.getTariff(), new TariffDto());
         ContractDto contractDto = (ContractDto) convertToDto(contract, new ContractDto());
-        contractDto.setClientDto(clientDto);
-        contractDto.setTariffDto(tariffDto);
+        contractDto.setClientDto((ClientDto) convertToDto(contract.getClient(), new ClientDto()));
+        contractDto.setTariffDto((TariffDto) convertToDto(contract.getTariff(), new TariffDto()));
         return contractDto;
+    }
+    @Transactional
+    @Override
+    public ContractDto getUserForAccountById(String id, ContractDto contractDto) {
+        if(contractDto!=null && contractDto.getId()!=null){
+            return contractDto;
+        }
+        int idUser = Integer.parseInt(id);
+        Contract contract = contractDAO.findById(idUser);
+        ContractDto contractDtoNew = (ContractDto) convertToDto(contract, new ContractDto());
+        contractDtoNew.setClientDto((ClientDto) convertToDto(contract.getClient(), new ClientDto()));
+        contractDtoNew.setTariffDto((TariffDto) convertToDto(contract.getTariff(), new TariffDto()));
+        return contractDtoNew;
     }
 
     @Transactional

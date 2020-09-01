@@ -1,6 +1,7 @@
 package com.task.dto;
 
-import com.task.entity.Contract;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +20,14 @@ public class TariffDto implements DtoEntity {
     private String tariff;
     private BigDecimal price;
     private Boolean deleted;
-     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<ContractDto> contracts= new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<OptionDto> options= new HashSet<>();
-
+    @JsonIgnore
+    private Set<ContractDto> contracts = new HashSet<>();
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonManagedReference
+    private Set<OptionDto> options = new HashSet<>();
 
 
 }

@@ -1,5 +1,6 @@
 package com.task.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class OptionDto implements DtoEntity {
     private Set<OptionDto> exclusionOptions= new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonBackReference
     private Set<TariffDto> tariffs= new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

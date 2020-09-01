@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter(onMethod = @__({@Autowired}))
 public class ExceptionsHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmplController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionsHandler.class);
 
 
     private TariffService tariffService;
@@ -80,6 +80,7 @@ public class ExceptionsHandler {
     public String page404Exception() {
         return "/404";
     }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public String notFoundHandler(Exception exception) {

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +31,8 @@ import java.util.Map;
 @Controller
 @Getter
 @Setter
-@AllArgsConstructor(onConstructor=@__({@Autowired}))
-@SessionAttributes({"contractDto","orderDto"})
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@SessionAttributes({"contractDto", "orderDto"})
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private ContractService contractService;
@@ -48,10 +49,13 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String clientPage (@RequestParam (required = false) String id, Model model) {
-        model.addAttribute("contractDto", contractService.findByIdDto(id));
+    public String clientPage(@RequestParam(required = false) String id, Model model, HttpServletRequest request) {
+        model.addAttribute("contractDto", contractService.getUserForAccountById(id,
+                (ContractDto) request.getSession().getAttribute("contractDto")));
+
         return "user";
     }
+
     @GetMapping("/startauthclient")
     public String afterAuthenticationClient() {
         return "startauthclient";

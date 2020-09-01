@@ -1,5 +1,6 @@
 package com.task.dao;
 
+import com.task.dto.ClientDto;
 import com.task.entity.Client;
 
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.List;
 
 public interface ClientDao extends GenericDao<Client> {
 
-    void check(com.task.dto.ClientDto clientDto);
+    void checkPassport(ClientDto clientDto);
+    void checkEmail(ClientDto clientDto);
 
     List<Client> getAllByPage(int skipClients, int numberContractsOnPage);
 

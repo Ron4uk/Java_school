@@ -47,4 +47,6 @@ public interface ContractService {
     List<ContractDto> getAllByPage(Integer id);
 
     Long countContractsInBd();
+
+    ContractDto getUserForAccountById(String id, ContractDto contractDto);
 }
