@@ -1,14 +1,10 @@
 package com.task.service;
 
-import com.task.dto.*;
-import com.task.entity.Option;
+import com.task.dto.DtoEntity;
+import com.task.dto.TariffDto;
 import com.task.entity.Tariff;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public interface TariffService {
 

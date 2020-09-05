@@ -1,12 +1,12 @@
 package com.task.service.impl;
 
-import com.task.dto.*;
-import com.task.exception.NotExistClientException;
 import com.task.dao.ClientDao;
 import com.task.dao.ContractDao;
 import com.task.dao.OptionDao;
 import com.task.dao.TariffDao;
+import com.task.dto.*;
 import com.task.entity.*;
+import com.task.exception.NotExistClientException;
 import com.task.service.ContractService;
 import com.task.service.GenericMapper;
 import lombok.AllArgsConstructor;

@@ -1,12 +1,11 @@
 package com.task.service.impl;
 
-import com.task.dao.TariffDao;
-import com.task.entity.Tariff;
-import com.task.exception.WrongOptionException;
 import com.task.dao.OptionDao;
+import com.task.dao.TariffDao;
 import com.task.dto.DtoEntity;
 import com.task.dto.OptionDto;
 import com.task.entity.Option;
+import com.task.entity.Tariff;
 import com.task.service.GenericMapper;
 import com.task.service.OptionService;
 import lombok.AllArgsConstructor;
@@ -20,8 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service

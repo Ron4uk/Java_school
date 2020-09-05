@@ -4,7 +4,6 @@ import com.task.dto.ContractDto;
 import com.task.dto.DtoEntity;
 import com.task.dto.OrderDto;
 import com.task.dto.TariffDto;
-import com.task.entity.Tariff;
 import com.task.service.ContractService;
 import com.task.service.OptionService;
 import com.task.service.TariffService;
@@ -13,18 +12,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @Getter

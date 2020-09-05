@@ -4,8 +4,6 @@ import com.task.dto.DtoEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class GenericMapper {
@@ -13,7 +11,7 @@ public abstract class GenericMapper {
     @Setter(onMethod = @__({@Autowired}))
     private ModelMapper modelMapper;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenericMapper.class);
+
     public DtoEntity convertToDto(Object obj, DtoEntity mapper) {
 
         return modelMapper.map(obj, mapper.getClass());

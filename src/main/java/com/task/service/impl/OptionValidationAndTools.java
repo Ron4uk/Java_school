@@ -132,7 +132,7 @@ public class OptionValidationAndTools extends GenericMapper {
     public void checkLikeChild(List<OptionDto> allCheckingOptions, OptionDto optionDto, OptionDto createOption,
                                List<OptionDto> onlyExclusionOptions) {
         List<OptionDto> parentOptions = getAllParentDto(optionDto);
-        if (parentOptions != null) {
+        if (!parentOptions.isEmpty()) {
             for (OptionDto parentDto : parentOptions) {
                 if (allCheckingOptions.contains(parentDto))
                     throw new WrongOptionException("Chosen options violates the principle of " +
@@ -163,7 +163,7 @@ public class OptionValidationAndTools extends GenericMapper {
                     new OptionDto())).collect(Collectors.toList());
             return parentOptionsDto;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public boolean checkOptions(Set<Option> optionSet) {

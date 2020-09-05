@@ -7,7 +7,6 @@ import com.task.service.ContractService;
 import com.task.service.TariffService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +37,6 @@ public class ClientController {
         model.addAttribute("clientList", clientService.getAllDtoByPage(id));
         model.addAttribute("countClients", clientService.countContractsInBd());
         model.addAttribute("pagenumber", id==null?0:id);
-        //model.addAttribute("clientList", clientService.getAllDto());
         return "employee";
     }
 
