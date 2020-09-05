@@ -110,7 +110,8 @@ public class OptionValidationAndTools extends GenericMapper {
         Deque<OptionDto> queueChildOptions = new ArrayDeque<>();
         if (optionDto.getRequiredOptions().size() > 0) {
             queueChildOptions.addAll(optionDto.getRequiredOptions());
-        } else if (optionDto.getExclusionOptions().size() > 0) {
+        }
+        if (optionDto.getExclusionOptions().size() > 0) {
             queueChildOptions.addAll(optionDto.getExclusionOptions());
         }
         while (queueChildOptions.size() > 0) {
@@ -121,7 +122,8 @@ public class OptionValidationAndTools extends GenericMapper {
             }
             if (optionDtoFromChild.getRequiredOptions().size() > 0) {
                 queueChildOptions.addAll(optionDtoFromChild.getRequiredOptions());
-            } else if (optionDtoFromChild.getExclusionOptions().size() > 0) {
+            }
+            if (optionDtoFromChild.getExclusionOptions().size() > 0) {
                 queueChildOptions.addAll(optionDtoFromChild.getExclusionOptions());
             }
         }

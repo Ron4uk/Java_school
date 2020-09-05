@@ -11,6 +11,7 @@ import com.task.service.GenericMapper;
 import com.task.service.OptionService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @Setter
 @Log4j
 @AllArgsConstructor(onConstructor = @__({@Autowired}))
+@NoArgsConstructor
 public class OptionServiceImpl extends GenericMapper implements OptionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OptionServiceImpl.class);

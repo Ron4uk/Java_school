@@ -29,7 +29,7 @@ public class TariffSenderImpl implements TariffSender {
         try {
             jmsTemplate.convertAndSend(tariffDto);
         } catch (JmsException e) {
-            LOGGER.error("ERROR [{}] [{}] convertAndSend: {}", LocalDateTime.now(), LOGGER.getName(),  e);
+            LOGGER.error("ERROR [{}] [{}] convertAndSend: ", LocalDateTime.now(), LOGGER.getName(),  e);
         }
 
     }

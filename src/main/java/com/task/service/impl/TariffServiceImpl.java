@@ -98,11 +98,13 @@ public class TariffServiceImpl extends GenericMapper implements TariffService {
         }
         if (optionId != null && optionId.length > 0) {
             tariffDto.setOptions(new HashSet<>());
+            tariff.setOptions(new HashSet<>());
             for (String id : optionId) {
                 Option option = optionDao.findById(Integer.parseInt(id));
                 optionSet.add(option);
                 OptionDto optionDto = (OptionDto) convertToDto(option, new OptionDto());
                 tariffDto.getOptions().add(optionDto);
+                tariff.getOptions().add(option);
             }
             if (!validationAndTools.checkOptions(optionSet)) return "Changes failed. Check requirements";
         }

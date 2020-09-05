@@ -41,13 +41,15 @@
 
 
             </ul>
-            <a href="${pageContext.request.contextPath}/employee" class="btn btn-secondary  active" role="button" aria-pressed="true">Back</a>
+            <a href="${pageContext.request.contextPath}/employee" class="btn btn-secondary  active" role="button"
+               aria-pressed="true">Back</a>
 
 
         </div>
     </nav>
 
-    <form:form action="${pageContext.request.contextPath}/employee/newTariff" modelAttribute="tariffDto" cssStyle="margin-top: 15px">
+    <form:form action="${pageContext.request.contextPath}/employee/newTariff" modelAttribute="tariffDto"
+               cssStyle="margin-top: 15px">
         <div class="form-group row">
             <form:label path="tariff" for="inputTariff" cssClass="col-sm-2 col-form-label">Tariff</form:label>
             <div class="col-sm-10">
@@ -57,7 +59,8 @@
         <div class="form-group row">
             <form:label path="price" for="inputPrice" class="col-sm-2 col-form-label">Price</form:label>
             <div class="col-sm-10">
-                <form:input path="price" type="number"  pattern="\d{1,4}\\.?\d{0,2}" step="0.01" min="0" max="9999" title="ex. 330.20$"
+                <form:input path="price" type="number" pattern="\d{1,4}\\.?\d{0,2}" step="0.01" min="0" max="9999"
+                            title="ex. 330.20$"
                             cssClass="form-control" id="inputPrice" required="required" placeholder="хххх.хх"/>
             </div>
         </div>
@@ -65,7 +68,7 @@
         <div class="form-group row">
 
             <div class="col-sm-12 col-md-12">
-                <div><h6 style="text-align: center">Select  options that will be available in the tariff.</h6></div>
+                <div><h6 style="text-align: center">Select options that will be available in the tariff.</h6></div>
 
                 <table class="table" id="required options" style="margin-top: 10px">
                     <thead>
@@ -85,13 +88,13 @@
                             <td>${mes.name}</td>
                             <td>${mes.price}$</td>
                             <td>
-                                <c:if   test="${mes.requiredOptions.size()>0}">
+                                <c:if test="${mes.requiredOptions.size()>0}">
                                     The following options should be connected:
                                     <c:forEach items="${mes.requiredOptions}" var="requirement">
                                         ${requirement.name}
                                     </c:forEach>
                                 </c:if>
-                                <c:if   test="${mes.exclusionOptions.size()>0}">
+                                <c:if test="${mes.exclusionOptions.size()>0}">
                                     <br> Cannot be connected with the following options:
                                     <c:forEach items="${mes.exclusionOptions}" var="exclusion">
                                         ${exclusion.name}
@@ -102,11 +105,11 @@
                                 <c:when test="${tariffDto.options.contains(mes)}">
                                     <td>
                                         <div class="pretty p-switch p-fill">
-                                        <input id="${mes.name}" type="checkbox" name="opt" value="${mes.id}"
-                                               onchange="check(${mes.requirementsId}, this)" checked>
-                                        <div class="state">
-                                            <label>On</label>
-                                        </div>
+                                            <input id="${mes.name}" type="checkbox" name="opt" value="${mes.id}"
+                                                   onchange="check(${mes.requirementsId}, this)" checked>
+                                            <div class="state">
+                                                <label>On</label>
+                                            </div>
                                         </div>
                                     </td>
                                 </c:when>
@@ -114,7 +117,7 @@
                                     <td>
                                         <div class="pretty p-switch p-fill">
                                             <input id="${mes.name}" type="checkbox" name="opt" value="${mes.id}"
-                                               onchange="check(${mes.requirementsId}, this)"/>
+                                                   onchange="check(${mes.requirementsId}, this)"/>
                                             <div class="state">
                                                 <label>On</label>
                                             </div>
@@ -122,7 +125,6 @@
                                     </td>
                                 </c:otherwise>
                             </c:choose>
-
 
 
                         </tr>
@@ -135,9 +137,9 @@
         </div>
 
 
-        <div class="form-group row justify-content-end" >
+        <div class="form-group row justify-content-end">
             <div class="col-sm-10 ">
-                <form:button type="submit" class="btn btn-secondary"  style="float: right;">Save</form:button>
+                <form:button type="submit" class="btn btn-secondary" style="float: right;">Save</form:button>
             </div>
         </div>
     </form:form>
@@ -147,9 +149,9 @@
             <div id="message"><p style="margin-top: 10px; color: forestgreen">Change successful! </p></div>
         </c:when>
 
-    <c:otherwise>
-        <div id="message"><p style="margin-top: 10px; color: red">${result}</p></div>
-    </c:otherwise>
+        <c:otherwise>
+            <div id="message"><p style="margin-top: 10px; color: red">${result}</p></div>
+        </c:otherwise>
     </c:choose>
 
     <div class="card-footer text-muted" style="margin-top: 20px">
@@ -158,50 +160,145 @@
 </div>
 
 <script>
-
+    var mapExclusions = new Map();
+    var mapRequirements = new Map();
+    var previoustariff = null;
 
     /**
      * checks option what parameters have requirements before connecting
      */
+    function onload() {
 
 
-    function check(optRequirementsId, checkbox) {
+        var chekboxes = document.getElementsByName("opt");
+
+        for (let checkbox of chekboxes) {
+
+            <c:forEach items="${optionsList}" var="option">
+            if (checkbox.value == ${option.id} && checkbox.checked == true) {
+                var requirementsIdOnLoad = ${option.requirementsId};
 
 
-        var elementsInTariffBlock = document.getElementsByName("opt");
+                if (requirementsIdOnLoad != null && requirementsIdOnLoad.length > 0) {
+                    for (let i = 0; i <= chekboxes.length - 1; i++) {
+                        if (requirementsIdOnLoad.includes(Number(chekboxes[i].value))) {
 
-        if (checkbox.checked == true) {
-            start:
-                if ( optRequirementsId.length>0){
-                    for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
-
-                         if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==false){
-                             console.log("optRequirementsId = "+ optRequirementsId);
-                             console.log("elementsInTariffBlock[i].value = "+ elementsInTariffBlock[i].value);
-                             console.log("elementsInTariffBlock[i].id = "+ elementsInTariffBlock[i].id);
-
-                            alert("Before enabling this option, connect following option: " + elementsInTariffBlock[i].id);
-                            checkbox.checked=false;
-                            break start;
-                        }
-                    }
-                    for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
-                        if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==true){
-                            elementsInTariffBlock[i].onclick = function () {
+                            if (mapRequirements.has(chekboxes[i].value)) {
+                                let number = mapRequirements.get(chekboxes[i].value);
+                                mapRequirements.set(chekboxes[i].value, ++number);
+                            } else {
+                                mapRequirements.set(chekboxes[i].value, 1);
+                                console.log("HERE =" + mapRequirements.get(chekboxes[i].value))
+                            }
+                            chekboxes[i].onclick = function () {
                                 return false;
                             }
                         }
                     }
                 }
 
+
+            }
+            </c:forEach>
         }
-        else {
-            stop:
-                if ( optRequirementsId.length>0){
+
+
+    }
+
+    window.onload = onload();
+
+
+    // function check(optRequirementsId, checkbox) {
+    //
+    //
+    //     var elementsInTariffBlock = document.getElementsByName("opt");
+    //
+    //     if (checkbox.checked == true) {
+    //         start:
+    //             if ( optRequirementsId.length>0){
+    //                 for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
+    //
+    //                      if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==false){
+    //                          console.log("optRequirementsId = "+ optRequirementsId);
+    //                          console.log("elementsInTariffBlock[i].value = "+ elementsInTariffBlock[i].value);
+    //                          console.log("elementsInTariffBlock[i].id = "+ elementsInTariffBlock[i].id);
+    //
+    //                         alert("Before enabling this option, connect following option: " + elementsInTariffBlock[i].id);
+    //                         checkbox.checked=false;
+    //                         break start;
+    //                     }
+    //                 }
+    //                 for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
+    //                     if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) && elementsInTariffBlock[i].checked==true){
+    //                         elementsInTariffBlock[i].onclick = function () {
+    //                             return false;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //
+    //     }
+    //     else {
+    //         stop:
+    //             if ( optRequirementsId.length>0){
+    //                 for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
+    //                     if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value))){
+    //                         elementsInTariffBlock[i].onclick = function () {
+    //                             return true;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //     }
+    //
+    // }
+
+
+    function check(optRequirementsId, checkbox) {
+
+        let elementsInTariffBlock = document.getElementsByName("opt");
+        if (checkbox.checked == true) {
+            start:
+                if (optRequirementsId.length > 0) {
                     for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
-                        if(optRequirementsId.includes(Number(elementsInTariffBlock[i].value))){
+                        if (optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) &&
+                            elementsInTariffBlock[i].checked == false) {
+                            alert("Before enabling this option, connect following option: " +
+                                elementsInTariffBlock[i].id);
+                            checkbox.checked = false;
+                            break start;
+                        }
+                    }
+                    for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
+                        if (optRequirementsId.includes(Number(elementsInTariffBlock[i].value)) &&
+                            elementsInTariffBlock[i].checked == true) {
+                            if (mapRequirements.has(elementsInTariffBlock[i].value)) {
+                                let number = mapRequirements.get(elementsInTariffBlock[i].value);
+                                mapRequirements.set(elementsInTariffBlock[i].value, ++number);
+                            } else {
+                                mapRequirements.set(elementsInTariffBlock[i].value, 1);
+                            }
                             elementsInTariffBlock[i].onclick = function () {
-                                return true;
+                                return false;
+                            }
+                        }
+                    }
+
+                }
+
+        } else {
+            stop:
+                if (optRequirementsId.length > 0) {
+                    for (let i = 0; i <= elementsInTariffBlock.length - 1; i++) {
+                        if (optRequirementsId.includes(Number(elementsInTariffBlock[i].value))) {
+                            let number = mapRequirements.get(elementsInTariffBlock[i].value);
+                            mapRequirements.set(elementsInTariffBlock[i].value, --number);
+                            console.log("optRequirementsId.includes -- " + mapRequirements.
+                            get(elementsInTariffBlock[i].value));
+                            if (mapRequirements.get(elementsInTariffBlock[i].value) == 0) {
+                                elementsInTariffBlock[i].onclick = function () {
+                                    return true;
+                                }
                             }
                         }
                     }
