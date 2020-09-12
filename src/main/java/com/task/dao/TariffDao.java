@@ -12,5 +12,5 @@ public interface TariffDao extends GenericDao<Tariff> {
 
     List<Tariff> findAllTariffWithOption(Option option);
 
-    void update(List<Tariff> tariffs, Option option);
+
 }

@@ -1,4 +1,4 @@
-package tests;
+package tests.service;
 
 import com.task.dao.OptionDao;
 import com.task.dao.TariffDao;
@@ -7,7 +7,6 @@ import com.task.entity.Option;
 import com.task.service.GenericMapper;
 import com.task.service.impl.OptionServiceImpl;
 import com.task.service.impl.OptionValidationAndTools;
-import org.hibernate.NonUniqueResultException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,7 +23,8 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OptionServiceImplTest extends GenericMapper {
@@ -104,18 +103,34 @@ public class OptionServiceImplTest extends GenericMapper {
     }
 
     @Test
-    public void getAllTest() {
+    public void getAll() {
         when(optionDao.getAll()).thenReturn(optionList);
 
         assertEquals(optionList, optionServiceImpl.getAll());
     }
 
     @Test
-    public void getAllDtoTest() {
+    public void getAllDto() {
         when(optionDao.getAll()).thenReturn(optionList);
         assertEquals(optionDtoList, optionServiceImpl.getAllDto());
     }
 
+    @Test
+    public void getAllDtoWithReqId() {
+        when(optionDao.getAll()).thenReturn(optionList);
+        assertEquals(optionDtoList, optionServiceImpl.getAllDtoWithReqId());
+        optionDtoList.forEach(e->verify(validationAndTools, times(1)).setExclusions(e));
+        optionDtoList.forEach(e->verify(validationAndTools, times(1)).setRequirements(e));
+        verifyNoMoreInteractions(validationAndTools);
+    }
+    @Test
+    public void getAllDtoWithReqIdWithDeleted() {
+        when(optionDao.getAllWithDeleted()).thenReturn(optionList);
+        assertEquals(optionDtoList, optionServiceImpl.getAllDtoWithReqIdWithDeleted());
+        optionDtoList.forEach(e->verify(validationAndTools, times(1)).setExclusions(e));
+        optionDtoList.forEach(e->verify(validationAndTools, times(1)).setRequirements(e));
+        verifyNoMoreInteractions(validationAndTools);
+    }
 
 
     @Test
@@ -126,12 +141,11 @@ public class OptionServiceImplTest extends GenericMapper {
         List<OptionDto> listDto = new ArrayList<>(optionDtoList);
         listDto.removeIf(e -> e.getId().equals(2));
         assertEquals(listDto, optionServiceImpl.getAllWithoutDto(2));
-        optionList.removeIf(e -> e.getId().equals(2));
-        optionDtoList.removeIf(e -> e.getId().equals(2));
+
     }
 
     @Test
-    public void findByIdTest() {
+    public void findById() {
         when(optionDao.findById(1)).thenReturn(optionList.get(0));
         assertEquals(optionList.get(0), optionServiceImpl.findById(1));
 
@@ -146,7 +160,7 @@ public class OptionServiceImplTest extends GenericMapper {
     }
 
     @Test
-    public void findByIdDtoTest() {
+    public void findByIdDto() {
         when(optionDao.findById(1)).thenReturn(optionList.get(0));
         assertEquals(optionDtoList.get(0), optionServiceImpl.findByIdDto(1));
     }
@@ -161,9 +175,11 @@ public class OptionServiceImplTest extends GenericMapper {
     }
 
     @Test
-    public void deleteByIdTest() {
+    public void deleteById() {
         when(optionDao.findById(2)).thenReturn(optionList.get(1));
         assertEquals("Changes successful.", optionServiceImpl.deleteById(2, optionDtoList.get(1)));
-
+        OptionDto optionDto = optionDtoList.get(1);
+        optionDto.setDeleted(true);
+        assertEquals("Option was deleted", optionServiceImpl.deleteById(2, optionDto));
     }
 }

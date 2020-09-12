@@ -37,7 +37,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/startauthempl">Main <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/employee/startauthempl">Main <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Tariffs</a>
@@ -93,7 +93,7 @@
             <div class="card">
                 <img src="/images/private_account2.png" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <a href="/employee" class="btn btn-primary btn-lg" style="max-width: 100%">Private account</a>
+                    <a href="${pageContext.request.contextPath}/employee" class="btn btn-primary btn-lg" style="max-width: 100%">Private account</a>
                 </div>
 
             </div>

@@ -30,7 +30,7 @@ public class AuthDeniedHandler implements AccessDeniedHandler {
         if (roles.contains("CLIENT")) {
             httpServletResponse.sendRedirect("/startauthclient");
         } else {
-            httpServletResponse.sendRedirect("/startauthempl");
+            httpServletResponse.sendRedirect("/employee/startauthempl");
         }
     }
 }

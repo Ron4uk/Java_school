@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -51,7 +52,7 @@ public class OptionController {
     @GetMapping("/employee/editoption")
     public String editOption(@RequestParam(value = "id", required = false) Integer id, Model model) {
         if (id != null) {
-            model.addAttribute(optionService.findByIdDto(id));
+            model.addAttribute("optionDto", optionService.findByIdDto(id));
             model.addAttribute("optionsList", optionService.getAllWithoutDto(id));
         } else {
             model.addAttribute("optionsList", optionService.getAllDto());
@@ -80,7 +81,6 @@ public class OptionController {
 
     @PostMapping("/user/addoptiontotariff")
     public String addOptionToTariff(@ModelAttribute("orderDto") OrderDto orderDto) {
-        log.info(orderDto);
         return "user";
     }
 
@@ -91,8 +91,8 @@ public class OptionController {
 
     @PostMapping("/user/connectedoptionbyuser")
     public String connectedNewOptionByUser(@ModelAttribute("contractDto") ContractDto contractDto,
-                                           @RequestParam(name = "optid") Integer id, Model model){
-        model.addAttribute("result", contractService.addConnectedOption(contractDto, id));
+                                           @RequestParam(name = "optid") Integer id, ModelAndView model){
+        model.addObject("result", contractService.addConnectedOption(contractDto, id));
         return "usermanageoption";
     }
 

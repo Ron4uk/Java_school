@@ -1,6 +1,5 @@
 package com.task.exception;
 
-import com.task.controller.EmplController;
 import com.task.dto.ContractDto;
 import com.task.service.OptionService;
 import com.task.service.TariffService;

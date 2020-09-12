@@ -2,6 +2,8 @@ package com.task.controller;
 
 import com.task.dto.ClientDto;
 import com.task.dto.ContractDto;
+import com.task.dto.OptionDto;
+import com.task.dto.TariffDto;
 import com.task.service.ClientService;
 import com.task.service.ContractService;
 import com.task.service.TariffService;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 @Setter
 @RequestMapping("/employee")
 @AllArgsConstructor(onConstructor=@__({@Autowired}))
-@SessionAttributes({"clientDto", "contractDto"})
+@SessionAttributes({"clientDto", "contractDto", "optionDto", "tariffDto"})
 public class ClientController {
 
     private ClientService clientService;
@@ -84,5 +87,20 @@ public class ClientController {
         if(contractDto.getPhone()!=null) model.addAttribute("contract",
                 contractService.findByPhoneDto(contractDto.getPhone(), "/employee"));
         return "employee";
+    }
+
+    @GetMapping
+    public String employeePage(SessionStatus sessionStatus, Model model) {
+        sessionStatus.setComplete();
+        model.addAttribute("optionDto", new OptionDto());
+        model.addAttribute("tariffDto", new TariffDto());
+        model.addAttribute("clientDto", new ClientDto());
+        model.addAttribute("contractDto", new ContractDto());
+        return "employee";
+    }
+
+    @GetMapping("/startauthempl")
+    public String startEmployeePage() {
+        return "startauthempl";
     }
 }

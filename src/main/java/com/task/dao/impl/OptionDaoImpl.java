@@ -57,7 +57,7 @@ public class OptionDaoImpl extends GenericDaoImpl<Option> implements OptionDao {
             }
             return optionList;
         }
-        else  return null;
+        else  return new ArrayList<>();
     }
 
     @Override

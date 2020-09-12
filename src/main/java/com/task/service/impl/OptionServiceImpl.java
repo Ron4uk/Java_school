@@ -36,6 +36,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
     private OptionValidationAndTools validationAndTools;
 
 
+
     @Transactional
     public List<Option> getAll() {
         return optionDao.getAll();
@@ -93,7 +94,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
         Option option = (Option) convertToEntity(new Option(), validationAndTools.
                 globalCheck(requirement,  exclusion, optionDto));
         List<Tariff> tariffs = tariffDao.findAllTariffWithOption(option);
-        tariffDao.update(tariffs, option);
+        validationAndTools.updateAllTariffsWithOption(tariffs, option);
         Option updatedOption = optionDao.update(option);
         optionDto.setId(updatedOption.getId());
         optionDto.setDeleted(false);
@@ -112,9 +113,7 @@ public class OptionServiceImpl extends GenericMapper implements OptionService {
             return "Option was deleted";
         }
 
-
     }
-
 
 
 }

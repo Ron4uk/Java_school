@@ -1,17 +1,22 @@
 package com.task.service.impl;
 
 import com.task.dao.OptionDao;
+import com.task.dao.TariffDao;
 import com.task.dto.OptionDto;
 import com.task.entity.Option;
+import com.task.entity.Tariff;
 import com.task.exception.WrongOptionException;
 import com.task.service.GenericMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,8 +27,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class OptionValidationAndTools extends GenericMapper {
 
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(OptionValidationAndTools.class);
     private OptionDao optionDao;
+    private TariffDao tariffDao;
 
     /**
      * Creates a list of required id options for processing it in jsp (these id will be selected on the checkboxes).
@@ -74,7 +80,7 @@ public class OptionValidationAndTools extends GenericMapper {
     }
 
     public List<OptionDto> createOnlyExclusionOptions(Set<OptionDto> chooseRequiredOptions,
-                                                       List<OptionDto> onlyExclusionOptions) {
+                                                      List<OptionDto> onlyExclusionOptions) {
 
         if (chooseRequiredOptions.size() > 0) {
             for (OptionDto reqOption : chooseRequiredOptions) {
@@ -143,7 +149,8 @@ public class OptionValidationAndTools extends GenericMapper {
                             throw new WrongOptionException("Chosen options violates the principle of " +
                                     "coupling with option " + parentDto.getName(), createOption);
                     }
-                } else if (parentDto.getRequiredOptions().size() > 0) {
+                }
+                if (parentDto.getRequiredOptions().size() > 0) {
                     for (OptionDto reqOptDtoParent : parentDto.getRequiredOptions()) {
                         if (reqOptDtoParent != optionDto && onlyExclusionOptions.contains(reqOptDtoParent)) {
                             throw new WrongOptionException("Chosen options violates the principle of " +
@@ -158,7 +165,7 @@ public class OptionValidationAndTools extends GenericMapper {
 
     public List<OptionDto> getAllParentDto(OptionDto optionDto) {
         List<Option> parentOptions = optionDao.getAllParent(optionDto.getId());
-        if (parentOptions != null) {
+        if (!parentOptions.isEmpty()) {
             List<OptionDto> parentOptionsDto = parentOptions.stream().map(e -> (OptionDto) convertToDto(e,
                     new OptionDto())).collect(Collectors.toList());
             return parentOptionsDto;
@@ -178,7 +185,7 @@ public class OptionValidationAndTools extends GenericMapper {
         return true;
     }
 
-    public void checkContainsRequirementInExclusion(String[] requirement, String[] exclusion, OptionDto optionDto){
+    public void checkContainsRequirementInExclusion(String[] requirement, String[] exclusion, OptionDto optionDto) {
         if (requirement != null && exclusion != null && requirement.length > 0 && exclusion.length > 0) {
             for (String req : requirement) {
                 if (Arrays.asList(exclusion).contains(req))
@@ -202,7 +209,7 @@ public class OptionValidationAndTools extends GenericMapper {
      */
     public OptionDto globalCheck(String[] requirement, String[] exclusion, OptionDto optionDto) {
         checkOptionName(optionDto);
-        checkContainsRequirementInExclusion(requirement,  exclusion, optionDto);
+        checkContainsRequirementInExclusion(requirement, exclusion, optionDto);
         Set<OptionDto> chooseRequiredOptions = new HashSet<>();
         Set<OptionDto> chooseExclusionOptions = new HashSet<>();
         if (requirement != null && requirement.length > 0) {
@@ -238,5 +245,26 @@ public class OptionValidationAndTools extends GenericMapper {
         optionDto.setRequiredOptions(chooseRequiredOptions);
         optionDto.setExclusionOptions(chooseExclusionOptions);
         return optionDto;
+    }
+
+    public void updateAllTariffsWithOption(List<Tariff> tariffs, Option option) {
+        LOGGER.info("[{}]  [{}] update tariffs = {} option = {}", LocalDateTime.now(), LOGGER.getName(), tariffs, option);
+        if (option.getRequiredOptions().size() > 0) {
+            List<Option> listForEquals = new ArrayList<>(option.getRequiredOptions());
+            Deque<Option> requiredOptions = new ArrayDeque<>();
+            requiredOptions.addAll(option.getRequiredOptions());
+            while (requiredOptions.size() > 0) {
+                Option opt = requiredOptions.pollFirst();
+                if (opt.getRequiredOptions().size() > 0) requiredOptions.addAll(opt.getRequiredOptions());
+                if (!listForEquals.contains(opt)) listForEquals.add(opt);
+            }
+            for (Tariff tariff : tariffs) {
+                if (!tariff.getOptions().containsAll(listForEquals)) {
+                    tariff.getOptions().addAll(listForEquals);
+                    tariffDao.update(tariff);
+                }
+
+            }
+        }
     }
 }

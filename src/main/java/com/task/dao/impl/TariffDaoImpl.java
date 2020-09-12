@@ -47,26 +47,5 @@ public class TariffDaoImpl extends GenericDaoImpl<Tariff> implements TariffDao {
         return tariffs;
     }
 
-    @Override
-    public void update(List<Tariff> tariffs, Option option) {
-        LOGGER.info("[{}]  [{}] update tariffs = {} option = {}", LocalDateTime.now(), LOGGER.getName(), tariffs,option);
-        if(option.getRequiredOptions().size()>0){
-            List<Option> listForEquals = new ArrayList<>(option.getRequiredOptions());
-            Deque<Option> requiredOptions = new ArrayDeque<>();
-            requiredOptions.addAll(option.getRequiredOptions());
-            while (requiredOptions.size()>0){
-                Option opt = requiredOptions.pollFirst();
-                if(opt.getRequiredOptions().size()>0) requiredOptions.addAll(opt.getRequiredOptions());
-                if(!listForEquals.contains(opt)) listForEquals.add(opt);
-            }
 
-            for(Tariff tariff: tariffs){
-                if(!tariff.getOptions().containsAll(listForEquals)){
-                    tariff.getOptions().addAll(listForEquals);
-                    update(tariff);
-                }
-
-            }
-        }
-    }
 }

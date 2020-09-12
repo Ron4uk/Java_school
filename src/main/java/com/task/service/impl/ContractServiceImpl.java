@@ -294,23 +294,19 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
     @Override
     @Transactional
     public void blockByUser(ContractDto contractDto) {
-        if (contractDto.getBlockByOperator() != true) {
             Contract contract = contractDAO.findById(contractDto.getId());
             contract.setBlockByClient(true);
             contractDAO.update(contract);
             contractDto.setBlockByClient(true);
-        }
     }
 
     @Override
     @Transactional
     public void unblockByUser(ContractDto contractDto) {
-        if (contractDto.getBlockByOperator() != true) {
             Contract contract = contractDAO.findById(contractDto.getId());
             contract.setBlockByClient(false);
             contractDAO.update(contract);
             contractDto.setBlockByClient(false);
-        }
     }
 
     @Override

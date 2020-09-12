@@ -53,7 +53,7 @@ public class TariffController {
 
 
     @GetMapping("/employee/edittariff")
-    public String editTariff(@RequestParam(required = false) Integer id, Model model) {
+    public String editTariff(@RequestParam( required = false) Integer id, Model model) {
         if (id != null) {
             model.addAttribute(tariffService.findByIdDto(id));
         }
@@ -63,7 +63,6 @@ public class TariffController {
 
     @PostMapping("/employee/newTariff")
     public String newTariff(@ModelAttribute("tariffDto") TariffDto tariffDto, HttpServletRequest request, Model model) {
-        log.info("change from HERE");
         String result = tariffService.merge(tariffDto, request.getParameterValues("opt"));
         model.addAttribute("result", result);
         model.addAttribute("optionsList", optionService.getAllDtoWithReqId());
