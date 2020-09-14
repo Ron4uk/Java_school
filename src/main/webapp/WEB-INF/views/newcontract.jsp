@@ -52,7 +52,7 @@
 
         <div class="col-sm-12" style="margin-top: 10px">
             <h5>Draw up a new contract for the
-                client: ${clientDto.id} ${clientDto.firstName} ${clientDto.lastName}</h5>
+                client: ${clientDto.firstName} ${clientDto.lastName}</h5>
         </div>
     </div>
 

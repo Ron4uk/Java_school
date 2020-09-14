@@ -206,7 +206,7 @@
                 <tr>
                     <th scope="row">${numberoftariff.count}</th>
                     <td>${tariff.tariff}</td>
-                    <td>${tariff.price}</td>
+                    <td>${tariff.price}$</td>
                     <td><a href="${pageContext.request.contextPath}/employee/edittariff?id=${tariff.id} ">Edit</a></td>
                     <td><a href="${pageContext.request.contextPath}/employee/deletetariff?id=${tariff.id} ">Delete</a></td>
 

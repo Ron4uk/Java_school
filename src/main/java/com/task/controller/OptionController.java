@@ -91,8 +91,8 @@ public class OptionController {
 
     @PostMapping("/user/connectedoptionbyuser")
     public String connectedNewOptionByUser(@ModelAttribute("contractDto") ContractDto contractDto,
-                                           @RequestParam(name = "optid") Integer id, ModelAndView model){
-        model.addObject("result", contractService.addConnectedOption(contractDto, id));
+                                           @RequestParam(name = "optid") Integer id, Model model){
+        model.addAttribute("result", contractService.addConnectedOption(contractDto, id));
         return "usermanageoption";
     }
 

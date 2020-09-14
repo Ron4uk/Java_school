@@ -25,7 +25,7 @@ import java.util.Arrays;
 @EnableJms
 @ComponentScan("com.task")
 public class JmsConfig {
-    private static String BROKER_URL = "tcp://localhost:61616";
+    private static String BROKER_URL = "tcp://docker.for.win.localhost:61616";
     private static String BROKER_USERNAME = "admin";
     private static String BROKER_PASSWORD = "admin";
     private static String DESTINATION_NAME = "eCare";

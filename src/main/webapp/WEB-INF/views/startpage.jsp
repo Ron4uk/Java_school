@@ -2,7 +2,7 @@
 <!DOCYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <style type="text/css">
@@ -45,7 +45,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Main <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/">Main <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Tariffs</a>
@@ -56,7 +56,7 @@
 
 
             </ul>
-            <a href="/login" class="btn btn-secondary  active" role="button" aria-pressed="true">Sign in</a>
+            <a href="${pageContext.request.contextPath}/login" class="btn btn-secondary  active" role="button" aria-pressed="true">Sign in</a>
 
 
         </div>
@@ -70,7 +70,7 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="/images/main_1.jpg" class="d-block w-100"
+                <img src="${pageContext.request.contextPath}/images/main_1.jpg" class="d-block w-100"
                      alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5 style="color: black">Family connect.</h5>
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="/images/main_2.jpg"
+                <img src="${pageContext.request.contextPath}/images/main_2.jpg"
                      class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Moving the business.</h5>
@@ -99,16 +99,16 @@
     <div class="row row-flex row-flex-wrap" style="margin-top: 10px">
         <div class="col-sm-2 col-md-2">
             <div class="card">
-                <img src="/images/private_account2.png" class="card-img-top" alt="...">
+                <img src="${pageContext.request.contextPath}/images/private_account2.png" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <a href="${pageContext.request.contextPath}/ogin" class="btn btn-primary btn-lg" style="max-width: 100%">Private account</a>
+                    <a href="${pageContext.request.contextPath}/login" class="btn btn-primary btn-lg" style="max-width: 100%">Private account</a>
                 </div>
 
             </div>
         </div>
         <div class="col-sm-2 col-md-2">
             <div class="card">
-                <img src="/images/deposit.jpg" class="card-img-top" alt="..." style="">
+                <img src="${pageContext.request.contextPath}/images/deposit.jpg" class="card-img-top" alt="..." style="">
                 <div class="card-body">
                     <a href="#" class="btn btn-lg btn-primary" style="max-width: 100%">Make a deposit</a>
                 </div>
@@ -117,7 +117,7 @@
         </div>
         <div class="col-sm-2 col-md-2">
             <div class="card">
-                <img src="/images/apps.png" class="card-img-top" alt="..." style="">
+                <img src="${pageContext.request.contextPath}/images/apps.png" class="card-img-top" alt="..." style="">
                 <div class="card-body">
                     <a href="#" class="btn btn-primary btn-lg" style="max-width: 110%">Mobile apps</a>
                 </div>

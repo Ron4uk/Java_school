@@ -45,6 +45,8 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.jsp("/WEB-INF/views/", ".jsp");
     }
 
+
+
     @Bean
     public ModelMapper modelMapper(){
         ModelMapper mapper = new ModelMapper();

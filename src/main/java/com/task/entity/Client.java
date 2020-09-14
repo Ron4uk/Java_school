@@ -35,10 +35,7 @@ public class Client extends AbstractIdentification {
     private String passport_series;
     @Column(name = "number")
     private  String passport_number;
-    @Column(name = "block_client")
-    private Boolean blockByClient;
-    @Column(name = "block_operator")
-    private Boolean blockByOperator;
+
 
     @OneToMany (mappedBy = "client")
     @ToString.Exclude

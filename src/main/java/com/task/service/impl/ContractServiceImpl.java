@@ -326,6 +326,9 @@ public class ContractServiceImpl extends GenericMapper implements ContractServic
         for (Option connectedOption : contract.getConnectedOptions()) {
             if (connectedOption.getExclusionOptions().contains(option)) return false;
         }
+        for(Option exclOption: option.getExclusionOptions()){
+            if (contract.getConnectedOptions().contains(exclOption)) return false;
+        }
         if (!contract.getConnectedOptions().containsAll(option.getRequiredOptions())) return false;
         contract.getConnectedOptions().add(option);
         return true;

@@ -1,26 +1,54 @@
-version: '3.8'
+version: '3.1'
+
 services:
 
   db:
-    image: mysql:latest
-    environment:
-
-      MYSQL_DATABASE: bd_operator
-      MYSQL_USER: root
-      MYSQL_PASSWORD: slimshady666
-      ports:
-       - "3306:3306"
-
-
-  web:
-    image: tomcat:latest
-    # Environment variables do not appear to be getting loaded the first time Tomcat starts!
-    environment:
-      JDBC_URL: jdbc:mysql://db:3306/bd_operator?connectTimeout=0&amp;socketTimeout=0&amp;autoReconnect=true
-
-    ports:
-      - "8080:8080"
+    image: mysql:5.7.31
+    container_name: mysql_c
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     volumes:
-      - ./tomcat/webapps:/usr/local/tomcat/webapps
+      - ./bd.sql:/docker-entrypoint-initdb.d/bd.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bd_operator
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: root
+      TZ: Europe/Moscow
+    ports:
+        - 3307:3306
+    networks:
+      - mt-network
+  tomcat:
+    image: tomcat:8.5.51
+    container_name: tomcat
+
+    environment:
+      WAIT_HOSTS: db:3306
+      TZ: Europe/Moscow
+    ports:
+      - 8080:8080
+    networks:
+      - mt-network
+    volumes:
+      - ./target/ROOT.war:/usr/local/tomcat/webapps/ROOT.war
+      - E:/13.T-systems/Logs/Docker:/usr/local/tomcat/logs/
+
+    depends_on:
+      - db
     links:
       - db
+
+  adminer:
+    image: adminer
+    restart: always
+    environment:
+      TZ: Europe/Moscow
+    ports:
+      - 8555:8080
+    networks:
+      - mt-network
+networks:
+  mt-network:
+    driver: bridge
+
